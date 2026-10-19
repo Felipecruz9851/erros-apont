@@ -53,5 +53,7 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 
-# Project temporary
-backend/storage/snapshots/raw_*.html
+# Project temporary & runtime snapshots
+backend/storage/snapshots/*.html
+backend/storage/snapshots/*.json
+!backend/storage/snapshots/.gitkeep

@@ -40,3 +40,8 @@ app.include_router(
     prefix=f"{settings.API_V1_STR}/results",
     tags=["Resultados"],
 )
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("backend.app.main:app", host="0.0.0.0", port=settings.PORT, reload=True)

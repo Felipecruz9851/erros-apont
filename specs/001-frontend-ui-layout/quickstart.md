@@ -30,9 +30,9 @@ npm install
 
 ### 2.1 Start Backend Server
 ```powershell
-uvicorn backend.app.main:app --reload --port 8000
+uvicorn backend.app.main:app --reload --port 8484
 ```
-- API Documentation available at: `http://localhost:8000/docs`
+- API Documentation available at: `http://localhost:8484/docs`
 
 ### 2.2 Start Frontend Dev Server
 ```powershell
