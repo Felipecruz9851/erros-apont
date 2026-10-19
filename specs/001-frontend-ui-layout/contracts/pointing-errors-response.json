@@ -1,0 +1,62 @@
+{
+  "execution_id": "exec_20261019_141500_sample",
+  "generated_at": "2026-10-19T14:15:00-03:00",
+  "parameters": {
+    "data_inicio": "2026-10-01",
+    "data_fim": "2026-10-19",
+    "fabricas": ["Todas"]
+  },
+  "summary": {
+    "total_ops_analisadas": 150,
+    "total_componentes_baixa_auto": 520,
+    "total_erros_apontamento": 6,
+    "total_ops_com_erro": 4,
+    "taxa_conformidade_pct": 98.85,
+    "tempo_processamento_segundos": 3.8
+  },
+  "pagination": {
+    "total": 6,
+    "limit": 50,
+    "offset": 0
+  },
+  "records": [
+    {
+      "id": "F01-OP10492-CMP0088",
+      "fabrica": "F01 - Móveis",
+      "op": "OP-10492",
+      "data_abertura": "2026-10-15",
+      "data_entrega": "2026-10-22",
+      "prioridade_fila": 1,
+      "produto_op": "MESA DE JANTAR ELO 2.40",
+      "local_producao": "LOC-MARCENARIA-01",
+      "codigo_componente": "CMP-0088",
+      "descricao_componente": "PARAFUSO SEXTAVADO INOX 1/4 X 2",
+      "baixa_automatica": true,
+      "qtd_necessaria": 24.0,
+      "saldo_inicial_local": 30.0,
+      "saldo_remanescente": 6.0,
+      "deficit_saldo": 18.0,
+      "status_divergencia": "SALDO_INSUFICIENTE",
+      "severidade": "ALTA"
+    },
+    {
+      "id": "F01-OP10495-CMP0088",
+      "fabrica": "F01 - Móveis",
+      "op": "OP-10495",
+      "data_abertura": "2026-10-16",
+      "data_entrega": "2026-10-25",
+      "prioridade_fila": 2,
+      "produto_op": "CADEIRA IBIZA ESTOFADA",
+      "local_producao": "LOC-MARCENARIA-01",
+      "codigo_componente": "CMP-0088",
+      "descricao_componente": "PARAFUSO SEXTAVADO INOX 1/4 X 2",
+      "baixa_automatica": true,
+      "qtd_necessaria": 16.0,
+      "saldo_inicial_local": 30.0,
+      "saldo_remanescente": 0.0,
+      "deficit_saldo": 16.0,
+      "status_divergencia": "SALDO_ZERADO_NO_LOCAL",
+      "severidade": "ALTA"
+    }
+  ]
+}

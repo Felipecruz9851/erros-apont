@@ -1,0 +1,1040 @@
+{
+  "http://192.168.0.6/pcp/atrasadas.php": {
+    "status": 200,
+    "title": "Ordens Atrasadas",
+    "forms": [
+      {
+        "form_index": 1,
+        "action": "atrasadas.php",
+        "method": "POST",
+        "inputs": [
+          {
+            "name": "cod_empresa",
+            "type": "text",
+            "value": "",
+            "id": ""
+          },
+          {
+            "name": "inicio",
+            "type": "date",
+            "value": "",
+            "id": ""
+          },
+          {
+            "name": "fim",
+            "type": "date",
+            "value": "",
+            "id": ""
+          },
+          {
+            "name": "marcar",
+            "type": "checkbox",
+            "value": "",
+            "id": "marcar"
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "COLCHOES",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "BOX",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ESTOF UL",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CC ACABA01",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ARMARIO UL",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "UL ACABA01",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "COZINHA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "PES ACABA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "VIDRACARIA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "PORTAS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "LAMINAD UL",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "TAMPOS UL",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "UL FABRI01",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CORTE",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CADEIRAS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CC FABRI01",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CORTE LE",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "PEZINHO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CC FABRI03",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "PLANEJADOS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "LE FABRI02",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "LE FABRI03",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "LE FABRI06",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "FIBRA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ALMOFADAS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CAPAS LE",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "METALURGIA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ALUMINIO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "INOX",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "PLASMA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ATELIE",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ATELIE2",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "UL-ALMOX05",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "REVENDA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "AT INSUMO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "AT SOFA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "AT MOVEIS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "AT KIT",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "AT VIDRO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "KIT",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "TAPA FURO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ACESSORIOS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "COLMEIAS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "C PILOTO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "MOSTRUARIO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "LAMINACAO1",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "EMBALAGEM",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "OSSOPAINEL",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "TAPETES",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "LE FABRI01",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "PLAN_ESP",
+            "id": ""
+          },
+          {
+            "name": "ordem",
+            "type": "radio",
+            "value": "entrega,",
+            "id": ""
+          },
+          {
+            "name": "ordem",
+            "type": "radio",
+            "value": "den_item,",
+            "id": ""
+          },
+          {
+            "name": "ordem",
+            "type": "radio",
+            "value": "num_peido,",
+            "id": ""
+          },
+          {
+            "name": "ordem",
+            "type": "radio",
+            "value": "cod_local_prod,entrega,",
+            "id": ""
+          },
+          {
+            "name": "dat_liberac",
+            "type": "radio",
+            "value": "S",
+            "id": ""
+          },
+          {
+            "name": "dat_liberac",
+            "type": "radio",
+            "value": "N",
+            "id": ""
+          },
+          {
+            "name": "item_desc",
+            "type": "radio",
+            "value": "S",
+            "id": ""
+          },
+          {
+            "name": "item_desc",
+            "type": "radio",
+            "value": "N",
+            "id": ""
+          },
+          {
+            "name": "exibir_codbar",
+            "type": "checkbox",
+            "value": "S",
+            "id": ""
+          },
+          {
+            "name": "exibir_fantasma",
+            "type": "checkbox",
+            "value": "S",
+            "id": ""
+          },
+          {
+            "name": null,
+            "type": "submit",
+            "value": "Consultar",
+            "id": ""
+          }
+        ],
+        "selects": []
+      }
+    ],
+    "table_count": 2,
+    "table_headers_sample": [
+      [
+        "Codigo da Empresa:Data Inicio :Data Fim :FÃ¡brica:Marcar TodosCOLCHOES;BOX;ESTOF UL;CC ACABA01;ARMARIO UL;UL ACABA01;COZINHAPES ACABA;VIDRACARIAPORTAS;LAMINAD UL;TAMPOS ULUL FABRI01;CORTE;CADEIRAS;CC FABRI01;CORTE LE;PEZINHO;CC FABRI03;PLANEJADOSLE FABRI02;LE FABRI03;LE FABRI06;FIBRA;ALMOFADASCAPAS LEMETALURGIAALUMINIO;INOX;PLASMA;ATELIE;ATELIE2;UL-ALMOX05;REVENDAAT INSUMOAT SOFAAT MOVEISAT KIT;AT VIDRO;KITTAPA FUROACESSORIOSCOLMEIASC PILOTO;MOSTRUARIOLAMINACAO1EMBALAGEMOSSOPAINELTAPETESLE FABRI01;PLAN_ESP;Ordenar por:DataItemPedidoLocal, DataExibir Data de LiberaÃ§Ã£o?SimNÃ£oExibir descriÃ§Ã£o do item completa?SimNÃ£oExibir cÃ³digo de barrasExibir Fantasma",
+        "Codigo da Empresa:Data Inicio :Data Fim :FÃ¡brica:Marcar TodosCOLCHOES;BOX;ESTOF UL;CC ACABA01;ARMARIO UL;UL ACABA01;COZINHAPES ACABA;VIDRACARIAPORTAS;LAMINAD UL;TAMPOS ULUL FABRI01;CORTE;CADEIRAS;CC FABRI01;CORTE LE;PEZINHO;CC FABRI03;PLANEJADOSLE FABRI02;LE FABRI03;LE FABRI06;FIBRA;ALMOFADASCAPAS LEMETALURGIAALUMINIO;INOX;PLASMA;ATELIE;ATELIE2;UL-ALMOX05;REVENDAAT INSUMOAT SOFAAT MOVEISAT KIT;AT VIDRO;KITTAPA FUROACESSORIOSCOLMEIASC PILOTO;MOSTRUARIOLAMINACAO1EMBALAGEMOSSOPAINELTAPETESLE FABRI01;PLAN_ESP;Ordenar por:DataItemPedidoLocal, DataExibir Data de LiberaÃ§Ã£o?SimNÃ£oExibir descriÃ§Ã£o do item completa?SimNÃ£oExibir cÃ³digo de barrasExibir Fantasma"
+      ],
+      [
+        "Codigo da Empresa:Data Inicio :Data Fim :FÃ¡brica:Marcar TodosCOLCHOES;BOX;ESTOF UL;CC ACABA01;ARMARIO UL;UL ACABA01;COZINHAPES ACABA;VIDRACARIAPORTAS;LAMINAD UL;TAMPOS ULUL FABRI01;CORTE;CADEIRAS;CC FABRI01;CORTE LE;PEZINHO;CC FABRI03;PLANEJADOSLE FABRI02;LE FABRI03;LE FABRI06;FIBRA;ALMOFADASCAPAS LEMETALURGIAALUMINIO;INOX;PLASMA;ATELIE;ATELIE2;UL-ALMOX05;REVENDAAT INSUMOAT SOFAAT MOVEISAT KIT;AT VIDRO;KITTAPA FUROACESSORIOSCOLMEIASC PILOTO;MOSTRUARIOLAMINACAO1EMBALAGEMOSSOPAINELTAPETESLE FABRI01;PLAN_ESP;Ordenar por:DataItemPedidoLocal, DataExibir Data de LiberaÃ§Ã£o?SimNÃ£oExibir descriÃ§Ã£o do item completa?SimNÃ£oExibir cÃ³digo de barrasExibir Fantasma"
+      ]
+    ]
+  },
+  "http://192.168.0.6/pcp/consumo_alt.php": {
+    "status": 200,
+    "title": "RelatÃ³rio de Consumo de Insumos",
+    "forms": [
+      {
+        "form_index": 1,
+        "action": "consumo_alt.php",
+        "method": "POST",
+        "inputs": [
+          {
+            "name": "dati",
+            "type": "date",
+            "value": "2026-10-19",
+            "id": ""
+          },
+          {
+            "name": "datf",
+            "type": "date",
+            "value": "2026-10-19",
+            "id": ""
+          },
+          {
+            "name": "cod_empresa",
+            "type": "text",
+            "value": "",
+            "id": ""
+          },
+          {
+            "name": "num_ordem",
+            "type": "text",
+            "value": "",
+            "id": ""
+          },
+          {
+            "name": "marcar",
+            "type": "checkbox",
+            "value": "",
+            "id": "marcar"
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "COLCHOES",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "BOX",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ESTOF UL",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CC ACABA01",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ARMARIO UL",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "UL ACABA01",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "COZINHA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "PES ACABA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "VIDRACARIA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "PORTAS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "LAMINAD UL",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "TAMPOS UL",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "UL FABRI01",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CORTE",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CADEIRAS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CC FABRI01",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CORTE LE",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "PEZINHO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CC FABRI03",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "PLANEJADOS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "LE FABRI02",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "LE FABRI03",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "LE FABRI06",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "FIBRA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ALMOFADAS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "CAPAS LE",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "METALURGIA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ALUMINIO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "INOX",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "PLASMA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ATELIE",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ATELIE2",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "UL-ALMOX05",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "REVENDA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "AT INSUMO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "AT SOFA",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "AT MOVEIS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "AT KIT",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "AT VIDRO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "KIT",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "TAPA FURO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "ACESSORIOS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "COLMEIAS",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "C PILOTO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "MOSTRUARIO",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "LAMINACAO1",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "EMBALAGEM",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "OSSOPAINEL",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "TAPETES",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "LE FABRI01",
+            "id": ""
+          },
+          {
+            "name": "local[]",
+            "type": "checkbox",
+            "value": "PLAN_ESP",
+            "id": ""
+          },
+          {
+            "name": "logis",
+            "type": "radio",
+            "value": "S",
+            "id": ""
+          },
+          {
+            "name": "logis",
+            "type": "radio",
+            "value": "N",
+            "id": ""
+          },
+          {
+            "name": "kit",
+            "type": "radio",
+            "value": "S",
+            "id": ""
+          },
+          {
+            "name": "kit",
+            "type": "radio",
+            "value": "N",
+            "id": ""
+          },
+          {
+            "name": "padrao",
+            "type": "radio",
+            "value": "A",
+            "id": ""
+          },
+          {
+            "name": "padrao",
+            "type": "radio",
+            "value": "B",
+            "id": ""
+          },
+          {
+            "name": "item_desc",
+            "type": "radio",
+            "value": "1",
+            "id": ""
+          },
+          {
+            "name": "item_desc",
+            "type": "radio",
+            "value": "2",
+            "id": ""
+          },
+          {
+            "name": "baixa",
+            "type": "radio",
+            "value": "S",
+            "id": ""
+          },
+          {
+            "name": "baixa",
+            "type": "radio",
+            "value": "N",
+            "id": ""
+          },
+          {
+            "name": "min",
+            "type": "radio",
+            "value": "S",
+            "id": ""
+          },
+          {
+            "name": "min",
+            "type": "radio",
+            "value": "N",
+            "id": ""
+          },
+          {
+            "name": "loc_compon",
+            "type": "text",
+            "value": "",
+            "id": ""
+          },
+          {
+            "name": null,
+            "type": "submit",
+            "value": "Consultar",
+            "id": ""
+          }
+        ],
+        "selects": []
+      }
+    ],
+    "table_count": 2,
+    "table_headers_sample": [
+      [
+        "Data Abertura de:aEmpresa :Ordens:FÃ¡brica:Marcar TodosCOLCHOES;BOX;ESTOF UL;CC ACABA01;ARMARIO UL;UL ACABA01;COZINHAPES ACABA;VIDRACARIAPORTAS;LAMINAD UL;TAMPOS ULUL FABRI01;CORTE;CADEIRAS;CC FABRI01;CORTE LE;PEZINHO;CC FABRI03;PLANEJADOSLE FABRI02;LE FABRI03;LE FABRI06;FIBRA;ALMOFADASCAPAS LEMETALURGIAALUMINIO;INOX;PLASMA;ATELIE;ATELIE2;UL-ALMOX05;REVENDAAT INSUMOAT SOFAAT MOVEISAT KIT;AT VIDRO;KITTAPA FUROACESSORIOSCOLMEIASC PILOTO;MOSTRUARIOLAMINACAO1EMBALAGEMOSSOPAINELTAPETESLE FABRI01;PLAN_ESP;Exibir somente estoque LOGISTICA?SimNÃ£oExibir somente estoque KIT?SimNÃ£oExibir somente estoque negativo?SimNÃ£oExibir descriÃ§Ã£o do item completa?SimNÃ£oExibir somente campo baixa igual a Sim?SimNÃ£oCONFERIR ESTRUTURA DAS ORDENS COM ESTRUTURA DO CADASTRO â FAMÃLIA MINSimNÃ£oLocal do Componente:",
+        "Data Abertura de:aEmpresa :Ordens:FÃ¡brica:Marcar TodosCOLCHOES;BOX;ESTOF UL;CC ACABA01;ARMARIO UL;UL ACABA01;COZINHAPES ACABA;VIDRACARIAPORTAS;LAMINAD UL;TAMPOS ULUL FABRI01;CORTE;CADEIRAS;CC FABRI01;CORTE LE;PEZINHO;CC FABRI03;PLANEJADOSLE FABRI02;LE FABRI03;LE FABRI06;FIBRA;ALMOFADASCAPAS LEMETALURGIAALUMINIO;INOX;PLASMA;ATELIE;ATELIE2;UL-ALMOX05;REVENDAAT INSUMOAT SOFAAT MOVEISAT KIT;AT VIDRO;KITTAPA FUROACESSORIOSCOLMEIASC PILOTO;MOSTRUARIOLAMINACAO1EMBALAGEMOSSOPAINELTAPETESLE FABRI01;PLAN_ESP;Exibir somente estoque LOGISTICA?SimNÃ£oExibir somente estoque KIT?SimNÃ£oExibir somente estoque negativo?SimNÃ£oExibir descriÃ§Ã£o do item completa?SimNÃ£oExibir somente campo baixa igual a Sim?SimNÃ£oCONFERIR ESTRUTURA DAS ORDENS COM ESTRUTURA DO CADASTRO â FAMÃLIA MINSimNÃ£oLocal do Componente:"
+      ],
+      [
+        "Data Abertura de:aEmpresa :Ordens:FÃ¡brica:Marcar TodosCOLCHOES;BOX;ESTOF UL;CC ACABA01;ARMARIO UL;UL ACABA01;COZINHAPES ACABA;VIDRACARIAPORTAS;LAMINAD UL;TAMPOS ULUL FABRI01;CORTE;CADEIRAS;CC FABRI01;CORTE LE;PEZINHO;CC FABRI03;PLANEJADOSLE FABRI02;LE FABRI03;LE FABRI06;FIBRA;ALMOFADASCAPAS LEMETALURGIAALUMINIO;INOX;PLASMA;ATELIE;ATELIE2;UL-ALMOX05;REVENDAAT INSUMOAT SOFAAT MOVEISAT KIT;AT VIDRO;KITTAPA FUROACESSORIOSCOLMEIASC PILOTO;MOSTRUARIOLAMINACAO1EMBALAGEMOSSOPAINELTAPETESLE FABRI01;PLAN_ESP;Exibir somente estoque LOGISTICA?SimNÃ£oExibir somente estoque KIT?SimNÃ£oExibir somente estoque negativo?SimNÃ£oExibir descriÃ§Ã£o do item completa?SimNÃ£oExibir somente campo baixa igual a Sim?SimNÃ£oCONFERIR ESTRUTURA DAS ORDENS COM ESTRUTURA DO CADASTRO â FAMÃLIA MINSimNÃ£oLocal do Componente:"
+      ]
+    ]
+  },
+  "http://192.168.0.6/pcp/estoque_lote.php": {
+    "status": 200,
+    "title": "Estoque por local",
+    "forms": [
+      {
+        "form_index": 1,
+        "action": "estoque_lote.php",
+        "method": "POST",
+        "inputs": [
+          {
+            "name": "cod_empresa",
+            "type": "text",
+            "value": "",
+            "id": ""
+          },
+          {
+            "name": "situacao",
+            "type": "radio",
+            "value": "L",
+            "id": ""
+          },
+          {
+            "name": "situacao",
+            "type": "radio",
+            "value": "I",
+            "id": ""
+          },
+          {
+            "name": "situacao",
+            "type": "radio",
+            "value": "R",
+            "id": ""
+          },
+          {
+            "name": "situacao",
+            "type": "radio",
+            "value": "E",
+            "id": ""
+          },
+          {
+            "name": "local",
+            "type": "text",
+            "value": "",
+            "id": ""
+          },
+          {
+            "name": "linha",
+            "type": "text",
+            "value": "",
+            "id": ""
+          },
+          {
+            "name": "linprod",
+            "type": "text",
+            "value": "",
+            "id": ""
+          },
+          {
+            "name": "linrecei",
+            "type": "text",
+            "value": "",
+            "id": ""
+          },
+          {
+            "name": "familia",
+            "type": "text",
+            "value": "",
+            "id": ""
+          },
+          {
+            "name": "tipo",
+            "type": "radio",
+            "value": "C",
+            "id": ""
+          },
+          {
+            "name": "tipo",
+            "type": "radio",
+            "value": "F",
+            "id": ""
+          },
+          {
+            "name": "tipo",
+            "type": "radio",
+            "value": "P",
+            "id": ""
+          },
+          {
+            "name": "tipo",
+            "type": "radio",
+            "value": "T",
+            "id": ""
+          },
+          {
+            "name": "ordem",
+            "type": "radio",
+            "value": "GETTDATE()-t_est3.dat_ult_saida desc",
+            "id": ""
+          },
+          {
+            "name": "ordem",
+            "type": "radio",
+            "value": "t_est3.cod_familia,t_est3.cod_item",
+            "id": ""
+          },
+          {
+            "name": "ordem",
+            "type": "radio",
+            "value": "t_est3.ies_situacao,t_est3.cod_item",
+            "id": ""
+          },
+          {
+            "name": "ordem",
+            "type": "radio",
+            "value": "t_est3.qtd_saldo*t_est3.cus_unit_medio desc",
+            "id": ""
+          },
+          {
+            "name": "relatorio",
+            "type": "radio",
+            "value": "R",
+            "id": ""
+          },
+          {
+            "name": "relatorio",
+            "type": "radio",
+            "value": "C",
+            "id": ""
+          },
+          {
+            "name": "item_desc",
+            "type": "radio",
+            "value": "S",
+            "id": ""
+          },
+          {
+            "name": "item_desc",
+            "type": "radio",
+            "value": "N",
+            "id": ""
+          },
+          {
+            "name": "sit",
+            "type": "radio",
+            "value": "A",
+            "id": ""
+          },
+          {
+            "name": "sit",
+            "type": "radio",
+            "value": "I",
+            "id": ""
+          },
+          {
+            "name": null,
+            "type": "submit",
+            "value": "Consultar",
+            "id": ""
+          }
+        ],
+        "selects": []
+      }
+    ],
+    "table_count": 2,
+    "table_headers_sample": [
+      [
+        "Codigo da Empresa:(campo obrigatÃ³rio)Situacao Estoque:LiberadoInspeÃ§Ã£oRejeitadoExcepcionalLocal Estoque:Grupo de Estoque:Linha de Produto:Linha de Receita:FamÃ­lia:Tipo do Item:CompradoFinalProduzidoFantasmaOrdenar por:TempoFamÃ­liaSituaÃ§Ã£oCustoRelatÃ³rioResumidoCompletoExibir descriÃ§Ã£o do item completa?SimNÃ£oSituaÃ§Ã£o do Item:AtivoInativoGrupos de Controle de Estoque:1 - CAJURU1 - PRODUTOS QUIMICOS2 - ACESSORIOS (EXTERNO)2 - FABRICA DE PES E ACESSORIO2 - FERRAGENS3 - MADEIRAS3 - MADEIRAS/BRUTA3 - MADEIRAS/BRUTAS4 - CRISTAIS5 - PEDRAS6 - MATERIAIS ELETRICOS6 - MATERIAL ELETRICO7 - TECIDOS8 - METALURGICA8 - METALURGICOS8 - SERRALHERIA - CHICO9 - MADEIRAS INDUSTRIALIZADAS9 - MADEIRAS/INDUSTRIALIZADAS9 - PASSAMANARIA10 - COLAS10 - PERCINTAS11 - AVIAMENTOS12 - PLASTICOS12 - QUIMICO/ESPUMA12 - QUIMIMICO/ESPUMA13 - ESTOFADOS14 - FERRAGENS (INTERNO)14 - FERRAGENS/INTERNO14 - PAPEIS15 - RACKS, ESTANTES, MESAS15 - UNILIDER16 - INOBILIZADO16 - MANUTENCAO17 - TRANSPORTE18 - MOVEIS OSSO18 - OSSO JANTAR19 - MOVEIS SALA DE JANTAR19 - MOVEIS SALA JANTAR19 - SALA DE JANTAR20 - ESPUMAS20 - MOVEIS OSSO TRANSFERIDOS21 - COLCHOES21 - OSSO ESTAR22 - SEGURANCA23 - ADORNOS23 - OBJETOS23 - PECAS DECORATIVAS24 - MOVEIS COMPLEMENTARES24 - MOVEIS REVENDA24 - REVENDA25 - IMOBILIZADO25 - MAQUINAS26 - EMBALAGENS26 - MOVEIS CAJURU26 - TRANSFERENCIAS27 - ABRASIVOS28 - ESPUMAS28 - IMOBILIZADO28 - LAMINACAO/ESPUMACAO29 - CAPAS29 - COURO30 - ATELIE LIDER30 - CCR30 - MATERIA PRIMA31 - TAPETES32 - ESTR DE MADEIRA - ESTOFADOS33 - ACESSORIOS COMPRADOS33 - MOVEIS PARA DORMITORIOS34 - DORMITORIOS35 - COLCHAS/ALMOF35 - OSSO DORMITORIO36 - CORTE DA UNILIDER36 - ESPUMA36 - PECAS ASSISTENCIA TECNICA37 - CAPAS CAMA37 - PECAS AT38 - AMBIENTAL / RESÃDUOS39 - ACESSORIOS CLARICE MOVEIS39 - CLARICE MOVEIS40 - LOJAS40 - MATERIAIS DE LIMPEZA E ESCRITÃ³40 - MERCADORIA P/REVENDA41 - OSSO SALA ESTAR42 - SERRARIA43 - EPI - CALCADOS44 - EPI - MAOS45 - ESTRUTURA DE MADEIRA45 - ESTRUTURA MADEIRA46 - INOX47 - ALUMINIO47 - Ferros/Inox/AlumÃ­nio48 - 11148 - FERRO48 - GAS49 - COURO50 - LIMPEZA51 - ADMINISTRATIVO51 - IMPRESSOS52 - ESCRITORIO52 - FELTROS52 - NAO USADO53 - VARANDA GOURMET54 - EPI - OLHOS / FACE55 - EPI - RESPIRATORIO56 - EPC - PROTECAO COLETIVA57 - EPI - AUDITIVO58 - EPI - CABECA59 - ESTRUTURA DE BOX60 - PECAS DECORATIVAS LEDA61 - EPI - CORPO / PROTECOES62 - EPI - TRABALHO EM ALTURA63 - UNIFORMES64 - SINALIZACAO / SEGURANCA65 - COMBATE A INCENDIO66 - SEGURANCA PATRIMONIAL67 - HIGIENE / SAUDE68 - OUTROS / NAO CLASSIFICADO69 - LAMINAS70 - INCOLBRAS71 - COLCHOES72 - TAMPOS E BORDADOS DE COLCHÃ£O86 - ALIMENTACAO86 - LIMPEZA/ALIMENTAÃÃO.89 - DIVERSOS97 - ANDRADE PINTO98 - CONSIGNACAO99 - OUTROS",
+        "Codigo da Empresa:(campo obrigatÃ³rio)Situacao Estoque:LiberadoInspeÃ§Ã£oRejeitadoExcepcionalLocal Estoque:Grupo de Estoque:Linha de Produto:Linha de Receita:FamÃ­lia:Tipo do Item:CompradoFinalProduzidoFantasmaOrdenar por:TempoFamÃ­liaSituaÃ§Ã£oCustoRelatÃ³rioResumidoCompletoExibir descriÃ§Ã£o do item completa?SimNÃ£oSituaÃ§Ã£o do Item:AtivoInativoGrupos de Controle de Estoque:1 - CAJURU1 - PRODUTOS QUIMICOS2 - ACESSORIOS (EXTERNO)2 - FABRICA DE PES E ACESSORIO2 - FERRAGENS3 - MADEIRAS3 - MADEIRAS/BRUTA3 - MADEIRAS/BRUTAS4 - CRISTAIS5 - PEDRAS6 - MATERIAIS ELETRICOS6 - MATERIAL ELETRICO7 - TECIDOS8 - METALURGICA8 - METALURGICOS8 - SERRALHERIA - CHICO9 - MADEIRAS INDUSTRIALIZADAS9 - MADEIRAS/INDUSTRIALIZADAS9 - PASSAMANARIA10 - COLAS10 - PERCINTAS11 - AVIAMENTOS12 - PLASTICOS12 - QUIMICO/ESPUMA12 - QUIMIMICO/ESPUMA13 - ESTOFADOS14 - FERRAGENS (INTERNO)14 - FERRAGENS/INTERNO14 - PAPEIS15 - RACKS, ESTANTES, MESAS15 - UNILIDER16 - INOBILIZADO16 - MANUTENCAO17 - TRANSPORTE18 - MOVEIS OSSO18 - OSSO JANTAR19 - MOVEIS SALA DE JANTAR19 - MOVEIS SALA JANTAR19 - SALA DE JANTAR20 - ESPUMAS20 - MOVEIS OSSO TRANSFERIDOS21 - COLCHOES21 - OSSO ESTAR22 - SEGURANCA23 - ADORNOS23 - OBJETOS23 - PECAS DECORATIVAS24 - MOVEIS COMPLEMENTARES24 - MOVEIS REVENDA24 - REVENDA25 - IMOBILIZADO25 - MAQUINAS26 - EMBALAGENS26 - MOVEIS CAJURU26 - TRANSFERENCIAS27 - ABRASIVOS28 - ESPUMAS28 - IMOBILIZADO28 - LAMINACAO/ESPUMACAO29 - CAPAS29 - COURO30 - ATELIE LIDER30 - CCR30 - MATERIA PRIMA31 - TAPETES32 - ESTR DE MADEIRA - ESTOFADOS33 - ACESSORIOS COMPRADOS33 - MOVEIS PARA DORMITORIOS34 - DORMITORIOS35 - COLCHAS/ALMOF35 - OSSO DORMITORIO36 - CORTE DA UNILIDER36 - ESPUMA36 - PECAS ASSISTENCIA TECNICA37 - CAPAS CAMA37 - PECAS AT38 - AMBIENTAL / RESÃDUOS39 - ACESSORIOS CLARICE MOVEIS39 - CLARICE MOVEIS40 - LOJAS40 - MATERIAIS DE LIMPEZA E ESCRITÃ³40 - MERCADORIA P/REVENDA41 - OSSO SALA ESTAR42 - SERRARIA43 - EPI - CALCADOS44 - EPI - MAOS45 - ESTRUTURA DE MADEIRA45 - ESTRUTURA MADEIRA46 - INOX47 - ALUMINIO47 - Ferros/Inox/AlumÃ­nio48 - 11148 - FERRO48 - GAS49 - COURO50 - LIMPEZA51 - ADMINISTRATIVO51 - IMPRESSOS52 - ESCRITORIO52 - FELTROS52 - NAO USADO53 - VARANDA GOURMET54 - EPI - OLHOS / FACE55 - EPI - RESPIRATORIO56 - EPC - PROTECAO COLETIVA57 - EPI - AUDITIVO58 - EPI - CABECA59 - ESTRUTURA DE BOX60 - PECAS DECORATIVAS LEDA61 - EPI - CORPO / PROTECOES62 - EPI - TRABALHO EM ALTURA63 - UNIFORMES64 - SINALIZACAO / SEGURANCA65 - COMBATE A INCENDIO66 - SEGURANCA PATRIMONIAL67 - HIGIENE / SAUDE68 - OUTROS / NAO CLASSIFICADO69 - LAMINAS70 - INCOLBRAS71 - COLCHOES72 - TAMPOS E BORDADOS DE COLCHÃ£O86 - ALIMENTACAO86 - LIMPEZA/ALIMENTAÃÃO.89 - DIVERSOS97 - ANDRADE PINTO98 - CONSIGNACAO99 - OUTROS"
+      ],
+      [
+        "Codigo da Empresa:(campo obrigatÃ³rio)Situacao Estoque:LiberadoInspeÃ§Ã£oRejeitadoExcepcionalLocal Estoque:Grupo de Estoque:Linha de Produto:Linha de Receita:FamÃ­lia:Tipo do Item:CompradoFinalProduzidoFantasmaOrdenar por:TempoFamÃ­liaSituaÃ§Ã£oCustoRelatÃ³rioResumidoCompletoExibir descriÃ§Ã£o do item completa?SimNÃ£oSituaÃ§Ã£o do Item:AtivoInativoGrupos de Controle de Estoque:1 - CAJURU1 - PRODUTOS QUIMICOS2 - ACESSORIOS (EXTERNO)2 - FABRICA DE PES E ACESSORIO2 - FERRAGENS3 - MADEIRAS3 - MADEIRAS/BRUTA3 - MADEIRAS/BRUTAS4 - CRISTAIS5 - PEDRAS6 - MATERIAIS ELETRICOS6 - MATERIAL ELETRICO7 - TECIDOS8 - METALURGICA8 - METALURGICOS8 - SERRALHERIA - CHICO9 - MADEIRAS INDUSTRIALIZADAS9 - MADEIRAS/INDUSTRIALIZADAS9 - PASSAMANARIA10 - COLAS10 - PERCINTAS11 - AVIAMENTOS12 - PLASTICOS12 - QUIMICO/ESPUMA12 - QUIMIMICO/ESPUMA13 - ESTOFADOS14 - FERRAGENS (INTERNO)14 - FERRAGENS/INTERNO14 - PAPEIS15 - RACKS, ESTANTES, MESAS15 - UNILIDER16 - INOBILIZADO16 - MANUTENCAO17 - TRANSPORTE18 - MOVEIS OSSO18 - OSSO JANTAR19 - MOVEIS SALA DE JANTAR19 - MOVEIS SALA JANTAR19 - SALA DE JANTAR20 - ESPUMAS20 - MOVEIS OSSO TRANSFERIDOS21 - COLCHOES21 - OSSO ESTAR22 - SEGURANCA23 - ADORNOS23 - OBJETOS23 - PECAS DECORATIVAS24 - MOVEIS COMPLEMENTARES24 - MOVEIS REVENDA24 - REVENDA25 - IMOBILIZADO25 - MAQUINAS26 - EMBALAGENS26 - MOVEIS CAJURU26 - TRANSFERENCIAS27 - ABRASIVOS28 - ESPUMAS28 - IMOBILIZADO28 - LAMINACAO/ESPUMACAO29 - CAPAS29 - COURO30 - ATELIE LIDER30 - CCR30 - MATERIA PRIMA31 - TAPETES32 - ESTR DE MADEIRA - ESTOFADOS33 - ACESSORIOS COMPRADOS33 - MOVEIS PARA DORMITORIOS34 - DORMITORIOS35 - COLCHAS/ALMOF35 - OSSO DORMITORIO36 - CORTE DA UNILIDER36 - ESPUMA36 - PECAS ASSISTENCIA TECNICA37 - CAPAS CAMA37 - PECAS AT38 - AMBIENTAL / RESÃDUOS39 - ACESSORIOS CLARICE MOVEIS39 - CLARICE MOVEIS40 - LOJAS40 - MATERIAIS DE LIMPEZA E ESCRITÃ³40 - MERCADORIA P/REVENDA41 - OSSO SALA ESTAR42 - SERRARIA43 - EPI - CALCADOS44 - EPI - MAOS45 - ESTRUTURA DE MADEIRA45 - ESTRUTURA MADEIRA46 - INOX47 - ALUMINIO47 - Ferros/Inox/AlumÃ­nio48 - 11148 - FERRO48 - GAS49 - COURO50 - LIMPEZA51 - ADMINISTRATIVO51 - IMPRESSOS52 - ESCRITORIO52 - FELTROS52 - NAO USADO53 - VARANDA GOURMET54 - EPI - OLHOS / FACE55 - EPI - RESPIRATORIO56 - EPC - PROTECAO COLETIVA57 - EPI - AUDITIVO58 - EPI - CABECA59 - ESTRUTURA DE BOX60 - PECAS DECORATIVAS LEDA61 - EPI - CORPO / PROTECOES62 - EPI - TRABALHO EM ALTURA63 - UNIFORMES64 - SINALIZACAO / SEGURANCA65 - COMBATE A INCENDIO66 - SEGURANCA PATRIMONIAL67 - HIGIENE / SAUDE68 - OUTROS / NAO CLASSIFICADO69 - LAMINAS70 - INCOLBRAS71 - COLCHOES72 - TAMPOS E BORDADOS DE COLCHÃ£O86 - ALIMENTACAO86 - LIMPEZA/ALIMENTAÃÃO.89 - DIVERSOS97 - ANDRADE PINTO98 - CONSIGNACAO99 - OUTROS"
+      ]
+    ]
+  }
+}

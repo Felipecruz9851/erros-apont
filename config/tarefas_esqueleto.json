@@ -1,0 +1,114 @@
+[
+  {
+    "id": "extracao_consumo_insumos",
+    "nome": "Relatório de Consumo de Insumos por Ordem",
+    "grupo": "consumo_ordem",
+    "ativo": true,
+    "iterar_por_local": true,
+    "url": "http://192.168.0.6/pcp/consumo_alt.php",
+    "metodo": "POST",
+    "descricao": "Extrai as ordens de produção e a relação de componentes necessários com indicação de baixa automática",
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    },
+    "payload_estatico": {
+      "cod_empresa": "11",
+      "num_ordem": "",
+      "logis": "N",
+      "kit": "N",
+      "padrao": "A",
+      "item_desc": "1",
+      "baixa": "S",
+      "min": "N",
+      "loc_compon": "",
+      "submit": "Consultar"
+    },
+    "parametros_dinamicos": {
+      "data_inicio_campo": "dati",
+      "data_fim_campo": "datf"
+    },
+    "locais_disponiveis": [
+      "COLCHOES", "BOX", "ESTOF UL", "CC ACABA01", "ARMARIO UL", "UL ACABA01",
+      "COZINHA", "PES ACABA", "VIDRACARIA", "PORTAS", "LAMINAD UL", "TAMPOS UL",
+      "UL FABRI01", "CORTE", "CADEIRAS", "CC FABRI01", "CORTE LE", "PEZINHO",
+      "CC FABRI03", "PLANEJADOS", "LE FABRI02", "LE FABRI03", "LE FABRI06",
+      "FIBRA", "ALMOFADAS", "CAPAS LE", "METALURGIA", "ALUMINIO", "INOX",
+      "PLASMA", "ATELIE", "ATELIE2", "UL-ALMOX05", "REVENDA", "AT INSUMO",
+      "AT SOFA", "AT MOVEIS", "AT KIT", "AT VIDRO", "KIT", "TAPA FURO",
+      "ACESSORIOS", "COLMEIAS", "C PILOTO", "MOSTRUARIO", "LAMINACAO1",
+      "EMBALAGEM", "OSSOPAINEL", "TAPETES", "LE FABRI01", "PLAN_ESP"
+    ]
+  },
+  {
+    "id": "extracao_estoque_local",
+    "nome": "Relatório de Estoque por Local",
+    "grupo": "estoque_local",
+    "ativo": true,
+    "iterar_por_local": false,
+    "url": "http://192.168.0.6/pcp/estoque_lote.php",
+    "metodo": "POST",
+    "descricao": "Extrai saldos físicos e reservados por item e por local de estoque/produção",
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    },
+    "payload_estatico": {
+      "cod_empresa": "11",
+      "situacao": "L",
+      "local": "",
+      "linha": "",
+      "linprod": "",
+      "linrecei": "",
+      "familia": "",
+      "tipo": "C",
+      "ordem": "t_est3.cod_familia,t_est3.cod_item",
+      "relatorio": "R",
+      "item_desc": "S",
+      "sit": "A",
+      "submit": "Consultar"
+    },
+    "observacoes_payload": {
+      "situacao": "L (Liberado), I (Inspeção), R (Rejeitado), E (Excepcional)",
+      "tipo": "C (Comprado), F (Final), P (Produzido), T (Fantasma)",
+      "relatorio": "R (Resumido), C (Completo)",
+      "sit": "A (Ativo), I (Inativo)",
+      "ordem": "t_est3.cod_familia,t_est3.cod_item (Família) ou GETTDATE()-t_est3.dat_ult_saida desc (Tempo)"
+    }
+  },
+  {
+    "id": "extracao_ordens_atrasadas",
+    "nome": "Relatório de Ordens de Produção / Atrasadas",
+    "grupo": "ordens_producao",
+    "ativo": true,
+    "iterar_por_local": true,
+    "url": "http://192.168.0.6/pcp/atrasadas.php",
+    "metodo": "POST",
+    "descricao": "Extrai cronograma, datas de abertura, liberação e entrega das OPs para priorização na alocação cumulativa",
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    },
+    "payload_estatico": {
+      "cod_empresa": "11",
+      "ordem": "entrega,",
+      "dat_liberac": "S",
+      "item_desc": "S",
+      "exibir_codbar": "S",
+      "exibir_fantasma": "S",
+      "submit": "Consultar"
+    },
+    "parametros_dinamicos": {
+      "data_inicio_campo": "inicio",
+      "data_fim_campo": "fim"
+    },
+    "locais_disponiveis": [
+      "COLCHOES", "BOX", "ESTOF UL", "CC ACABA01", "ARMARIO UL", "UL ACABA01",
+      "COZINHA", "PES ACABA", "VIDRACARIA", "PORTAS", "LAMINAD UL", "TAMPOS UL",
+      "UL FABRI01", "CORTE", "CADEIRAS", "CC FABRI01", "CORTE LE", "PEZINHO",
+      "CC FABRI03", "PLANEJADOS", "LE FABRI02", "LE FABRI03", "LE FABRI06",
+      "FIBRA", "ALMOFADAS", "CAPAS LE", "METALURGIA", "ALUMINIO", "INOX",
+      "PLASMA", "ATELIE", "ATELIE2", "UL-ALMOX05", "REVENDA", "AT INSUMO",
+      "AT SOFA", "AT MOVEIS", "AT KIT", "AT VIDRO", "KIT", "TAPA FURO",
+      "ACESSORIOS", "COLMEIAS", "C PILOTO", "MOSTRUARIO", "LAMINACAO1",
+      "EMBALAGEM", "OSSOPAINEL", "TAPETES", "LE FABRI01", "PLAN_ESP"
+    ]
+  }
+]

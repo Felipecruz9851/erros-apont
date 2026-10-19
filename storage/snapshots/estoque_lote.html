@@ -1,0 +1,67 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href='../templates/favicon.ico' rel='icon' type='image/x-icon' />
+<title>Estoque por local</title>
+</head>
+<table width="100%" height="100%"  margin=0 valign=top class="frame">
+   <tr>
+       <td th bgcolor="#F5F5F5" valign=top><center>
+	   <TABLE width=100% heigth="100%" border=0 margin=0 valign=top class="frame">
+	      <tr>
+		    <td colspan=4  th bgcolor=white valign=top>
+	<basefont face="courier" size="3">
+					<form method="post" action="estoque_lote.php">
+				Codigo da Empresa:
+				<input type="text" name="cod_empresa" size=5>
+				(campo obrigatório)
+				<br>
+				Situacao Estoque:
+				<input type="radio" name="situacao" value="L">Liberado
+				<input type="radio" name="situacao" value="I">Inspeção
+				<input type="radio" name="situacao" value="R">Rejeitado
+				<input type="radio" name="situacao" value="E">Excepcional
+				<br>
+				Local Estoque: <input type="text" name="local" size="10" maxlength="100">
+				<br>
+				Grupo de Estoque: <input type="text" name="linha" size="5">
+				<br>
+				Linha de Produto: <input type="text" name="linprod" size="5">
+				<br>
+				Linha de Receita: <input type="text" name="linrecei" size="5">
+				<br>
+				Família: <input type="text" name="familia" size="8">
+				<br>
+				Tipo do Item:
+				<input type="radio" name="tipo" value='C'> Comprado
+				<input type="radio" name="tipo" value='F'> Final
+				<input type="radio" name="tipo" value='P'> Produzido
+				<input type="radio" name="tipo" value='T'> Fantasma
+				<br><br>
+
+				Ordenar por:
+				<input type="radio" name="ordem" value="GETTDATE()-t_est3.dat_ult_saida desc"> Tempo
+				<input type="radio" name="ordem" value="t_est3.cod_familia,t_est3.cod_item">Família
+				<input type="radio" name="ordem" value="t_est3.ies_situacao,t_est3.cod_item">Situação
+				<input type="radio" name="ordem" value="t_est3.qtd_saldo*t_est3.cus_unit_medio desc"> Custo
+
+				<br><br>
+
+				Relatório
+				<input type="radio" name="relatorio" value="R"> Resumido
+				<input type="radio" name="relatorio" value="C"> Completo
+				<br><br>
+				Exibir descrição do item completa?  
+				<input type="radio" name="item_desc" value="S"> Sim
+				<input type="radio" name="item_desc" value="N"> Não <br><br>
+				Situação do Item:
+				<input type="radio" name="sit" value='A'> Ativo
+				<input type="radio" name="sit" value='I'> Inativo<br>
+				<br><br>
+				<input type="submit" value="Consultar">
+			</form>
+			<b>Grupos de Controle de Estoque:</b><br>1 - CAJURU                        <br>1 - PRODUTOS QUIMICOS             <br>2 - ACESSORIOS (EXTERNO)          <br>2 - FABRICA DE PES E ACESSORIO    <br>2 - FERRAGENS                     <br>3 - MADEIRAS                      <br>3 - MADEIRAS/BRUTA                <br>3 - MADEIRAS/BRUTAS               <br>4 - CRISTAIS                      <br>5 - PEDRAS                        <br>6 - MATERIAIS ELETRICOS           <br>6 - MATERIAL ELETRICO             <br>7 - TECIDOS                       <br>8 - METALURGICA                   <br>8 - METALURGICOS                  <br>8 - SERRALHERIA - CHICO           <br>9 - MADEIRAS INDUSTRIALIZADAS     <br>9 - MADEIRAS/INDUSTRIALIZADAS     <br>9 - PASSAMANARIA                  <br>10 - COLAS                         <br>10 - PERCINTAS                     <br>11 - AVIAMENTOS                    <br>12 - PLASTICOS                     <br>12 - QUIMICO/ESPUMA                <br>12 - QUIMIMICO/ESPUMA              <br>13 - ESTOFADOS                     <br>14 - FERRAGENS (INTERNO)           <br>14 - FERRAGENS/INTERNO             <br>14 - PAPEIS                        <br>15 - RACKS, ESTANTES, MESAS        <br>15 - UNILIDER                      <br>16 - INOBILIZADO                   <br>16 - MANUTENCAO                    <br>17 - TRANSPORTE                    <br>18 - MOVEIS OSSO                   <br>18 - OSSO JANTAR                   <br>19 - MOVEIS SALA DE JANTAR         <br>19 - MOVEIS SALA JANTAR            <br>19 - SALA DE JANTAR                <br>20 - ESPUMAS                       <br>20 - MOVEIS OSSO TRANSFERIDOS      <br>21 - COLCHOES                      <br>21 - OSSO ESTAR                    <br>22 - SEGURANCA                     <br>23 - ADORNOS                       <br>23 - OBJETOS                       <br>23 - PECAS DECORATIVAS             <br>24 - MOVEIS COMPLEMENTARES         <br>24 - MOVEIS REVENDA                <br>24 - REVENDA                       <br>25 - IMOBILIZADO                   <br>25 - MAQUINAS                      <br>26 - EMBALAGENS                    <br>26 - MOVEIS CAJURU                 <br>26 - TRANSFERENCIAS                <br>27 - ABRASIVOS                     <br>28 - ESPUMAS                       <br>28 - IMOBILIZADO                   <br>28 - LAMINACAO/ESPUMACAO           <br>29 - CAPAS                         <br>29 - COURO                         <br>30 - ATELIE LIDER                  <br>30 - CCR                           <br>30 - MATERIA PRIMA                 <br>31 - TAPETES                       <br>32 - ESTR DE MADEIRA - ESTOFADOS   <br>33 - ACESSORIOS COMPRADOS          <br>33 - MOVEIS PARA DORMITORIOS       <br>34 - DORMITORIOS                   <br>35 - COLCHAS/ALMOF                 <br>35 - OSSO DORMITORIO               <br>36 - CORTE DA UNILIDER             <br>36 - ESPUMA                        <br>36 - PECAS ASSISTENCIA TECNICA     <br>37 - CAPAS CAMA                    <br>37 - PECAS AT                      <br>38 - AMBIENTAL / RESÍDUOS          <br>39 - ACESSORIOS CLARICE MOVEIS     <br>39 - CLARICE MOVEIS                <br>40 - LOJAS                         <br>40 - MATERIAIS DE LIMPEZA E ESCRITó<br>40 - MERCADORIA P/REVENDA          <br>41 - OSSO SALA ESTAR               <br>42 - SERRARIA                      <br>43 - EPI - CALCADOS                <br>44 - EPI - MAOS                    <br>45 - ESTRUTURA DE MADEIRA          <br>45 - ESTRUTURA MADEIRA             <br>46 - INOX                          <br>47 - ALUMINIO                      <br>47 - Ferros/Inox/Alumínio          <br>48 - 111                           <br>48 - FERRO                         <br>48 - GAS                           <br>49 - COURO                         <br>50 - LIMPEZA                       <br>51 - ADMINISTRATIVO                <br>51 - IMPRESSOS                     <br>52 - ESCRITORIO                    <br>52 - FELTROS                       <br>52 - NAO USADO                     <br>53 - VARANDA GOURMET               <br>54 - EPI - OLHOS / FACE            <br>55 - EPI - RESPIRATORIO            <br>56 - EPC - PROTECAO COLETIVA       <br>57 - EPI - AUDITIVO                <br>58 - EPI - CABECA                  <br>59 - ESTRUTURA DE BOX              <br>60 - PECAS DECORATIVAS LEDA        <br>61 - EPI - CORPO / PROTECOES       <br>62 - EPI - TRABALHO EM ALTURA      <br>63 - UNIFORMES                     <br>64 - SINALIZACAO / SEGURANCA       <br>65 - COMBATE A INCENDIO            <br>66 - SEGURANCA PATRIMONIAL         <br>67 - HIGIENE / SAUDE               <br>68 - OUTROS / NAO CLASSIFICADO     <br>69 - LAMINAS                       <br>70 - INCOLBRAS                     <br>71 - COLCHOES                      <br>72 - TAMPOS E BORDADOS DE COLCHãO  <br>86 - ALIMENTACAO                   <br>86 - LIMPEZA/ALIMENTAÇÃO.          <br>89 - DIVERSOS                      <br>97 - ANDRADE PINTO                 <br>98 - CONSIGNACAO                   <br>99 - OUTROS                        <br> 				</td>
+	       </tr>
+	     </table></center>
+</td></tr>
+</table>

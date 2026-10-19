@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TaskDefinitionList",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Unique identifier for the scraping task"
+      },
+      "name": {
+        "type": "string",
+        "description": "Human readable name of the task"
+      },
+      "group": {
+        "type": "string",
+        "enum": ["consumo_ordem", "estoque_local"],
+        "description": "Group key used to cluster related tables together"
+      },
+      "fabrica": {
+        "type": "string",
+        "description": "Factory code or designation"
+      },
+      "url": {
+        "type": "string",
+        "format": "uri",
+        "description": "Intranet URL endpoint for the report"
+      },
+      "method": {
+        "type": "string",
+        "enum": ["GET", "POST"],
+        "default": "POST"
+      },
+      "payload": {
+        "type": "object",
+        "description": "Query parameters or form body payload"
+      },
+      "headers": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "required": ["id", "name", "group", "fabrica", "url", "method"]
+  }
+}

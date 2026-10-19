@@ -1,0 +1,52 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href='../templates/favicon.ico' rel='icon' type='image/x-icon' />
+<title>Relatório de Consumo de Insumos</title>
+</head>
+<table width="100%" height="100%"  margin=0 valign=top class="frame">
+   <tr>
+       <td th bgcolor="#F5F5F5" valign=top><center>
+	   <TABLE width=100% heigth="100%" border=0 margin=0 valign=top class="frame">
+	      <tr>
+		    <td colspan=4  th bgcolor=white valign=top>
+	<form method="post" action="consumo_alt.php">
+		Data Abertura de: <input type="date" name="dati" size=10 value=2026-10-19>
+		a <input type="date" name="datf" size=10 value=2026-10-19>
+		Empresa : <input type="text" name="cod_empresa" size=10>
+		<br>
+		Ordens: <input type="text" name="num_ordem" size=30>
+		<br>
+		<br>
+		<script type="text/javascript">
+  function marcar_todos() {
+    var inputs = document.getElementsByTagName('input');
+    var linha = 0;
+    for (var j = 0; j < inputs.length; j++) {
+      if (inputs[j].name == 'local[]') {
+        if (document.getElementById("marcar").checked) {
+          inputs[j].checked = true;
+        } else {
+          inputs[j].checked = false;
+        }
+      }
+    }
+  }
+</script>
+Fábrica: <input type=checkbox name=marcar id=marcar onclick=marcar_todos()>Marcar Todos<br><input type='checkbox' name='local[]' value='COLCHOES'>COLCHOES;<input type='checkbox' name='local[]' value='BOX'>BOX;<br><input type='checkbox' name='local[]' value='ESTOF UL'>ESTOF UL;<input type='checkbox' name='local[]' value='CC ACABA01'>CC ACABA01;<input type='checkbox' name='local[]' value='ARMARIO UL'>ARMARIO UL;<input type='checkbox' name='local[]' value='UL ACABA01'>UL ACABA01;<input type='checkbox' name='local[]' value='COZINHA'>COZINHA<br><input type='checkbox' name='local[]' value='PES ACABA'>PES ACABA;<br><input type='checkbox' name='local[]' value='VIDRACARIA'>VIDRACARIA<input type='checkbox' name='local[]' value='PORTAS'>PORTAS;<input type='checkbox' name='local[]' value='LAMINAD UL'>LAMINAD UL;<input type='checkbox' name='local[]' value='TAMPOS UL'>TAMPOS UL<br><input type='checkbox' name='local[]' value='UL FABRI01'>UL FABRI01;<input type='checkbox' name='local[]' value='CORTE'>CORTE;<input type='checkbox' name='local[]' value='CADEIRAS'>CADEIRAS;<input type='checkbox' name='local[]' value='CC FABRI01'>CC FABRI01;<input type='checkbox' name='local[]' value='CORTE LE'>CORTE LE;<input type='checkbox' name='local[]' value='PEZINHO'>PEZINHO;<br><input type='checkbox' name='local[]' value='CC FABRI03'>CC FABRI03;<br><br><input type='checkbox' name='local[]' value='PLANEJADOS'>PLANEJADOS<br><br><input type='checkbox' name='local[]' value='LE FABRI02'>LE FABRI02;<input type='checkbox' name='local[]' value='LE FABRI03'>LE FABRI03;<input type='checkbox' name='local[]' value='LE FABRI06'>LE FABRI06;<input type='checkbox' name='local[]' value='FIBRA'>FIBRA;<input type='checkbox' name='local[]' value='ALMOFADAS'>ALMOFADAS<input type='checkbox' name='local[]' value='CAPAS LE'>CAPAS LE<br><input type='checkbox' name='local[]' value='METALURGIA'>METALURGIA<input type='checkbox' name='local[]' value='ALUMINIO'>ALUMINIO;<input type='checkbox' name='local[]' value='INOX'>INOX;<input type='checkbox' name='local[]' value='PLASMA'>PLASMA;<br><input type='checkbox' name='local[]' value='ATELIE'>ATELIE;<input type='checkbox' name='local[]' value='ATELIE2'>ATELIE2;<br><input type='checkbox' name='local[]' value='UL-ALMOX05'>UL-ALMOX05;<input type='checkbox' name='local[]' value='REVENDA'>REVENDA<br><input type='checkbox' name='local[]' value='AT INSUMO'>AT INSUMO<input type='checkbox' name='local[]' value='AT SOFA'>AT SOFA<input type='checkbox' name='local[]' value='AT MOVEIS'>AT MOVEIS<input type='checkbox' name='local[]' value='AT KIT'>AT KIT;<input type='checkbox' name='local[]' value='AT VIDRO'>AT VIDRO;<br><input type='checkbox' name='local[]' value='KIT'>KIT<input type='checkbox' name='local[]' value='TAPA FURO'>TAPA FURO<input type='checkbox' name='local[]' value='ACESSORIOS'>ACESSORIOS<input type='checkbox' name='local[]' value='COLMEIAS'>COLMEIAS<input type='checkbox' name='local[]' value='C PILOTO'>C PILOTO;<input type='checkbox' name='local[]' value='MOSTRUARIO'>MOSTRUARIO<input type='checkbox' name='local[]' value='LAMINACAO1'>LAMINACAO1<input type='checkbox' name='local[]' value='EMBALAGEM'>EMBALAGEM<input type='checkbox' name='local[]' value='OSSOPAINEL'>OSSOPAINEL<br><input type='checkbox' name='local[]' value='TAPETES'>TAPETES <input type='checkbox' name='local[]' value='LE FABRI01'>LE FABRI01;<input type='checkbox' name='local[]' value='PLAN_ESP'>PLAN_ESP;<br>		<br>
+		Exibir somente estoque LOGISTICA? <input type="radio" name="logis" value="S"> Sim<input type="radio" name="logis" value="N"> Não <br>
+		Exibir somente estoque KIT? <input type="radio" name="kit" value="S"> Sim<input type="radio" name="kit" value="N"> Não <br>
+		Exibir somente estoque negativo? <input type="radio" name="padrao" value="A"> Sim<input type="radio" name="padrao" value="B"> Não <br>
+		Exibir descrição do item completa? <input type="radio" name="item_desc" value="1"> Sim<input type="radio" name="item_desc" value="2"> Não <br>
+		Exibir somente campo baixa igual a Sim? <input type="radio" name="baixa" value="S"> Sim<input type="radio" name="baixa" value="N"> Não <br>
+        CONFERIR ESTRUTURA DAS ORDENS COM ESTRUTURA DO CADASTRO – FAMÍLIA MIN <input type="radio" name="min" value="S"> Sim <input type="radio" name="min" value="N"> Não <br>
+		<br>
+		<br>
+		Local do Componente: <input type="text" name="loc_compon" size=50><br><br>
+		<input type="submit" value="Consultar">
+	</form>
+ 				</td>
+	       </tr>
+	     </table></center>
+</td></tr>
+</table>
