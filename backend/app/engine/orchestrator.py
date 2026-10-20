@@ -4,6 +4,7 @@ import uuid
 from typing import Any, Dict, List, Optional
 import pandas as pd
 from backend.app.core.security import security_manager
+from backend.app.extraction.snapshot import snapshot_manager
 from backend.app.extraction.worker import execute_task_pool
 from backend.app.models.domain import ExecutionState
 from backend.app.models.requests import StagesProgress, StatusResponse
@@ -107,72 +108,110 @@ class PipelineOrchestrator:
         cookies: Optional[Dict[str, str]],
     ) -> None:
         try:
-            # ESTÁGIO 1: Autenticação e Preparação dos Workers
-            ctx.state = "AUTHENTICATING"
-            ctx.stages.auth = "IN_PROGRESS"
-            ctx.progress_pct = 5
+            use_pickle_cache = not (username and username.strip())
 
-            security_manager.store_credentials(ctx.execution_id, username, password)
-
-            # Gera tarefas expandidas por local conforme config/tarefas_esqueleto.json
-            tasks = self.task_generator.generate_tasks(
-                data_inicio=data_inicio,
-                data_fim=data_fim,
-                locais_filtro=fabricas,
-                empresa_padrao="11",
-            )
-            ctx.tasks_total = len(tasks)
-            ctx.tasks_completed = 0
-
-            def _on_auth_done():
-                # Transição automática após cada worker do pool concluir seu login individual
+            if use_pickle_cache:
+                # Carregamento direto do snapshot pickle gerado na última extração
+                ctx.state = "AUTHENTICATING"
                 ctx.stages.auth = "COMPLETED"
                 ctx.state = "EXTRACTING"
                 ctx.stages.extraction = "IN_PROGRESS"
-                ctx.progress_pct = 10
+                ctx.progress_pct = 25
 
-            def _on_task_done(res: Dict[str, Any]):
-                ctx.tasks_completed += 1
-                if ctx.tasks_total > 0:
-                    pct = 10 + int((ctx.tasks_completed / ctx.tasks_total) * 40)
-                    ctx.progress_pct = min(pct, 50)
+                cached_dfs = snapshot_manager.load_pickle_snapshot()
+                if not cached_dfs:
+                    raise RuntimeError(
+                        "Nenhum snapshot pickle encontrado. Realize uma extração informando usuário e senha primeiro."
+                    )
 
-            # ESTÁGIO 2: Executa o pool de workers (cada worker faz login próprio 1x no seu ciclo de vida)
-            raw_results = await execute_task_pool(
-                execution_id=ctx.execution_id,
-                tasks=tasks,
-                username=username,
-                password=password,
-                cookies=cookies,
-                concurrency_limit=15,
-                on_auth_completed=_on_auth_done,
-                on_task_completed=_on_task_done,
-            )
-            ctx.raw_results = raw_results
-            ctx.stages.extraction = "COMPLETED"
-            ctx.progress_pct = 50
+                df_c = cached_dfs.get("consumo", pd.DataFrame())
+                df_e = cached_dfs.get("estoque", pd.DataFrame())
+                df_o = cached_dfs.get("ordens", pd.DataFrame())
 
-            # Agrupa os DataFrames extraídos por grupo
-            dfs_consumo = []
-            dfs_estoque = []
-            dfs_ordens = []
+                if fabricas:
+                    fab_set = {f.strip().upper() for f in fabricas}
+                    if not df_c.empty and "_local_filtro" in df_c.columns:
+                        df_c = df_c[df_c["_local_filtro"].astype(str).str.strip().str.upper().isin(fab_set)].copy()
 
-            for r in raw_results:
-                df = r.get("dataframe")
-                if df is not None and not df.empty:
-                    grp = df.get("_grupo", pd.Series()).iloc[0] if "_grupo" in df.columns else ""
-                    if grp == "consumo_ordem":
-                        dfs_consumo.append(df)
-                    elif grp == "estoque_local":
-                        dfs_estoque.append(df)
-                    elif grp == "ordens_producao":
-                        dfs_ordens.append(df)
+                ctx.dfs_by_group = {
+                    "consumo": df_c,
+                    "estoque": df_e,
+                    "ordens": df_o,
+                }
+                ctx.tasks_total = 1
+                ctx.tasks_completed = 1
+                ctx.stages.extraction = "COMPLETED"
+                ctx.progress_pct = 50
+            else:
+                # ESTÁGIO 1: Autenticação e Preparação dos Workers
+                ctx.state = "AUTHENTICATING"
+                ctx.stages.auth = "IN_PROGRESS"
+                ctx.progress_pct = 5
 
-            ctx.dfs_by_group = {
-                "consumo": pd.concat(dfs_consumo, ignore_index=True) if dfs_consumo else pd.DataFrame(),
-                "estoque": pd.concat(dfs_estoque, ignore_index=True) if dfs_estoque else pd.DataFrame(),
-                "ordens": pd.concat(dfs_ordens, ignore_index=True) if dfs_ordens else pd.DataFrame(),
-            }
+                security_manager.store_credentials(ctx.execution_id, username, password)
+
+                # Gera tarefas expandidas por local conforme config/tarefas_esqueleto.json
+                tasks = self.task_generator.generate_tasks(
+                    data_inicio=data_inicio,
+                    data_fim=data_fim,
+                    locais_filtro=fabricas,
+                    empresa_padrao="11",
+                )
+                ctx.tasks_total = len(tasks)
+                ctx.tasks_completed = 0
+
+                def _on_auth_done():
+                    # Transição automática após cada worker do pool concluir seu login individual
+                    ctx.stages.auth = "COMPLETED"
+                    ctx.state = "EXTRACTING"
+                    ctx.stages.extraction = "IN_PROGRESS"
+                    ctx.progress_pct = 10
+
+                def _on_task_done(res: Dict[str, Any]):
+                    ctx.tasks_completed += 1
+                    if ctx.tasks_total > 0:
+                        pct = 10 + int((ctx.tasks_completed / ctx.tasks_total) * 40)
+                        ctx.progress_pct = min(pct, 50)
+
+                # ESTÁGIO 2: Executa o pool de workers (cada worker faz login próprio 1x no seu ciclo de vida)
+                raw_results = await execute_task_pool(
+                    execution_id=ctx.execution_id,
+                    tasks=tasks,
+                    username=username,
+                    password=password,
+                    cookies=cookies,
+                    concurrency_limit=15,
+                    on_auth_completed=_on_auth_done,
+                    on_task_completed=_on_task_done,
+                )
+                ctx.raw_results = raw_results
+                ctx.stages.extraction = "COMPLETED"
+                ctx.progress_pct = 50
+
+                # Agrupa os DataFrames extraídos por grupo
+                dfs_consumo = []
+                dfs_estoque = []
+                dfs_ordens = []
+
+                for r in raw_results:
+                    df = r.get("dataframe")
+                    if df is not None and not df.empty:
+                        grp = df.get("_grupo", pd.Series()).iloc[0] if "_grupo" in df.columns else ""
+                        if grp == "consumo_ordem":
+                            dfs_consumo.append(df)
+                        elif grp == "estoque_local":
+                            dfs_estoque.append(df)
+                        elif grp == "ordens_producao":
+                            dfs_ordens.append(df)
+
+                ctx.dfs_by_group = {
+                    "consumo": pd.concat(dfs_consumo, ignore_index=True) if dfs_consumo else pd.DataFrame(),
+                    "estoque": pd.concat(dfs_estoque, ignore_index=True) if dfs_estoque else pd.DataFrame(),
+                    "ordens": pd.concat(dfs_ordens, ignore_index=True) if dfs_ordens else pd.DataFrame(),
+                }
+
+                # Salva snapshot pickle após concluir o carregamento dos relatórios
+                snapshot_manager.save_pickle_snapshot(ctx.dfs_by_group, execution_id=ctx.execution_id)
 
             # ESTÁGIO 3: Tratamento de Dados Modular
             ctx.state = "TREATING"

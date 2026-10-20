@@ -17,8 +17,12 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="h-16 bg-lider-card border-b border-lider-border px-8 flex items-center justify-between sticky top-0 z-30 shadow-subtle">
       <div className="flex items-center space-x-3">
-        <div className="flex items-center space-x-2">
-          <span className="font-bold tracking-tight text-sm text-lider-primary uppercase">Líder</span>
+        <div className="flex items-center space-x-3">
+          <img
+            src="/logo_lider.png"
+            alt="Líder"
+            className="h-4 w-auto object-contain"
+          />
           <span className="text-lider-border font-light">|</span>
           <span className="text-xs text-lider-secondary font-medium tracking-wide">
             Auditoria de Apontamentos & Estoque

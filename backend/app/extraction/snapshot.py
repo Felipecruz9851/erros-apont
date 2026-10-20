@@ -1,5 +1,7 @@
 import os
-from typing import List, Optional
+import pickle
+from typing import Any, Dict, List, Optional
+import pandas as pd
 
 
 DEFAULT_SNAPSHOT_DIR = os.path.join(
@@ -7,6 +9,8 @@ DEFAULT_SNAPSHOT_DIR = os.path.join(
     "storage",
     "snapshots",
 )
+
+LATEST_PICKLE_FILENAME = "latest_extraction.pkl"
 
 
 class SnapshotManager:
@@ -62,6 +66,39 @@ class SnapshotManager:
                 if fname.startswith(prefix) and fname.endswith(".html"):
                     snapshots.append(os.path.join(self.snapshot_dir, fname))
         return snapshots
+
+    def save_pickle_snapshot(self, dfs_by_group: Dict[str, pd.DataFrame], execution_id: str = "") -> str:
+        """
+        Salva o dicionário de DataFrames extraídos ('consumo', 'estoque', 'ordens')
+        em um arquivo pickle (latest_extraction.pkl) para carregamento rápido sem novo scraping.
+        """
+        payload = {
+            "execution_id": execution_id,
+            "dfs_by_group": {
+                "consumo": dfs_by_group.get("consumo", pd.DataFrame()),
+                "estoque": dfs_by_group.get("estoque", pd.DataFrame()),
+                "ordens": dfs_by_group.get("ordens", pd.DataFrame()),
+            },
+        }
+        latest_path = os.path.join(self.snapshot_dir, LATEST_PICKLE_FILENAME)
+        with open(latest_path, "wb") as f:
+            pickle.dump(payload, f, protocol=pickle.HIGHEST_PROTOCOL)
+        return latest_path
+
+    def load_pickle_snapshot(self) -> Optional[Dict[str, pd.DataFrame]]:
+        """
+        Carrega os DataFrames do último snapshot pickle salvo em disco, se existir.
+        """
+        latest_path = os.path.join(self.snapshot_dir, LATEST_PICKLE_FILENAME)
+        if not os.path.exists(latest_path):
+            return None
+        with open(latest_path, "rb") as f:
+            data: Dict[str, Any] = pickle.load(f)
+        if isinstance(data, dict) and "dfs_by_group" in data:
+            return data["dfs_by_group"]
+        if isinstance(data, dict):
+            return data
+        return None
 
 
 # Instância padrão

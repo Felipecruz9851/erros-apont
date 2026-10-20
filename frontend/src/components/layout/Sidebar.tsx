@@ -21,9 +21,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div>
         {/* Top Branding */}
         <div className="h-16 px-6 border-b border-lider-divider flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-xs uppercase tracking-widest text-lider-wood font-bold">PCP INDUSTRIAL</span>
-            <span className="text-sm font-semibold tracking-tight text-lider-primary">LÍDER INTERIORES</span>
+          <div className="flex flex-col space-y-1">
+            <img
+              src="/logo_lider.png"
+              alt="Líder Interiores"
+              className="h-5 w-auto object-contain object-left"
+            />
+            <span className="text-[10px] uppercase tracking-widest text-lider-wood font-semibold">
+              PCP Industrial
+            </span>
           </div>
           <div className="w-2 h-2 rounded-full bg-lider-wood" />
         </div>

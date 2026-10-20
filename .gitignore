@@ -56,4 +56,5 @@ Thumbs.db
 # Project temporary & runtime snapshots
 backend/storage/snapshots/*.html
 backend/storage/snapshots/*.json
+backend/storage/snapshots/*.pkl
 !backend/storage/snapshots/.gitkeep

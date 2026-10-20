@@ -4,8 +4,8 @@ from backend.app.models.domain import ErroApontamento, ExecutionState
 
 
 class StartPipelineRequest(BaseModel):
-    username: str = Field(..., description="Usuário corporativo da intranet")
-    password: str = Field(..., description="Senha corporativa da intranet")
+    username: Optional[str] = Field(default="", description="Usuário corporativo da intranet (em branco para carregar pickle)")
+    password: Optional[str] = Field(default="", description="Senha corporativa da intranet")
     data_inicio: Optional[str] = Field(default="2000-01-01", description="Data de início (YYYY-MM-DD), padrão 2000-01-01")
     data_fim: str = Field(..., description="Data atual de referência preenchida no frontend (YYYY-MM-DD)")
     fabricas: Optional[List[str]] = Field(default=None, description="Filtro opcional de fábricas")

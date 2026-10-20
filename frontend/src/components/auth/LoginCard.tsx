@@ -48,10 +48,9 @@ export const LoginCard: React.FC<LoginCardProps> = ({ onStart, isLoading, error 
             <div className="relative">
               <input
                 type="text"
-                required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="nome.sobrenome"
+                placeholder="Em branco para carregar snapshot"
                 className="w-full px-3 py-2 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood transition-colors text-lider-primary"
               />
             </div>
@@ -62,7 +61,6 @@ export const LoginCard: React.FC<LoginCardProps> = ({ onStart, isLoading, error 
             <div className="relative">
               <input
                 type="password"
-                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
