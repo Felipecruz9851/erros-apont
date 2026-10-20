@@ -10,8 +10,8 @@ interface LoginCardProps {
 
 export const LoginCard: React.FC<LoginCardProps> = ({ onStart, isLoading, error }) => {
   const today = new Date().toISOString().split('T')[0];
-  const [username, setUsername] = useState('operador.pcp');
-  const [password, setPassword] = useState('PHPSESSID=3eeero9cktl23hpo78aba98gai');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [dataInicio, setDataInicio] = useState(today);
   const [dataFim, setDataFim] = useState(today);
 
@@ -59,14 +59,14 @@ export const LoginCard: React.FC<LoginCardProps> = ({ onStart, isLoading, error 
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-lider-secondary mb-1">Senha ou Cookie de Sessão</label>
+            <label className="block text-xs font-medium text-lider-secondary mb-1">Senha Intranet</label>
             <div className="relative">
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Senha ou PHPSESSID=..."
+                placeholder="••••••••"
                 className="w-full px-3 py-2 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood transition-colors text-lider-primary"
               />
             </div>

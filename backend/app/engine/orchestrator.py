@@ -107,32 +107,12 @@ class PipelineOrchestrator:
         cookies: Optional[Dict[str, str]],
     ) -> None:
         try:
-            # ESTÁGIO 1: Autenticação e Preparação
+            # ESTÁGIO 1: Autenticação e Preparação dos Workers
             ctx.state = "AUTHENTICATING"
             ctx.stages.auth = "IN_PROGRESS"
             ctx.progress_pct = 5
 
-            # Se o usuário passou um cookie diretamente (ex: PHPSESSID=...)
-            auth_cookies = dict(cookies or {})
-            if "PHPSESSID=" in password or "PHPSESSID=" in username:
-                token = (password if "PHPSESSID=" in password else username).replace("PHPSESSID=", "").strip()
-                auth_cookies["PHPSESSID"] = token
-            elif not auth_cookies and "PHPSESSID" not in auth_cookies:
-                # Usa cookie padrão ou obtido da sessão
-                stored_cookies = security_manager.get_session_cookies(ctx.execution_id)
-                if stored_cookies:
-                    auth_cookies.update(stored_cookies)
-
             security_manager.store_credentials(ctx.execution_id, username, password)
-            if auth_cookies:
-                security_manager.store_session_cookies(ctx.execution_id, auth_cookies)
-
-            ctx.stages.auth = "COMPLETED"
-            ctx.progress_pct = 10
-
-            # ESTÁGIO 2: Geração e Disparo de Tarefas de Extração
-            ctx.state = "EXTRACTING"
-            ctx.stages.extraction = "IN_PROGRESS"
 
             # Gera tarefas expandidas por local conforme config/tarefas_esqueleto.json
             tasks = self.task_generator.generate_tasks(
@@ -144,18 +124,28 @@ class PipelineOrchestrator:
             ctx.tasks_total = len(tasks)
             ctx.tasks_completed = 0
 
+            def _on_auth_done():
+                # Transição automática após cada worker do pool concluir seu login individual
+                ctx.stages.auth = "COMPLETED"
+                ctx.state = "EXTRACTING"
+                ctx.stages.extraction = "IN_PROGRESS"
+                ctx.progress_pct = 10
+
             def _on_task_done(res: Dict[str, Any]):
                 ctx.tasks_completed += 1
                 if ctx.tasks_total > 0:
                     pct = 10 + int((ctx.tasks_completed / ctx.tasks_total) * 40)
                     ctx.progress_pct = min(pct, 50)
 
-            # Executa os workers de scraping
+            # ESTÁGIO 2: Executa o pool de workers (cada worker faz login próprio 1x no seu ciclo de vida)
             raw_results = await execute_task_pool(
                 execution_id=ctx.execution_id,
                 tasks=tasks,
-                cookies=auth_cookies,
+                username=username,
+                password=password,
+                cookies=cookies,
                 concurrency_limit=5,
+                on_auth_completed=_on_auth_done,
                 on_task_completed=_on_task_done,
             )
             ctx.raw_results = raw_results
@@ -237,6 +227,16 @@ class PipelineOrchestrator:
             ctx.end_time = time.time()
 
         except Exception as e:
+            if ctx.state == "AUTHENTICATING":
+                ctx.stages.auth = "FAILED"
+            elif ctx.state == "EXTRACTING":
+                ctx.stages.extraction = "FAILED"
+            elif ctx.state == "TREATING":
+                ctx.stages.treatment = "FAILED"
+            elif ctx.state == "CALCULATING":
+                ctx.stages.calculation = "FAILED"
+            elif ctx.state == "SERIALIZING":
+                ctx.stages.serialization = "FAILED"
             ctx.state = "FAILED"
             ctx.error_message = str(e)
             ctx.end_time = time.time()

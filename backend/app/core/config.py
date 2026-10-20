@@ -8,7 +8,10 @@ class Settings(BaseModel):
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
 
-    # Intranet default host
+    # Intranet default host and endpoints
+    INTRANET_HOST: str = Field(
+        default_factory=lambda: os.getenv("INTRANET_HOST", "http://192.168.0.6")
+    )
     INTRANET_BASE_URL: str = Field(
         default_factory=lambda: os.getenv("INTRANET_BASE_URL", "http://192.168.0.6/pcp")
     )
