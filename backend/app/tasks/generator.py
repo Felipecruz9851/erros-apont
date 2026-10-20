@@ -1,6 +1,7 @@
 import json
 import os
 from copy import deepcopy
+from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 
@@ -68,22 +69,30 @@ class TaskGenerator:
                 payload_base[campo_ini] = data_inicio
             if "data_fim_campo" in params_dinamicos and data_fim:
                 campo_fim = params_dinamicos["data_fim_campo"]
-                payload_base[campo_fim] = data_fim
+                dias_offset = int(params_dinamicos.get("data_fim_offset_dias", 0) or 0)
+                if dias_offset != 0:
+                    try:
+                        dt_f = datetime.strptime(data_fim[:10], "%Y-%m-%d") + timedelta(days=dias_offset)
+                        payload_base[campo_fim] = dt_f.strftime("%Y-%m-%d")
+                    except ValueError:
+                        payload_base[campo_fim] = data_fim
+                else:
+                    payload_base[campo_fim] = data_fim
+
+            locais_disponiveis = template.get("locais_disponiveis", [])
+            if locais_filtro:
+                locais = [loc for loc in locais_disponiveis if loc in locais_filtro]
+                if not locais:
+                    locais = locais_filtro
+            else:
+                locais = locais_disponiveis
 
             if iterar:
                 # Expansão iterativa por local
-                locais_disponiveis = template.get("locais_disponiveis", [])
-                if locais_filtro:
-                    locais = [loc for loc in locais_disponiveis if loc in locais_filtro]
-                    if not locais:
-                        locais = locais_filtro
-                else:
-                    locais = locais_disponiveis
-
+                campo_local = template.get("campo_local", "local[]")
                 for local in locais:
                     payload_local = deepcopy(payload_base)
-                    # O PHP legado espera local[] no POST form
-                    payload_local["local[]"] = local
+                    payload_local[campo_local] = local
 
                     tarefas.append(
                         {
@@ -99,7 +108,11 @@ class TaskGenerator:
                         }
                     )
             else:
-                # Tarefa única não particionada por local (ex: estoque geral)
+                # Tarefa única consolidada: se tiver locais_disponiveis, envia todos em local[] de uma só vez
+                payload_unico = deepcopy(payload_base)
+                if locais:
+                    payload_unico["local[]"] = list(locais)
+
                 tarefas.append(
                     {
                         "task_id": t_id,
@@ -110,7 +123,7 @@ class TaskGenerator:
                         "url": url,
                         "metodo": metodo,
                         "headers": headers,
-                        "payload": payload_base,
+                        "payload": payload_unico,
                     }
                 )
 

@@ -144,7 +144,7 @@ class PipelineOrchestrator:
                 username=username,
                 password=password,
                 cookies=cookies,
-                concurrency_limit=5,
+                concurrency_limit=15,
                 on_auth_completed=_on_auth_done,
                 on_task_completed=_on_task_done,
             )

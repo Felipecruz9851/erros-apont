@@ -119,8 +119,8 @@ class CalculationEngine:
                 dt_ent = self._parse_dt(data_ent_str)
 
                 # Se a ordem tem data de entrega para mais de 3 dias no futuro da data_atual, é ignorada
-                if limit_dt is not None:
-                    if dt_ent is None or dt_ent > limit_dt:
+                if limit_dt is not None and dt_ent is not None:
+                    if dt_ent > limit_dt:
                         continue
 
                 saldo_rem = saldo_corrente

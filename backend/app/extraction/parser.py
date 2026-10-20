@@ -64,7 +64,23 @@ class LegacyTableParser:
             # Fallback para a última tabela candidata ou a que tiver mais linhas
             best_table = max(candidate_tables, key=lambda t: len(t.find_all("tr")))
 
-        return self._extract_table_to_df(best_table)
+        df = self._extract_table_to_df(best_table)
+
+        # Se o HTML possuir o link 'consumo.php?...&local=...' em cada linha (caso de consumo_alt.php consolidado),
+        # extrai a fábrica da ordem diretamente do atributo href da célula 'Item'
+        if not df.empty and "Item" in df.columns and "consumo.php?" in html_content:
+            locais_extraidos = []
+            for row in best_table.find_all("tr")[1:]:
+                a_tag = row.find("a", href=True)
+                if a_tag and "local=" in a_tag["href"]:
+                    m = re.search(r"[?&]local=([^&]+)", a_tag["href"])
+                    locais_extraidos.append(m.group(1).strip() if m else "")
+                else:
+                    locais_extraidos.append("")
+            if len(locais_extraidos) == len(df) and any(locais_extraidos):
+                df["_local_filtro"] = locais_extraidos
+
+        return df
 
     def _extract_table_to_df(self, table_element) -> pd.DataFrame:
         rows = table_element.find_all("tr")

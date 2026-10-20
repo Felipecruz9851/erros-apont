@@ -28,7 +28,7 @@ class ExtractionWorker:
         password: str = "",
         worker_id: int = 1,
         cookies: Optional[Dict[str, str]] = None,
-        timeout: float = 60.0,
+        timeout: float = 120.0,
         base_url: Optional[str] = None,
     ):
         self.worker_id = worker_id
@@ -184,7 +184,7 @@ async def execute_task_pool(
     username: str = "",
     password: str = "",
     cookies: Optional[Dict[str, str]] = None,
-    concurrency_limit: int = 5,
+    concurrency_limit: int = 15,
     on_auth_completed: Optional[Callable[[], None]] = None,
     on_task_completed: Optional[Callable[[Dict[str, Any]], None]] = None,
 ) -> List[Dict[str, Any]]:

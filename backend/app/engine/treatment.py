@@ -177,6 +177,10 @@ class TreatmentEngine:
         df["data_abertura"] = df["data_abertura"].apply(self._parse_date_iso)
         df["data_entrega"] = df["data_entrega"].apply(self._parse_date_iso)
 
+        # Remove linhas de rodapé/totais do relatório legado (ex: '0 itens, 0 horas, custo 0,00' ou 'Total de peças = ...')
+        df = df[~df["op"].isin(["", "SEM_OP", "NONE", "NAN", "."])].copy()
+        df = df[~df["codigo_componente"].str.upper().str.startswith(("TOTAL", "0 ITENS"))].copy()
+
         # Tratamento de quantidade necessária
         def _parse_float(val):
             try:
@@ -229,6 +233,8 @@ class TreatmentEngine:
                 target = "saldo_fisico"
             elif norm in ["qt_reser", "saldo_reservado", "reservado"]:
                 target = "saldo_reservado"
+            elif norm in ["sofre_baixa", "baixa", "baixa_automatica"]:
+                target = "sofre_baixa"
 
             if target and target not in assigned_targets:
                 rename_map[col] = target
@@ -244,6 +250,12 @@ class TreatmentEngine:
 
         df["codigo_item"] = df["codigo_item"].apply(self._clean_item_code)
         df["local_estoque"] = df["local_estoque"].apply(self._clean_local_estoque)
+        df = df[~df["codigo_item"].isin(["", "SEM_ITEM", "NONE", "NAN"])].copy()
+        df = df[~df["codigo_item"].str.upper().str.startswith(("TOTAL", "0 ITENS"))].copy()
+
+        # Mantém apenas itens que sofrem baixa automática (Sofre Baixa? == S / SIM)
+        if "sofre_baixa" in df.columns:
+            df = df[df["sofre_baixa"].astype(str).str.strip().str.upper().isin(["S", "SIM", "TRUE", "1"])].copy()
 
         def _parse_float(val):
             try:
@@ -308,6 +320,8 @@ class TreatmentEngine:
             return df_consumo
 
         df_o["op"] = df_o["op"].astype(str).str.strip().str.upper()
+        df_o = df_o[~df_o["op"].isin(["", "NONE", "NAN", "."])].copy()
+        df_o = df_o[~df_o["op"].str.startswith(("0 ITENS", "TOTAL"))].copy()
         if "ordem_data_entrega" in df_o.columns:
             df_o["ordem_data_entrega"] = df_o["ordem_data_entrega"].apply(self._parse_date_iso)
         if "ordem_data_abertura" in df_o.columns:
