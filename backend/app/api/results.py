@@ -19,7 +19,7 @@ async def get_results(
     fabrica: Optional[str] = Query(None, description="Filtrar por fábrica"),
     local_producao: Optional[str] = Query(None, description="Filtrar por local de produção"),
     status_divergencia: Optional[str] = Query(None, description="Filtrar por tipo de divergência"),
-    limit: int = Query(100, ge=1, le=1000, description="Limite de registros por página"),
+    limit: int = Query(5000, ge=1, le=50000, description="Limite de registros por página"),
     offset: int = Query(0, ge=0, description="Deslocamento para paginação"),
 ):
     ctx = orchestrator.get_context(execution_id)

@@ -12,16 +12,15 @@ export const LoginCard: React.FC<LoginCardProps> = ({ onStart, isLoading, error 
   const today = new Date().toISOString().split('T')[0];
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [dataInicio, setDataInicio] = useState(today);
-  const [dataFim, setDataFim] = useState(today);
+  const [dataAtual, setDataAtual] = useState(today);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onStart({
       username,
       password,
-      data_inicio: dataInicio,
-      data_fim: dataFim,
+      data_inicio: '2000-01-01',
+      data_fim: dataAtual,
     });
   };
 
@@ -73,33 +72,22 @@ export const LoginCard: React.FC<LoginCardProps> = ({ onStart, isLoading, error 
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+        <div className="pt-2">
           <div>
             <label className="block text-xs font-medium text-lider-secondary mb-1 flex items-center space-x-1">
               <Calendar className="w-3.5 h-3.5 text-lider-tertiary" />
-              <span>Data de Abertura (Início)</span>
+              <span>Data Atual de Referência</span>
             </label>
             <input
               type="date"
               required
-              value={dataInicio}
-              onChange={(e) => setDataInicio(e.target.value)}
+              value={dataAtual}
+              onChange={(e) => setDataAtual(e.target.value)}
               className="w-full px-3 py-2 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood transition-colors text-lider-primary"
             />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-lider-secondary mb-1 flex items-center space-x-1">
-              <Calendar className="w-3.5 h-3.5 text-lider-tertiary" />
-              <span>Data de Entrega (Fim)</span>
-            </label>
-            <input
-              type="date"
-              required
-              value={dataFim}
-              onChange={(e) => setDataFim(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood transition-colors text-lider-primary"
-            />
+            <p className="text-[11px] text-lider-tertiary mt-1">
+              Analisa ordens abertas até esta data (desde 01/01/2000) com entrega em até 3 dias.
+            </p>
           </div>
         </div>
 

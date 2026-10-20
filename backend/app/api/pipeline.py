@@ -16,11 +16,13 @@ async def start_pipeline(request: StartPipelineRequest):
     Recebe credenciais em memória e parâmetros temporais para
     iniciar o scraping assíncrono multi-fábrica e o cálculo de erros de apontamento.
     """
-    if not request.data_inicio or not request.data_fim:
+    if not request.data_fim:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Datas de início e fim são obrigatórias.",
+            detail="A data atual de referência é obrigatória.",
         )
+
+    data_inicio = request.data_inicio or "2000-01-01"
 
     # Cria contexto de execução
     ctx = orchestrator.create_execution()
@@ -30,7 +32,7 @@ async def start_pipeline(request: StartPipelineRequest):
         execution_id=ctx.execution_id,
         username=request.username,
         password=request.password,
-        data_inicio=request.data_inicio,
+        data_inicio=data_inicio,
         data_fim=request.data_fim,
         fabricas=request.fabricas,
     )

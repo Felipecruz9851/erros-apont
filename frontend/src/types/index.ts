@@ -11,9 +11,10 @@ export type ExecutionStage =
 export type StatusDivergencia =
   | 'SALDO_INSUFICIENTE'
   | 'SALDO_ZERADO_NO_LOCAL'
-  | 'ITEM_SEM_CADASTRO_ESTOQUE';
+  | 'ITEM_SEM_CADASTRO_ESTOQUE'
+  | 'OK';
 
-export type Severidade = 'ALTA' | 'MEDIA';
+export type Severidade = 'ALTA' | 'MEDIA' | 'OK';
 
 export interface ErroApontamento {
   id: string;
@@ -81,7 +82,7 @@ export interface ResultsResponse {
 export interface StartPipelinePayload {
   username: string;
   password: string;
-  data_inicio: string;
+  data_inicio?: string;
   data_fim: string;
   fabricas?: string[];
 }

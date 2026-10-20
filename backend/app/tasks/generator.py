@@ -62,11 +62,13 @@ class TaskGenerator:
             # Regra estrita mandatória: sempre usar empresa 11
             payload_base["cod_empresa"] = empresa_padrao
 
-            # Injeção de datas se houver mapeamento dinâmico
-            if "data_inicio_campo" in params_dinamicos:
-                payload_base[params_dinamicos["data_inicio_campo"]] = data_inicio
-            if "data_fim_campo" in params_dinamicos:
-                payload_base[params_dinamicos["data_fim_campo"]] = data_fim
+            # Injeção de datas se houver mapeamento dinâmico (suporta nome de campo de request ou literal de data)
+            if "data_inicio_campo" in params_dinamicos and data_inicio:
+                campo_ini = params_dinamicos["data_inicio_campo"]
+                payload_base[campo_ini] = data_inicio
+            if "data_fim_campo" in params_dinamicos and data_fim:
+                campo_fim = params_dinamicos["data_fim_campo"]
+                payload_base[campo_fim] = data_fim
 
             if iterar:
                 # Expansão iterativa por local

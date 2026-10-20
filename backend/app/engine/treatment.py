@@ -29,6 +29,49 @@ class TreatmentEngine:
 
         return c_clean, e_clean
 
+    def _parse_date_iso(self, val: object) -> str:
+        """
+        Converte datas legadas (DD/MM/YYYY., DD/MM/YYYY, YYYY-MM-DD) para YYYY-MM-DD.
+        Retorna string vazia caso não seja uma data válida.
+        """
+        if pd.isna(val) or val is None:
+            return ""
+        s = str(val).strip().rstrip(".")
+        if not s or s == ".":
+            return ""
+        # Formato DD/MM/YYYY
+        m_br = re.search(r"(\d{2})/(\d{2})/(\d{4})", s)
+        if m_br:
+            return f"{m_br.group(3)}-{m_br.group(2)}-{m_br.group(1)}"
+        # Formato YYYY-MM-DD
+        m_iso = re.search(r"(\d{4})-(\d{2})-(\d{2})", s)
+        if m_iso:
+            return f"{m_iso.group(1)}-{m_iso.group(2)}-{m_iso.group(3)}"
+        return s
+
+    def _clean_item_code(self, val: object) -> str:
+        """
+        Limpa o código do componente removendo sufixos de unidade de medida
+        presentes nos links do relatório de consumo (ex: '3COUPCOU378 -M2' -> '3COUPCOU378').
+        """
+        if pd.isna(val) or val is None:
+            return ""
+        s = str(val).strip().upper()
+        # Remove sufixo de unidade separado por espaço + hífen (ex: '3COUPCOU378    -M2' ou '2CATIES0001CC -UN')
+        s = re.sub(r"\s+-[A-Z0-9]{1,4}$", "", s)
+        return s.strip()
+
+    def _clean_local_estoque(self, val: object) -> str:
+        """
+        Limpa o código do local de estoque removendo o sufixo de situação
+        presente no relatório de estoque (ex: 'CAPAS LE - L' -> 'CAPAS LE').
+        """
+        if pd.isna(val) or val is None:
+            return ""
+        s = str(val).strip().upper()
+        s = re.sub(r"\s*-\s*[LIRE]$", "", s)
+        return s.strip()
+
     def _normalize_col_name(self, col: str) -> str:
         s = col.lower().strip()
         s = re.sub(r"[.\-_/]", " ", s)
@@ -54,6 +97,12 @@ class TreatmentEngine:
             )
 
         df = df.copy()
+        local_filtro_series = (
+            df["_local_filtro"].astype(str).str.strip().str.upper()
+            if "_local_filtro" in df.columns
+            else None
+        )
+
         # Normaliza nomes de colunas sem conflitos
         rename_map = {}
         assigned_targets = set()
@@ -94,9 +143,9 @@ class TreatmentEngine:
         if "codigo_componente" not in df.columns:
             df["codigo_componente"] = "SEM_CODIGO"
         if "local_producao" not in df.columns:
-            df["local_producao"] = df.get("_local_filtro", "GERAL")
+            df["local_producao"] = local_filtro_series if local_filtro_series is not None else "GERAL"
         if "fabrica" not in df.columns:
-            df["fabrica"] = df.get("_local_filtro", "F01")
+            df["fabrica"] = local_filtro_series if local_filtro_series is not None else "F01"
         if "descricao_componente" not in df.columns:
             df["descricao_componente"] = ""
         if "produto_op" not in df.columns:
@@ -108,10 +157,25 @@ class TreatmentEngine:
 
         # Limpeza e tipagem
         df["op"] = df["op"].astype(str).str.strip().str.upper()
-        df["codigo_componente"] = df["codigo_componente"].astype(str).str.strip().str.upper()
-        df["local_producao"] = df["local_producao"].astype(str).str.strip().str.upper()
+        df["codigo_componente"] = df["codigo_componente"].apply(self._clean_item_code)
         df["fabrica"] = df["fabrica"].astype(str).str.strip().str.upper()
+        df["local_producao"] = df["local_producao"].astype(str).str.strip().str.upper()
+
+        # Quando extraído de consumo_alt.php por local (_local_filtro), a coluna 'Local Prod.'
+        # refere-se à origem do componente (ou '0' para comprado), enquanto o local de produção da ordem
+        # consumidora é o próprio _local_filtro (fábrica da ordem).
+        if local_filtro_series is not None:
+            df["fabrica"] = local_filtro_series
+            df["local_producao"] = local_filtro_series
+        else:
+            mask_invalid_loc = df["local_producao"].isin(["", "0", ".", "NONE", "NAN"])
+            df.loc[mask_invalid_loc, "local_producao"] = df.loc[mask_invalid_loc, "fabrica"]
+            mask_valid_loc = ~df["local_producao"].isin(["", "0", ".", "NONE", "NAN"]) & df["fabrica"].isin(["F01", "GERAL", ""])
+            df.loc[mask_valid_loc, "fabrica"] = df.loc[mask_valid_loc, "local_producao"]
+
         df["descricao_componente"] = df["descricao_componente"].astype(str).str.strip()
+        df["data_abertura"] = df["data_abertura"].apply(self._parse_date_iso)
+        df["data_entrega"] = df["data_entrega"].apply(self._parse_date_iso)
 
         # Tratamento de quantidade necessária
         def _parse_float(val):
@@ -178,8 +242,8 @@ class TreatmentEngine:
         if "local_estoque" not in df.columns:
             df["local_estoque"] = "GERAL"
 
-        df["codigo_item"] = df["codigo_item"].astype(str).str.strip().str.upper()
-        df["local_estoque"] = df["local_estoque"].astype(str).str.strip().str.upper()
+        df["codigo_item"] = df["codigo_item"].apply(self._clean_item_code)
+        df["local_estoque"] = df["local_estoque"].apply(self._clean_local_estoque)
 
         def _parse_float(val):
             try:
@@ -200,8 +264,8 @@ class TreatmentEngine:
         else:
             df["saldo_reservado"] = 0.0
 
-        # Regra de Saldo Disponível: Saldo Físico - Saldo Reservado
-        df["saldo_disponivel"] = df["saldo_fisico"] - df["saldo_reservado"]
+        # Regra de Saldo Disponível: Usa Qtde. (saldo físico no local, ignorando Qt.Reser)
+        df["saldo_disponivel"] = df["saldo_fisico"]
 
         # Agrega saldos se houver múltiplos lotes no mesmo item e local
         df_agrupado = (
@@ -221,24 +285,36 @@ class TreatmentEngine:
         df_o = df_ordens.copy()
         # Mapeia colunas de ordens
         ordem_map = {}
+        assigned = set()
         for col in df_o.columns:
             norm = self._normalize_col_name(col)
+            target = None
             if norm in ["ordem", "op"]:
-                ordem_map[col] = "op"
+                target = "op"
             elif norm in ["data_entrega", "entrega"]:
-                ordem_map[col] = "ordem_data_entrega"
+                target = "ordem_data_entrega"
             elif norm in ["data_abertura", "abertura"]:
-                ordem_map[col] = "ordem_data_abertura"
-            elif norm in ["descricao_do_item", "cliente"]:
-                ordem_map[col] = "ordem_produto"
+                target = "ordem_data_abertura"
+            elif norm in ["descricao_do_item"]:
+                target = "ordem_produto"
+            elif norm in ["fabrica"]:
+                target = "ordem_fabrica"
+            if target and target not in assigned:
+                ordem_map[col] = target
+                assigned.add(target)
 
         df_o = df_o.rename(columns=ordem_map)
         if "op" not in df_o.columns:
             return df_consumo
 
         df_o["op"] = df_o["op"].astype(str).str.strip().str.upper()
+        if "ordem_data_entrega" in df_o.columns:
+            df_o["ordem_data_entrega"] = df_o["ordem_data_entrega"].apply(self._parse_date_iso)
+        if "ordem_data_abertura" in df_o.columns:
+            df_o["ordem_data_abertura"] = df_o["ordem_data_abertura"].apply(self._parse_date_iso)
+
         cols_to_merge = ["op"]
-        for c in ["ordem_data_entrega", "ordem_data_abertura", "ordem_produto"]:
+        for c in ["ordem_data_entrega", "ordem_data_abertura", "ordem_produto", "ordem_fabrica"]:
             if c in df_o.columns:
                 cols_to_merge.append(c)
 
@@ -246,14 +322,22 @@ class TreatmentEngine:
         merged = pd.merge(df_consumo, df_o_unique, on="op", how="left")
 
         if "ordem_data_entrega" in merged.columns:
-            merged["data_entrega"] = merged["ordem_data_entrega"].fillna(merged.get("data_entrega", ""))
+            merged["data_entrega"] = merged["ordem_data_entrega"].replace("", pd.NA).fillna(merged.get("data_entrega", "")).fillna("")
             merged = merged.drop(columns=["ordem_data_entrega"])
         if "ordem_data_abertura" in merged.columns:
-            merged["data_abertura"] = merged["ordem_data_abertura"].fillna(merged.get("data_abertura", ""))
+            merged["data_abertura"] = merged["ordem_data_abertura"].replace("", pd.NA).fillna(merged.get("data_abertura", "")).fillna("")
             merged = merged.drop(columns=["ordem_data_abertura"])
         if "ordem_produto" in merged.columns:
-            merged["produto_op"] = merged["ordem_produto"].fillna(merged.get("produto_op", ""))
+            merged["produto_op"] = merged["ordem_produto"].replace("", pd.NA).fillna(merged.get("produto_op", "")).fillna("")
             merged = merged.drop(columns=["ordem_produto"])
+        if "ordem_fabrica" in merged.columns:
+            ordem_fab = merged["ordem_fabrica"].astype(str).str.strip().str.upper()
+            # No consumo_alt.php, uma OP da fábrica X pode ter componente produzido no local Y,
+            # mas o local de produção da ordem consumidora é a fábrica da ordem (ordem_fabrica / _local_filtro)
+            mask_valid_fab = ~ordem_fab.isin(["", "NONE", "NAN", "."])
+            merged.loc[mask_valid_fab, "fabrica"] = ordem_fab[mask_valid_fab]
+            merged.loc[mask_valid_fab, "local_producao"] = ordem_fab[mask_valid_fab]
+            merged = merged.drop(columns=["ordem_fabrica"])
 
         return merged
 

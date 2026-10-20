@@ -1,36 +1,34 @@
 ---
 modulo: "Motor_Calculo_Pandas"
 tipo: "dominio"
-data_atualizacao: 2026-10-19
-tags: [regras-negocio, calculo, parametros, pandas, json, tratamento, baixa-automatica, estoque]
+data_atualizacao: 2026-10-20
+tags: [regras-negocio, calculo, parametros, pandas, json, tratamento, baixa-automatica, estoque, janela-3-dias]
 ---
 
 # Regra: Motor_Calculo_Pandas
 
-**Contexto:** Camada de domínio analítico responsável pela esteira de transformação pós-extração: tratamento dos dois relatórios extraídos da intranet (**Consumo de Componentes por Ordem** e **Estoque**), filtro de insumos que sofrem **baixa automática**, cruzamento de saldos por **local de produção** da ordem consumidora e montagem do DataFrame consolidado de erros em JSON.
+**Contexto:** Camada de domínio analítico responsável pela esteira de transformação pós-extração: tratamento dos relatórios extraídos da intranet (**Consumo de Componentes por Ordem**, **Ordens de Produção / Atrasadas** e **Estoque por Local**), filtro de insumos que sofrem **baixa automática**, ordenação pela data de entrega das ordens mais urgentes/antigas para as mais futuras, abatimento cumulativo do saldo físico (`Qtde.`) no **local de produção** da ordem consumidora e avaliação na janela de até 3 dias da **data atual** informada no frontend.
 
 ## Fases da Execução
 
 1. **Tratamento e Normalização dos Dados (`clean_and_normalize`):**
-   - Sanitização de espaços e caracteres das tabelas HTML legadas.
-   - Normalização dos identificadores de itens, ordens e códigos de locais de estoque/produção (remoção de formatações espúrias).
-   - Conversão de tipos: quantidades e saldos como `float`, datas e códigos como `string`.
-2. **Filtro de Baixa Automática (`filter_automatic_deduction`):**
-   - Seleção estrita dos componentes no relatório de consumo onde o indicador de baixa automática está ativo (`baixa_automatica == True`).
-   - Componentes de baixa manual são preservados no contexto de ordens, mas excluídos da verificação de saldo automático para evitar falsos positivos.
-3. **Cruzamento de Saldos por Local de Produção (`cross_match_stock_by_location`):**
-   - Realização de junção (*merge/join*) entre o DataFrame de consumo e o DataFrame de estoque utilizando como chave composta:
-     - `codigo_componente`
-     - `local_producao` (local atribuído à OP que consome o insumo) vs `local_estoque` (local do relatório de estoque)
-4. **Identificação de Divergências e Cálculo de Déficit (`calculate_pointing_errors`):**
-   - Condição de erro: `saldo_disponivel.fillna(0) < quantidade_necessaria`
-   - Cálculo de déficit: `deficit = quantidade_necessaria - saldo_disponivel`
-   - Categorização:
-     - `SALDO_INSUFICIENTE`: Saldo existe no local, mas não atende a quantidade total da OP.
-     - `SALDO_ZERADO_NO_LOCAL`: Saldo é zero ou inexistente no local de produção da ordem (mesmo que haja saldo em outros almoxarifados).
-5. **Montagem do DataFrame de Saída em JSON (`assemble_output_json`):**
-   - Estruturação do DataFrame com as colunas finais: `fabrica`, `op`, `produto_op`, `local_producao`, `codigo_componente`, `descricao_componente`, `baixa_automatica`, `qtd_necessaria`, `saldo_disponivel`, `deficit`, `status_divergencia`.
-   - Serialização determinística para JSON orientada à renderização no frontend.
+   - Seleção de tabelas folha (`leaf_tables`) no parser `BeautifulSoup` para evitar tabelas de layout aninhadas do HTML legado.
+   - Sanitização de códigos de itens no consumo (remoção do sufixo de unidade de medida, ex.: `'3COUPCOU378 -M2'` $\rightarrow$ `'3COUPCOU378'`).
+   - Normalização do local de estoque em `estoque_lote.php` (remoção do sufixo de situação `' - L'` em `'Local - Sit'`, ex.: `'CAPAS LE - L'` $\rightarrow$ `'CAPAS LE'`).
+   - Padronização de datas (`DD/MM/YYYY.` $\rightarrow$ `YYYY-MM-DD`) e enriquecimento das OPs com `data_abertura`, `data_entrega` e `fabrica` extraídas de `atrasadas.php` (consulta geral `2000-01-01` a `2050-12-31`).
+   - Definição de `saldo_disponivel = saldo_fisico` (`Qtde.`, ignorando `Qt.Reser`).
+2. **Filtro de Baixa Automática e Data de Abertura (`calculate_pointing_errors`):**
+   - Seleção estrita dos componentes onde `baixa_automatica == True`.
+   - Filtragem das ordens com `data_abertura <= data_atual` (consulta de `2000-01-01` até a data atual preenchida no frontend).
+3. **Fila de Prioridade e Abatimento Cumulativo no Local de Produção:**
+   - Ordenação das ordens por data de entrega das mais antigas/atrasadas para as mais futuras (`_sort_data_entrega`, `_sort_data_abertura`, `op`).
+   - Agrupamento por `(codigo_componente, local_producao)` e abatimento cumulativo do saldo a cada ordem atendida.
+4. **Classificação na Janela de Entrega (até +3 dias da Data Atual):**
+   - **Ignoradas:** Ordens com `data_entrega > data_atual + 3 dias` são ignoradas do resultado final.
+   - **Passíveis de Erro de Apontamento (`SALDO_INSUFICIENTE` / `SALDO_ZERADO_NO_LOCAL`):** Ordens com `data_entrega <= data_atual + 3 dias` (incluindo atrasadas e janela de 0 a 3 dias) cujo saldo remanescente no local de produção da ordem é menor que `qtd_necessaria`.
+   - **Atendidas (`OK`):** Ordens na janela de até 3 dias com componentes disponíveis em quantidade suficiente no local de produção, tendo seu consumo abatido do saldo para as ordens seguintes.
+5. **Montagem do DataFrame de Saída em JSON (`serialize_results`):**
+   - Estruturação com KPIs separando `total_erros_apontamento` (apenas divergências reais) dos itens `OK` na janela, expondo todos os registros avaliados para o dashboard.
 
 ## Lógica e Parâmetros
 

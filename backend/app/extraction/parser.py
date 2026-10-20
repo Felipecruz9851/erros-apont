@@ -36,12 +36,14 @@ class LegacyTableParser:
             return pd.DataFrame()
 
         # Heurística para selecionar a tabela certa:
-        # Se keywords forem fornecidas, pontua tabelas que contenham mais palavras-chave
-        # Em caso de empate, escolhe a tabela com mais linhas (<tr>)
+        # Prioriza tabelas "folha" (que não possuem outras tabelas de layout aninhadas dentro delas)
+        leaf_tables = [tbl for tbl in tables if not tbl.find("table")]
+        candidate_tables = leaf_tables if leaf_tables else tables
+
         best_table = None
         best_score = -1
 
-        for tbl in tables:
+        for tbl in candidate_tables:
             text = tbl.get_text()
             rows = tbl.find_all("tr")
             if len(rows) < 2:
@@ -59,8 +61,8 @@ class LegacyTableParser:
                 best_table = tbl
 
         if not best_table:
-            # Fallback para a última tabela ou a que tiver mais linhas
-            best_table = max(tables, key=lambda t: len(t.find_all("tr")))
+            # Fallback para a última tabela candidata ou a que tiver mais linhas
+            best_table = max(candidate_tables, key=lambda t: len(t.find_all("tr")))
 
         return self._extract_table_to_df(best_table)
 

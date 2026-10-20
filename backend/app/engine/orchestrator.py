@@ -200,6 +200,8 @@ class PipelineOrchestrator:
             divergences_df = calculation_engine.calculate_pointing_errors(
                 df_consumo=cleaned_consumo,
                 df_estoque=cleaned_estoque,
+                data_atual=data_fim,
+                include_ok=True,
             )
             ctx.divergences_df = divergences_df
             ctx.stages.calculation = "COMPLETED"
@@ -210,11 +212,16 @@ class PipelineOrchestrator:
             ctx.stages.serialization = "IN_PROGRESS"
 
             from backend.app.engine.serializer import serialize_results
+            total_ops_janela = (
+                int(divergences_df["op"].nunique())
+                if not divergences_df.empty and "op" in divergences_df.columns
+                else 0
+            )
             final_json = serialize_results(
                 execution_id=ctx.execution_id,
                 divergences_df=divergences_df,
-                total_ops_analisadas=len(cleaned_consumo["op"].unique()) if not cleaned_consumo.empty and "op" in cleaned_consumo.columns else 0,
-                total_componentes_baixa_auto=len(cleaned_consumo) if not cleaned_consumo.empty else 0,
+                total_ops_analisadas=total_ops_janela,
+                total_componentes_baixa_auto=len(divergences_df) if not divergences_df.empty else 0,
                 elapsed_seconds=ctx.get_elapsed_seconds(),
             )
             ctx.final_response = final_json

@@ -13,6 +13,7 @@
     },
     "payload_estatico": {
       "cod_empresa": "11",
+      "dati": "2000-01-01",
       "num_ordem": "",
       "logis": "N",
       "kit": "N",
@@ -24,7 +25,6 @@
       "submit": "Consultar"
     },
     "parametros_dinamicos": {
-      "data_inicio_campo": "dati",
       "data_fim_campo": "datf"
     },
     "locais_disponiveis": [
@@ -88,6 +88,8 @@
     },
     "payload_estatico": {
       "cod_empresa": "11",
+      "inicio": "2000-01-01",
+      "fim": "2050-12-31",
       "ordem": "entrega,",
       "dat_liberac": "S",
       "item_desc": "S",
@@ -95,10 +97,7 @@
       "exibir_fantasma": "S",
       "submit": "Consultar"
     },
-    "parametros_dinamicos": {
-      "data_inicio_campo": "inicio",
-      "data_fim_campo": "fim"
-    },
+    "parametros_dinamicos": {},
     "locais_disponiveis": [
       "COLCHOES", "BOX", "ESTOF UL", "CC ACABA01", "ARMARIO UL", "UL ACABA01",
       "COZINHA", "PES ACABA", "VIDRACARIA", "PORTAS", "LAMINAD UL", "TAMPOS UL",

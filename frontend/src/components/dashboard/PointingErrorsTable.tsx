@@ -39,7 +39,10 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
         (r.produto_op && r.produto_op.toLowerCase().includes(searchTerm.toLowerCase()));
 
       const matchFab = selectedFabrica === 'ALL' || r.fabrica === selectedFabrica;
-      const matchSev = selectedSeverity === 'ALL' || r.severidade === selectedSeverity;
+      const matchSev =
+        selectedSeverity === 'ALL' ||
+        (selectedSeverity === 'ERROS' && r.severidade !== 'OK') ||
+        r.severidade === selectedSeverity;
 
       return matchSearch && matchFab && matchSev;
     });
@@ -116,7 +119,7 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
             </select>
           </div>
 
-          {/* Filtro Severidade */}
+          {/* Filtro Severidade / Status */}
           <select
             value={selectedSeverity}
             onChange={(e) => {
@@ -125,9 +128,11 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
             }}
             className="px-2 py-1.5 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood text-lider-primary"
           >
-            <option value="ALL">Todas as Severidades</option>
+            <option value="ALL">Todos na Janela (Erros + OK)</option>
+            <option value="ERROS">Apenas Passíveis de Erro</option>
             <option value="ALTA">Alta (Crítica)</option>
             <option value="MEDIA">Média (Parcial)</option>
+            <option value="OK">Atendidas (OK)</option>
           </select>
         </div>
 
@@ -255,21 +260,33 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
                       Inicial: {r.saldo_inicial_local.toLocaleString('pt-BR', { minimumFractionDigits: 1 })}
                     </div>
                   </td>
-                  <td className="py-3 px-4 text-right font-bold text-lider-danger whitespace-nowrap">
-                    -{r.deficit_saldo.toLocaleString('pt-BR', { minimumFractionDigits: 1 })}
+                  <td className="py-3 px-4 text-right font-bold whitespace-nowrap">
+                    {r.deficit_saldo > 0 ? (
+                      <span className="text-lider-danger">
+                        -{r.deficit_saldo.toLocaleString('pt-BR', { minimumFractionDigits: 1 })}
+                      </span>
+                    ) : (
+                      <span className="text-lider-tertiary font-normal">0,0</span>
+                    )}
                   </td>
                   <td className="py-3 px-4 text-center whitespace-nowrap">
                     <span
                       className={`inline-block px-2 py-0.5 text-[10px] font-semibold rounded-sm border ${
-                        r.severidade === 'ALTA'
+                        r.severidade === 'OK'
+                          ? 'bg-lider-successLight text-lider-success border-lider-success/20'
+                          : r.severidade === 'ALTA'
                           ? 'bg-lider-dangerLight text-lider-danger border-lider-danger/20'
                           : 'bg-lider-warningLight text-lider-warning border-lider-warning/20'
                       }`}
                     >
-                      {r.severidade === 'ALTA' ? 'CRÍTICA' : 'PARCIAL'}
+                      {r.severidade === 'OK' ? 'OK' : r.severidade === 'ALTA' ? 'CRÍTICA' : 'PARCIAL'}
                     </span>
                     <div className="text-[9px] text-lider-tertiary mt-0.5">
-                      {r.status_divergencia === 'SALDO_ZERADO_NO_LOCAL' ? 'Saldo Zerado' : 'Saldo Insuficiente'}
+                      {r.status_divergencia === 'OK'
+                        ? 'Saldo Disponível'
+                        : r.status_divergencia === 'SALDO_ZERADO_NO_LOCAL'
+                        ? 'Saldo Zerado'
+                        : 'Saldo Insuficiente'}
                     </div>
                   </td>
                 </tr>

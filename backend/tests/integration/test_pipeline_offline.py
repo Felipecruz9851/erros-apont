@@ -51,16 +51,21 @@ def test_full_pipeline_offline():
     )
 
     # 5. Validação das Regras Cardeais de Negócio
-    assert len(divergences_df) == 2, f"Esperado exatamente 2 erros, obtido: {len(divergences_df)}"
+    # Com include_ok=True (padrão), retorna 3 registros: OP-1001 (OK), OP-1002 (SALDO_INSUFICIENTE), OP-1003 (SALDO_ZERADO_NO_LOCAL)
+    assert len(divergences_df) == 3, f"Esperado 3 registros avaliados, obtido: {len(divergences_df)}"
 
-    # Erro 1: OP-1002 deve ter déficit de 40 no componente CMP-001 (saldo inicial era 80, OP-1001 consumiu 50)
+    op1001_ok = divergences_df[divergences_df["op"] == "OP-1001"].iloc[0]
+    assert op1001_ok["status_divergencia"] == "OK"
+    assert op1001_ok["deficit_saldo"] == 0.0
+
+    # Erro 1: OP-1002 deve ter déficit de 20 no componente CMP-001 (saldo físico inicial era 100, OP-1001 consumiu 50 -> restam 50 para necessidade de 70)
     op1002_err = divergences_df[divergences_df["op"] == "OP-1002"]
     assert len(op1002_err) == 1
     row_1002 = op1002_err.iloc[0]
     assert row_1002["codigo_componente"] == "CMP-001"
-    assert row_1002["saldo_inicial_local"] == 80.0
-    assert row_1002["saldo_remanescente"] == 30.0
-    assert row_1002["deficit_saldo"] == 40.0
+    assert row_1002["saldo_inicial_local"] == 100.0
+    assert row_1002["saldo_remanescente"] == 50.0
+    assert row_1002["deficit_saldo"] == 20.0
     assert row_1002["status_divergencia"] == "SALDO_INSUFICIENTE"
 
     # Erro 2: OP-1003 deve ter déficit de 15 no componente CMP-003 (saldo zero no local)
@@ -88,4 +93,4 @@ def test_full_pipeline_offline():
     assert results["execution_id"] == "exec_test_offline"
     assert results["summary"]["total_erros_apontamento"] == 2
     assert results["summary"]["total_ops_com_erro"] == 2
-    assert len(results["records"]) == 2
+    assert len(results["records"]) == 3

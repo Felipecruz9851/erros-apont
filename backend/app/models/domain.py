@@ -17,9 +17,10 @@ StatusDivergencia = Literal[
     "SALDO_INSUFICIENTE",
     "SALDO_ZERADO_NO_LOCAL",
     "ITEM_SEM_CADASTRO_ESTOQUE",
+    "OK",
 ]
 
-Severidade = Literal["ALTA", "MEDIA"]
+Severidade = Literal["ALTA", "MEDIA", "OK"]
 
 
 class OPRecord(BaseModel):
