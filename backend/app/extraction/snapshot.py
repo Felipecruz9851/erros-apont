@@ -101,5 +101,30 @@ class SnapshotManager:
         return None
 
 
+    def clear_html_snapshots(self, execution_id: Optional[str] = None) -> int:
+        """
+        Remove os arquivos HTML temporários da pasta de snapshots (preservando latest_extraction.pkl e .gitkeep).
+        Se execution_id for omitido, limpa todos os .html da pasta.
+        Retorna a quantidade de arquivos removidos.
+        """
+        if not os.path.exists(self.snapshot_dir):
+            return 0
+
+        prefix = f"{self._sanitize_filename(execution_id)}_" if execution_id else ""
+        removed = 0
+        for fname in os.listdir(self.snapshot_dir):
+            if not fname.endswith(".html"):
+                continue
+            if prefix and not fname.startswith(prefix):
+                continue
+            fpath = os.path.join(self.snapshot_dir, fname)
+            try:
+                os.remove(fpath)
+                removed += 1
+            except OSError:
+                pass
+        return removed
+
+
 # Instância padrão
 snapshot_manager = SnapshotManager()

@@ -85,4 +85,5 @@ export interface StartPipelinePayload {
   data_inicio?: string;
   data_fim: string;
   fabricas?: string[];
+  debug?: boolean;
 }

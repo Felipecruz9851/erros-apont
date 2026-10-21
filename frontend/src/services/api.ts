@@ -10,7 +10,13 @@ const api = axios.create({
 
 export const pipelineApi = {
   async start(payload: StartPipelinePayload): Promise<{ execution_id: string; status: string; message: string }> {
-    const response = await api.post('/pipeline/start', payload);
+    const urlParams = new URLSearchParams(window.location.search);
+    const isDebug =
+      payload.debug === true ||
+      urlParams.get('debug')?.toLowerCase() === 'true' ||
+      urlParams.get('debug') === '1';
+    const endpoint = isDebug ? '/pipeline/start?debug=true' : '/pipeline/start';
+    const response = await api.post(endpoint, { ...payload, debug: isDebug });
     return response.data;
   },
 

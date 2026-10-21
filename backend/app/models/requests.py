@@ -9,6 +9,7 @@ class StartPipelineRequest(BaseModel):
     data_inicio: Optional[str] = Field(default="2000-01-01", description="Data de início (YYYY-MM-DD), padrão 2000-01-01")
     data_fim: str = Field(..., description="Data atual de referência preenchida no frontend (YYYY-MM-DD)")
     fabricas: Optional[List[str]] = Field(default=None, description="Filtro opcional de fábricas")
+    debug: Optional[bool] = Field(default=False, description="Quando True, preserva os arquivos HTML temporários")
 
 
 class StartPipelineResponse(BaseModel):

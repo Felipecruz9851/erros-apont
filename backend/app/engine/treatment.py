@@ -52,13 +52,15 @@ class TreatmentEngine:
     def _clean_item_code(self, val: object) -> str:
         """
         Limpa o código do componente removendo sufixos de unidade de medida
-        presentes nos links do relatório de consumo (ex: '3COUPCOU378 -M2' -> '3COUPCOU378').
+        presentes nos links do relatório de consumo (ex: '3COUPCOU378 -M2' -> '3COUPCOU378'
+        ou códigos de 15 caracteres colados na unidade como '3LEDDP73000K24V-UN' -> '3LEDDP73000K24V').
         """
         if pd.isna(val) or val is None:
             return ""
         s = str(val).strip().upper()
-        # Remove sufixo de unidade separado por espaço + hífen (ex: '3COUPCOU378    -M2' ou '2CATIES0001CC -UN')
-        s = re.sub(r"\s+-[A-Z0-9]{1,4}$", "", s)
+        # Remove sufixo de unidade precedido ou não por espaço (ex: ' -M2', '-UN', '-PAR', '-KG')
+        # Garante que a unidade comece com letra ([A-Z]) para não afetar códigos sintéticos de teste (ex: 'COMP-001')
+        s = re.sub(r"\s*-[A-Z][A-Z0-9]{1,3}$", "", s)
         return s.strip()
 
     def _clean_local_estoque(self, val: object) -> str:

@@ -79,6 +79,7 @@ class PipelineOrchestrator:
         data_fim: str,
         fabricas: Optional[List[str]] = None,
         cookies: Optional[Dict[str, str]] = None,
+        debug: bool = False,
     ) -> None:
         """Dispara a execução completa em background."""
         ctx = self.get_context(execution_id)
@@ -94,6 +95,7 @@ class PipelineOrchestrator:
                 data_fim=data_fim,
                 fabricas=fabricas,
                 cookies=cookies,
+                debug=debug,
             )
         )
 
@@ -106,6 +108,7 @@ class PipelineOrchestrator:
         data_fim: str,
         fabricas: Optional[List[str]],
         cookies: Optional[Dict[str, str]],
+        debug: bool = False,
     ) -> None:
         try:
             use_pickle_cache = not (username and username.strip())
@@ -267,7 +270,12 @@ class PipelineOrchestrator:
             ctx.stages.serialization = "COMPLETED"
             ctx.stages.presentation = "COMPLETED"
 
-            # ESTÁGIO 6: Conclusão
+            # ESTÁGIO 6: Conclusão e limpeza dos HTMLs temporários (se sem erro e debug=False)
+            if not debug:
+                has_task_errors = any(r.get("status") == "FAILED" for r in ctx.raw_results)
+                if not has_task_errors:
+                    snapshot_manager.clear_html_snapshots()
+
             ctx.state = "COMPLETED"
             ctx.progress_pct = 100
             ctx.end_time = time.time()

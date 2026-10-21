@@ -89,3 +89,18 @@ def test_cumulative_allocation_scenario_3():
     assert err["saldo_remanescente"] == 6.0
     assert err["deficit_saldo"] == 10.0
     assert err["status_divergencia"] == "SALDO_INSUFICIENTE"
+
+
+def test_clean_item_code_without_space_before_unit_suffix():
+    """
+    Garante que códigos de 15 caracteres do relatório de consumo que vêm colados
+    no sufixo de unidade (ex: '3LEDDP73000K24V-UN') sejam limpos corretamente para
+    '3LEDDP73000K24V' e cruzem com o saldo do local no relatório de estoque.
+    """
+    from backend.app.engine.treatment import treatment_engine
+
+    assert treatment_engine._clean_item_code("3LEDDP73000K24V-UN") == "3LEDDP73000K24V"
+    assert treatment_engine._clean_item_code("3CH01900ACMDPGR-M2") == "3CH01900ACMDPGR"
+    assert treatment_engine._clean_item_code("3COUPCOU378    -M2") == "3COUPCOU378"
+    assert treatment_engine._clean_item_code("COMP-001") == "COMP-001"
+

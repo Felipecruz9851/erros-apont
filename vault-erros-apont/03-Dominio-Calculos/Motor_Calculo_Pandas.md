@@ -13,7 +13,7 @@ tags: [regras-negocio, calculo, parametros, pandas, json, tratamento, baixa-auto
 
 1. **Tratamento e Normalização dos Dados (`clean_and_normalize`):**
    - Seleção de tabelas folha (`leaf_tables`) no parser `BeautifulSoup` para evitar tabelas de layout aninhadas do HTML legado.
-   - Sanitização de códigos de itens no consumo (remoção do sufixo de unidade de medida, ex.: `'3COUPCOU378 -M2'` $\rightarrow$ `'3COUPCOU378'`).
+   - Sanitização de códigos de itens no consumo: remoção do sufixo de unidade de medida precedido ou não por espaço (ex.: `'3COUPCOU378 -M2'` $\rightarrow$ `'3COUPCOU378'` e códigos de 15 caracteres colados na unidade como `'3LEDDP73000K24V-UN'` $\rightarrow$ `'3LEDDP73000K24V'`).
    - Normalização do local de estoque em `estoque_lote.php` (remoção do sufixo de situação `' - L'` em `'Local - Sit'`, ex.: `'CAPAS LE - L'` $\rightarrow$ `'CAPAS LE'`).
    - Padronização de datas (`DD/MM/YYYY.` $\rightarrow$ `YYYY-MM-DD`) e enriquecimento das OPs com `data_abertura`, `data_entrega` e `fabrica` extraídas de `atrasadas.php` (consulta geral `2000-01-01` a `2050-12-31`).
    - Definição de `saldo_disponivel = saldo_fisico` (`Qtde.`, ignorando `Qt.Reser`).

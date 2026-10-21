@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Query, status
 from backend.app.engine.orchestrator import orchestrator
 from backend.app.models.requests import StartPipelineRequest, StartPipelineResponse, StatusResponse
 
@@ -11,7 +11,10 @@ router = APIRouter()
     status_code=status.HTTP_202_ACCEPTED,
     summary="Dispara o pipeline completo de extração e análise",
 )
-async def start_pipeline(request: StartPipelineRequest):
+async def start_pipeline(
+    request: StartPipelineRequest,
+    debug: bool = Query(False, description="Se true (?debug=true), não limpa os arquivos HTML temporários"),
+):
     """
     Recebe credenciais em memória e parâmetros temporais para
     iniciar o scraping assíncrono multi-fábrica e o cálculo de erros de apontamento.
@@ -23,6 +26,7 @@ async def start_pipeline(request: StartPipelineRequest):
         )
 
     data_inicio = request.data_inicio or "2000-01-01"
+    debug_flag = bool(debug or request.debug)
 
     # Cria contexto de execução
     ctx = orchestrator.create_execution()
@@ -30,11 +34,12 @@ async def start_pipeline(request: StartPipelineRequest):
     # Dispara o pipeline em background
     await orchestrator.start_pipeline_background(
         execution_id=ctx.execution_id,
-        username=request.username,
-        password=request.password,
+        username=request.username or "",
+        password=request.password or "",
         data_inicio=data_inicio,
         data_fim=request.data_fim,
         fabricas=request.fabricas,
+        debug=debug_flag,
     )
 
     return StartPipelineResponse(
