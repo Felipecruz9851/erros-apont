@@ -159,3 +159,138 @@ def test_email_compilation_and_preview(isolated_contacts):
     assert "OP-999" in plain
     assert "MOLA-01" in plain
     assert "OP-888" not in plain  # Não deve vazar outro local
+
+    # Garante que as colunas removidas não constam no e-mail
+    for col in ["Qtd Nec.", "Saldo Local", "Saldo Rem.", ">Status<"]:
+        assert col not in html_out
+
+
+def test_tipo_componente_separation_in_email():
+    """Valida separação de itens produzidos (P) e comprados (C) nas tabelas do e-mail."""
+    records = [
+        {
+            "id": "1",
+            "op": "OP-101",
+            "produto_op": "CADEIRA",
+            "local_producao": "CADEIRAS",
+            "codigo_componente": "PER-01",
+            "descricao_componente": "PERFIL ALUMINIO",
+            "tipo_componente": "P",
+            "qtd_necessaria": 10.0,
+            "saldo_inicial_local": 0.0,
+            "saldo_remanescente": 0.0,
+            "deficit_saldo": 10.0,
+            "status_divergencia": "SALDO_ZERADO_NO_LOCAL",
+            "severidade": "ALTA",
+            "data_entrega": "2026-10-25",
+        },
+        {
+            "id": "2",
+            "op": "OP-102",
+            "produto_op": "MESA",
+            "local_producao": "CADEIRAS",
+            "codigo_componente": "PAR-01",
+            "descricao_componente": "PARAFUSO INOX",
+            "tipo_componente": "C",
+            "qtd_necessaria": 50.0,
+            "saldo_inicial_local": 0.0,
+            "saldo_remanescente": 0.0,
+            "deficit_saldo": 50.0,
+            "status_divergencia": "SALDO_ZERADO_NO_LOCAL",
+            "severidade": "ALTA",
+            "data_entrega": "2026-10-25",
+        },
+    ]
+
+    # Teste de filtro P
+    p_only = email_service.filter_errors_for_contact(records, ["CADEIRAS"], tipo_filtro="P")
+    assert len(p_only) == 1
+    assert p_only[0]["codigo_componente"] == "PER-01"
+
+    # Teste de filtro C
+    c_only = email_service.filter_errors_for_contact(records, ["CADEIRAS"], tipo_filtro="C")
+    assert len(c_only) == 1
+    assert c_only[0]["codigo_componente"] == "PAR-01"
+
+    # Teste de e-mail com ambos: deve conter blocos separados para Produzidos e Comprados
+    _, plain, html_out = email_service.build_email_content(
+        contact_name="Supervisor Cadeiras",
+        locais=["CADEIRAS"],
+        error_records=records,
+        dias_uteis=3,
+        tipo_filtro="TODOS",
+    )
+
+    assert "COMPONENTES PRODUZIDOS (P)" in plain
+    assert "COMPONENTES COMPRADOS (C)" in plain
+    assert "Componentes Produzidos (P)" in html_out
+    assert "Componentes Comprados (C)" in html_out
+    assert "PER-01" in html_out
+    assert "PAR-01" in html_out
+
+
+def test_dispatch_selected_records_to_locais_and_target_email(isolated_contacts, monkeypatch):
+    """Valida envio de linhas selecionadas para responsáveis de locais e envio para e-mail específico."""
+    c1 = isolated_contacts.create_contact(nome="Resp Acessorios", email="acess@lider.com.br", locais=["ACESSORIOS"])
+    c2 = isolated_contacts.create_contact(nome="Resp Colchoes", email="colch@lider.com.br", locais=["COLCHOES"])
+
+    mock_records = [
+        {
+            "id": "rec_acess_1",
+            "op": "OP-1",
+            "local_producao": "ACESSORIOS",
+            "codigo_componente": "COMP-A",
+            "tipo_componente": "P",
+            "deficit_saldo": 5.0,
+            "status_divergencia": "SALDO_INSUFICIENTE",
+            "severidade": "ALTA",
+            "data_entrega": "2026-10-25",
+        },
+        {
+            "id": "rec_colch_1",
+            "op": "OP-2",
+            "local_producao": "COLCHOES",
+            "codigo_componente": "COMP-C",
+            "tipo_componente": "C",
+            "deficit_saldo": 15.0,
+            "status_divergencia": "SALDO_ZERADO_NO_LOCAL",
+            "severidade": "ALTA",
+            "data_entrega": "2026-10-25",
+        },
+        {
+            "id": "rec_colch_2",
+            "op": "OP-3",
+            "local_producao": "COLCHOES",
+            "codigo_componente": "COMP-D",
+            "tipo_componente": "P",
+            "deficit_saldo": 8.0,
+            "status_divergencia": "SALDO_INSUFICIENTE",
+            "severidade": "ALTA",
+            "data_entrega": "2026-10-25",
+        },
+    ]
+
+    monkeypatch.setattr(email_service, "get_execution_data", lambda eid=None: (mock_records, 3, "2026-10-22"))
+
+    # 1. Enviar apenas as linhas rec_acess_1 e rec_colch_1 para os responsáveis dos locais
+    res_locais = email_service.dispatch_for_contacts(
+        selected_record_ids=["rec_acess_1", "rec_colch_1"]
+    )
+    assert res_locais["total_processed"] == 2
+    assert res_locais["total_sent"] == 2
+    res_by_email = {item["email"]: item for item in res_locais["results"]}
+    assert "acess@lider.com.br" in res_by_email
+    assert res_by_email["acess@lider.com.br"]["total_erros"] == 1
+    assert "colch@lider.com.br" in res_by_email
+    assert res_by_email["colch@lider.com.br"]["total_erros"] == 1  # Apenas rec_colch_1, rec_colch_2 não foi marcada
+
+    # 2. Enviar linha rec_colch_2 para um e-mail específico
+    res_especifico = email_service.dispatch_for_contacts(
+        selected_record_ids=["rec_colch_2"],
+        target_email="auditoria@lider.com.br",
+        target_name="Auditoria Central",
+    )
+    assert res_especifico["total_processed"] == 1
+    assert res_especifico["total_sent"] == 1
+    assert res_especifico["results"][0]["email"] == "auditoria@lider.com.br"
+    assert res_especifico["results"][0]["total_erros"] == 1

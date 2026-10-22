@@ -88,15 +88,20 @@ class EmailService:
         return records, dias_uteis, data_ref
 
     def filter_errors_for_contact(
-        self, records: List[Dict[str, Any]], locais: List[str]
+        self,
+        records: List[Dict[str, Any]],
+        locais: List[str],
+        tipo_filtro: Optional[str] = "TODOS",
     ) -> List[Dict[str, Any]]:
         """
-        Filtra ordens passíveis de erro pertencentes aos locais de produção do contato.
+        Filtra ordens passíveis de erro pertencentes aos locais de produção do contato,
+        com suporte opcional a filtro de tipo ('TODOS', 'C', 'P').
         """
         if not records or not locais:
             return []
 
         target_locais = {str(l).strip().upper() for l in locais if str(l).strip()}
+        tipo_norm = str(tipo_filtro or "TODOS").strip().upper()
         filtered: List[Dict[str, Any]] = []
 
         for r in records:
@@ -111,9 +116,19 @@ class EmailService:
 
             r_local = str(r.get("local_producao", "")).strip().upper()
             r_fab = str(r.get("fabrica", "")).strip().upper()
+            # Prioriza estritamente o local de produção do componente; se ausente, usa a fábrica
+            comp_local = r_local if r_local else r_fab
 
-            if r_local in target_locais or r_fab in target_locais:
-                filtered.append(r)
+            if comp_local not in target_locais:
+                continue
+
+            # Filtro por tipo de componente
+            if tipo_norm in ["C", "P"]:
+                tipo_comp = str(r.get("tipo_componente", "C")).strip().upper()
+                if tipo_comp != tipo_norm:
+                    continue
+
+            filtered.append(r)
 
         return filtered
 
@@ -124,96 +139,171 @@ class EmailService:
         error_records: List[Dict[str, Any]],
         dias_uteis: int = 3,
         data_ref: str = "",
+        tipo_filtro: Optional[str] = "TODOS",
     ) -> Tuple[str, str, str]:
         """
         Gera o assunto, corpo em texto puro e corpo formatado em HTML.
         Mensagem obrigatória:
         "(Bom dia ou boa tarde a depender do horário), (Nome do contato) segue lista de erros de apontamento dos próximos x dias."
+        Separa os componentes entre Produzidos (P) e Comprados (C).
         """
         saudacao = self.get_greeting()
         nome = contact_name.strip()
-        locais_str = ", ".join(sorted(locais))
+        locais_str = ", ".join(sorted(locais)) if locais else "Geral"
         data_ref_str = f" (Ref: {data_ref})" if data_ref else ""
+        tipo_norm = str(tipo_filtro or "TODOS").strip().upper()
 
-        subject = f"Erros de Apontamento - {locais_str} - Próximos {dias_uteis} dias úteis"
+        tipo_sufixo = ""
+        if tipo_norm == "P":
+            tipo_sufixo = " [Produzidos]"
+        elif tipo_norm == "C":
+            tipo_sufixo = " [Comprados]"
+
+        subject = f"Erros de Apontamento - {locais_str}{tipo_sufixo} - Próximos {dias_uteis} dias úteis"
 
         # Mensagem textual padrão conforme especificação
         frase_abertura = f"{saudacao}, {nome} segue lista de erros de apontamento dos próximos {dias_uteis} dias."
 
-        # Versão Plain Text com resuminho e tabela (sem cabeçalho decorativo)
+        # Separa os tipos de componentes: P (Produzidos) e C (Comprados)
+        produzidos = [r for r in error_records if str(r.get("tipo_componente", "C")).strip().upper() == "P"]
+        comprados = [r for r in error_records if str(r.get("tipo_componente", "C")).strip().upper() != "P"]
+
+        # ----------------------------------------------------
+        # Versão Plain Text
+        # ----------------------------------------------------
+        tipo_info = f" | Filtro Tipo: {tipo_norm}" if tipo_norm != "TODOS" else ""
         lines = [
             frase_abertura,
             "",
-            f"Locais atribuídos: {locais_str}{data_ref_str}",
-            f"Total de ordens passíveis de erro: {len(error_records)}",
-            "-" * 90,
+            f"Locais atribuídos: {locais_str}{data_ref_str}{tipo_info}",
+            f"Total de divergências: {len(error_records)} (Produzidos: {len(produzidos)} | Comprados: {len(comprados)})",
+            "-" * 95,
         ]
 
         if not error_records:
             lines.append("Nenhum erro de apontamento identificado para os seus locais nesta janela.")
         else:
-            lines.append(
-                f"{'OP':<12} | {'Produto':<24} | {'Componente':<18} | {'Local':<12} | {'Entrega':<10} | {'Déficit':<8} | {'Status'}"
-            )
-            lines.append("-" * 90)
-            for r in error_records:
-                op = str(r.get("op", ""))[:12]
-                prod = str(r.get("produto_op", ""))[:24]
-                comp = str(r.get("codigo_componente", ""))[:18]
-                loc = str(r.get("local_producao", ""))[:12]
-                ent = str(r.get("data_entrega", ""))[:10]
-                defic = f"{float(r.get('deficit_saldo', 0)):.1f}"
-                stat = str(r.get("status_divergencia", ""))
-                lines.append(f"{op:<12} | {prod:<24} | {comp:<18} | {loc:<12} | {ent:<10} | {defic:<8} | {stat}")
+            if produzidos:
+                lines.append(f"\n=== COMPONENTES PRODUZIDOS (P) ({len(produzidos)} itens) ===")
+                lines.append(
+                    f"{'OP':<12} | {'Produto':<20} | {'Componente':<18} | {'Tipo':<4} | {'Local':<12} | {'Entrega':<10} | {'Déficit':<8}"
+                )
+                lines.append("-" * 90)
+                for r in produzidos:
+                    op = str(r.get("op", ""))[:12]
+                    prod = str(r.get("produto_op", ""))[:20]
+                    comp = str(r.get("codigo_componente", ""))[:18]
+                    loc = str(r.get("local_producao", ""))[:12]
+                    ent = str(r.get("data_entrega", ""))[:10]
+                    defic = f"{float(r.get('deficit_saldo', 0)):.1f}"
+                    lines.append(f"{op:<12} | {prod:<20} | {comp:<18} | {'P':<4} | {loc:<12} | {ent:<10} | {defic:<8}")
+
+            if comprados:
+                lines.append(f"\n=== COMPONENTES COMPRADOS (C) ({len(comprados)} itens) ===")
+                lines.append(
+                    f"{'OP':<12} | {'Produto':<20} | {'Componente':<18} | {'Tipo':<4} | {'Local':<12} | {'Entrega':<10} | {'Déficit':<8}"
+                )
+                lines.append("-" * 90)
+                for r in comprados:
+                    op = str(r.get("op", ""))[:12]
+                    prod = str(r.get("produto_op", ""))[:20]
+                    comp = str(r.get("codigo_componente", ""))[:18]
+                    loc = str(r.get("local_producao", ""))[:12]
+                    ent = str(r.get("data_entrega", ""))[:10]
+                    defic = f"{float(r.get('deficit_saldo', 0)):.1f}"
+                    lines.append(f"{op:<12} | {prod:<20} | {comp:<18} | {'C':<4} | {loc:<12} | {ent:<10} | {defic:<8}")
 
         plain_text = "\n".join(lines)
 
-        # Versão HTML simples (sem cabeçalhos rebuscados, apenas o texto de apresentação e a tabela)
-        table_rows_html = ""
-        if error_records:
-            for r in error_records:
+        # ----------------------------------------------------
+        # Versão HTML com tabelas separadas por Tipo (P e C)
+        # ----------------------------------------------------
+        def _render_table_rows(records_list: List[Dict[str, Any]]) -> str:
+            rows_html = ""
+            for r in records_list:
                 op_val = html.escape(str(r.get("op", "")))
                 prod_val = html.escape(str(r.get("produto_op", "") or "-"))
                 comp_code = html.escape(str(r.get("codigo_componente", "")))
                 comp_desc = html.escape(str(r.get("descricao_componente", "")))
+                tipo_val = html.escape(str(r.get("tipo_componente", "C")).upper())
+                is_p = tipo_val == "P"
+                tipo_badge = f'<span style="background-color: {"#EFF6FF" if is_p else "#FEF3C7"}; color: {"#1D4ED8" if is_p else "#B45309"}; border: 1px solid {"#BFDBFE" if is_p else "#FDE68A"}; padding: 1px 6px; border-radius: 3px; font-weight: bold; font-size: 10px;">{tipo_val}</span>'
                 loc_val = html.escape(str(r.get("local_producao", "")))
                 ent_val = html.escape(str(r.get("data_entrega", "")))
-                qtd_nec = f"{float(r.get('qtd_necessaria', 0)):.2f}"
-                saldo_ini = f"{float(r.get('saldo_inicial_local', 0)):.2f}"
-                saldo_rem = f"{float(r.get('saldo_remanescente', 0)):.2f}"
                 deficit = f"{float(r.get('deficit_saldo', 0)):.2f}"
-                status_raw = str(r.get("status_divergencia", ""))
 
-                status_label = (
-                    "SALDO ZERADO"
-                    if status_raw == "SALDO_ZERADO_NO_LOCAL"
-                    else "SALDO INSUFICIENTE"
-                )
-
-                table_rows_html += f"""
+                rows_html += f"""
                 <tr>
                     <td style="border: 1px solid #ccc; padding: 6px 8px; font-family: monospace; font-weight: bold;">{op_val}</td>
                     <td style="border: 1px solid #ccc; padding: 6px 8px;">{prod_val}</td>
                     <td style="border: 1px solid #ccc; padding: 6px 8px;">
                         <strong>{comp_code}</strong> - {comp_desc}
                     </td>
+                    <td style="border: 1px solid #ccc; padding: 6px 8px; text-align: center;">{tipo_badge}</td>
                     <td style="border: 1px solid #ccc; padding: 6px 8px;">{loc_val}</td>
                     <td style="border: 1px solid #ccc; padding: 6px 8px; font-family: monospace;">{ent_val}</td>
-                    <td style="border: 1px solid #ccc; padding: 6px 8px; text-align: right;">{qtd_nec}</td>
-                    <td style="border: 1px solid #ccc; padding: 6px 8px; text-align: right;">{saldo_ini}</td>
-                    <td style="border: 1px solid #ccc; padding: 6px 8px; text-align: right;">{saldo_rem}</td>
                     <td style="border: 1px solid #ccc; padding: 6px 8px; text-align: right; color: #b91c1c; font-weight: bold;">-{deficit}</td>
-                    <td style="border: 1px solid #ccc; padding: 6px 8px; text-align: center;">{status_label}</td>
                 </tr>
                 """
-        else:
-            table_rows_html = """
-            <tr>
-                <td colspan="10" style="border: 1px solid #ccc; padding: 12px; text-align: center; color: #2e7d32;">
-                    Nenhum erro de apontamento identificado para os seus locais nesta análise.
-                </td>
-            </tr>
+            return rows_html
+
+        def _render_table_block(title: str, records_list: List[Dict[str, Any]], color: str, bg_tint: str) -> str:
+            if not records_list:
+                return ""
+            return f"""
+            <div style="margin-top: 18px; margin-bottom: 6px; font-size: 13px; font-weight: bold; color: {color};">
+                <span style="display: inline-block; width: 8px; height: 8px; background-color: {color}; border-radius: 50%; margin-right: 6px;"></span>
+                {title} ({len(records_list)} item(ns))
+            </div>
+            <table style="border-collapse: collapse; width: 100%; border: 1px solid #ccc; font-size: 12px; margin-bottom: 18px;">
+                <thead>
+                    <tr style="background-color: {bg_tint};">
+                        <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: left;">OP</th>
+                        <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: left;">Produto</th>
+                        <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: left;">Componente</th>
+                        <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: center;">Tipo</th>
+                        <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: left;">Local</th>
+                        <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: left;">Entrega</th>
+                        <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: right;">Déficit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {_render_table_rows(records_list)}
+                </tbody>
+            </table>
             """
+
+        tables_html = ""
+        if not error_records:
+            tables_html = """
+            <table style="border-collapse: collapse; width: 100%; border: 1px solid #ccc; font-size: 12px;">
+                <tr>
+                    <td style="border: 1px solid #ccc; padding: 14px; text-align: center; color: #2e7d32;">
+                        Nenhum erro de apontamento identificado para os seus locais nesta análise.
+                    </td>
+                </tr>
+            </table>
+            """
+        else:
+            if produzidos:
+                tables_html += _render_table_block(
+                    "Componentes Produzidos (P)",
+                    produzidos,
+                    color="#1D4ED8",
+                    bg_tint="#F0F7FF",
+                )
+            if comprados:
+                tables_html += _render_table_block(
+                    "Componentes Comprados (C)",
+                    comprados,
+                    color="#B45309",
+                    bg_tint="#FFFBEB",
+                )
+
+        tipo_badge_summary = ""
+        if tipo_norm != "TODOS":
+            tipo_label = "Apenas Produzidos (P)" if tipo_norm == "P" else "Apenas Comprados (C)"
+            tipo_badge_summary = f'<div style="margin-bottom: 3px;"><strong>Filtro de Tipo:</strong> <span style="color: #374151;">{tipo_label}</span></div>'
 
         html_body = f"""<!DOCTYPE html>
 <html lang="pt-BR">
@@ -230,28 +320,11 @@ class EmailService:
     <div style="background-color: #F9FAFB; border: 1px solid #E5E7EB; border-left: 4px solid #C49A45; border-radius: 2px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px;">
         <div style="margin-bottom: 3px;"><strong>Locais de Produção:</strong> <span style="color: #374151;">{html.escape(locais_str)}</span></div>
         <div style="margin-bottom: 3px;"><strong>Janela Considerada:</strong> <span style="color: #374151;">Próximos {dias_uteis} dias úteis{data_ref_str}</span></div>
-        <div><strong>Total de Erros de Apontamento:</strong> <span style="color: {'#B91C1C' if error_records else '#059669'}; font-weight: bold;">{len(error_records)} divergência(s)</span></div>
+        {tipo_badge_summary}
+        <div><strong>Total de Erros de Apontamento:</strong> <span style="color: {'#B91C1C' if error_records else '#059669'}; font-weight: bold;">{len(error_records)} divergência(s)</span> (Produzidos: {len(produzidos)} | Comprados: {len(comprados)})</div>
     </div>
 
-    <table style="border-collapse: collapse; width: 100%; border: 1px solid #ccc; font-size: 12px;">
-        <thead>
-            <tr style="background-color: #f2f2f2;">
-                <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: left;">OP</th>
-                <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: left;">Produto</th>
-                <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: left;">Componente</th>
-                <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: left;">Local</th>
-                <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: left;">Entrega</th>
-                <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: right;">Qtd Nec.</th>
-                <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: right;">Saldo Local</th>
-                <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: right;">Saldo Rem.</th>
-                <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: right;">Déficit</th>
-                <th style="border: 1px solid #ccc; padding: 6px 8px; text-align: center;">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {table_rows_html}
-        </tbody>
-    </table>
+    {tables_html}
 </body>
 </html>"""
 
@@ -348,13 +421,144 @@ class EmailService:
         execution_id: Optional[str] = None,
         contact_ids: Optional[List[str]] = None,
         send_all_with_errors: bool = False,
+        tipo_filtro: Optional[str] = "TODOS",
+        selected_record_ids: Optional[List[str]] = None,
+        selected_records: Optional[List[Dict[str, Any]]] = None,
+        target_email: Optional[str] = None,
+        target_name: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
-        Compila e despacha e-mails para os contatos especificados ou para todos que tenham erros.
+        Compila e despacha e-mails com suporte a:
+        1. Envio avulso de linhas para um e-mail específico (target_email) -> Envia estritamente para ele.
+        2. Envio de linhas selecionadas para os responsáveis vinculados pelos locais de produção.
+        3. Envio padrão filtrado por contatos ou para todos que tenham erros.
+        Permite filtrar os tipos de componentes ('TODOS', 'C', 'P').
         """
         all_contacts = contacts_service.list_contacts()
         records, dias_uteis, data_ref = self.get_execution_data(execution_id)
+        tipo_norm = str(tipo_filtro or "TODOS").strip().upper()
 
+        # Determina o universo de registros: se o frontend enviou as linhas completas selecionadas, usa-as
+        if selected_records:
+            records = selected_records
+        elif selected_record_ids:
+            selected_set = set(selected_record_ids)
+            records = [r for r in records if r.get("id") in selected_set]
+
+        # ------------------------------------------------------------------
+        # Caso 1: Enviar linhas para um e-mail específico (target_email)
+        # ------------------------------------------------------------------
+        if target_email and target_email.strip():
+            dest_email = target_email.strip()
+            dest_name = (target_name or "").strip() or "Prezado(a)"
+
+            # Aplica filtro de tipo
+            target_records = records
+            if tipo_norm in ["C", "P"]:
+                target_records = [
+                    r for r in target_records if str(r.get("tipo_componente", "C")).strip().upper() == tipo_norm
+                ]
+
+            locais_set = {str(r.get("local_producao", "")).strip().upper() for r in target_records if r.get("local_producao")}
+            locais_list = sorted(list(locais_set)) or ["Geral"]
+
+            subject, plain_text, html_body = self.build_email_content(
+                contact_name=dest_name,
+                locais=locais_list,
+                error_records=target_records,
+                dias_uteis=dias_uteis,
+                data_ref=data_ref,
+                tipo_filtro=tipo_norm,
+            )
+
+            send_res = self.send_email(
+                to_email=dest_email,
+                subject=subject,
+                text_content=plain_text,
+                html_content=html_body,
+            )
+
+            is_ok = send_res.get("status") in ["SENT", "SIMULATED"]
+            result_item = {
+                "contact_id": "custom_recipient",
+                "contact_name": dest_name,
+                "email": dest_email,
+                "locais": locais_list,
+                "total_erros": len(target_records),
+                "status": send_res.get("status"),
+                "message": send_res.get("message"),
+            }
+
+            return {
+                "execution_id": execution_id or "latest",
+                "dias_uteis": dias_uteis,
+                "data_ref": data_ref,
+                "total_processed": 1,
+                "total_sent": 1 if is_ok else 0,
+                "results": [result_item],
+            }
+
+        # ------------------------------------------------------------------
+        # Caso 2: Linhas marcadas para os responsáveis vinculados pelo local
+        # ------------------------------------------------------------------
+        if selected_records or selected_record_ids:
+            # Envia apenas para os contatos cujos locais contêm alguma das linhas marcadas
+            results = []
+            sent_count = 0
+
+            # Mapeia quais contatos receberão quais linhas marcadas
+            for contact in all_contacts:
+                c_id = contact.get("id", "")
+                c_name = contact.get("nome", "")
+                c_email = contact.get("email", "")
+                locais = contact.get("locais", [])
+
+                contact_errors = self.filter_errors_for_contact(records, locais, tipo_filtro=tipo_norm)
+                if not contact_errors:
+                    continue
+
+                subject, plain_text, html_body = self.build_email_content(
+                    contact_name=c_name,
+                    locais=locais,
+                    error_records=contact_errors,
+                    dias_uteis=dias_uteis,
+                    data_ref=data_ref,
+                    tipo_filtro=tipo_norm,
+                )
+
+                send_res = self.send_email(
+                    to_email=c_email,
+                    subject=subject,
+                    text_content=plain_text,
+                    html_content=html_body,
+                )
+
+                is_ok = send_res.get("status") in ["SENT", "SIMULATED"]
+                if is_ok:
+                    sent_count += 1
+
+                results.append({
+                    "contact_id": c_id,
+                    "contact_name": c_name,
+                    "email": c_email,
+                    "locais": locais,
+                    "total_erros": len(contact_errors),
+                    "status": send_res.get("status"),
+                    "message": send_res.get("message"),
+                })
+
+            return {
+                "execution_id": execution_id or "latest",
+                "dias_uteis": dias_uteis,
+                "data_ref": data_ref,
+                "total_processed": len(results),
+                "total_sent": sent_count,
+                "results": results,
+            }
+
+        # ------------------------------------------------------------------
+        # Caso 3: Envio padrão da tela de e-mails
+        # ------------------------------------------------------------------
         target_contacts = []
         if send_all_with_errors:
             target_contacts = all_contacts
@@ -373,7 +577,7 @@ class EmailService:
             c_email = contact.get("email", "")
             locais = contact.get("locais", [])
 
-            contact_errors = self.filter_errors_for_contact(records, locais)
+            contact_errors = self.filter_errors_for_contact(records, locais, tipo_filtro=tipo_norm)
 
             # Se o usuário pediu para enviar apenas para quem tem erro e este não tem, pula
             if send_all_with_errors and not contact_errors:
@@ -394,6 +598,7 @@ class EmailService:
                 error_records=contact_errors,
                 dias_uteis=dias_uteis,
                 data_ref=data_ref,
+                tipo_filtro=tipo_norm,
             )
 
             send_res = self.send_email(

@@ -88,6 +88,7 @@ class CalculationEngine:
             "local_producao",
             "codigo_componente",
             "descricao_componente",
+            "tipo_componente",
             "baixa_automatica",
             "qtd_necessaria",
             "saldo_inicial_local",
@@ -182,6 +183,10 @@ class CalculationEngine:
 
                 saldo_rem = saldo_corrente
 
+                tipo_comp = str(row.get("tipo_componente", "C")).strip().upper()
+                if not tipo_comp or tipo_comp not in ["P", "C"]:
+                    tipo_comp = "P" if tipo_comp.startswith("P") else "C"
+
                 # Verifica se há componentes disponíveis em quantidade suficiente no local de produção
                 if saldo_rem < qtd_necessaria:
                     deficit = round(qtd_necessaria - max(0.0, saldo_rem), 4)
@@ -210,6 +215,7 @@ class CalculationEngine:
                             "local_producao": loc_prod,
                             "codigo_componente": cod_comp,
                             "descricao_componente": row.get("descricao_componente", ""),
+                            "tipo_componente": tipo_comp,
                             "baixa_automatica": True,
                             "qtd_necessaria": qtd_necessaria,
                             "saldo_inicial_local": round(saldo_inicial, 4),
@@ -236,6 +242,7 @@ class CalculationEngine:
                                 "local_producao": loc_prod,
                                 "codigo_componente": cod_comp,
                                 "descricao_componente": row.get("descricao_componente", ""),
+                                "tipo_componente": tipo_comp,
                                 "baixa_automatica": True,
                                 "qtd_necessaria": qtd_necessaria,
                                 "saldo_inicial_local": round(saldo_inicial, 4),

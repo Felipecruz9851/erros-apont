@@ -27,6 +27,7 @@ export interface ErroApontamento {
   local_producao: string;
   codigo_componente: string;
   descricao_componente: string;
+  tipo_componente?: string;
   baixa_automatica: boolean;
   qtd_necessaria: number;
   saldo_inicial_local: number;
@@ -131,6 +132,17 @@ export interface EmailSendItemResult {
   total_erros: number;
   status: string;
   message: string;
+}
+
+export interface EmailSendPayload {
+  execution_id?: string;
+  contact_ids?: string[];
+  send_all_with_errors?: boolean;
+  tipo_filtro?: 'TODOS' | 'C' | 'P';
+  selected_record_ids?: string[];
+  selected_records?: any[];
+  target_email?: string;
+  target_name?: string;
 }
 
 export interface EmailSendResponse {

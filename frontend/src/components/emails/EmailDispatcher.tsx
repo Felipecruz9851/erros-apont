@@ -30,6 +30,9 @@ export const EmailDispatcher: React.FC<EmailDispatcherProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Filtro de Tipo de Insumo (TODOS, P ou C)
+  const [tipoFiltro, setTipoFiltro] = useState<'TODOS' | 'P' | 'C'>('TODOS');
+
   // Seleção de contatos para envio em lote
   const [selectedContactIds, setSelectedContactIds] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -48,7 +51,7 @@ export const EmailDispatcher: React.FC<EmailDispatcherProps> = ({
     setIsLoading(true);
     setError(null);
     try {
-      const data = await emailsApi.getSummary(executionId || undefined);
+      const data = await emailsApi.getSummary(executionId || undefined, tipoFiltro);
       setContactsSummary(data.contacts);
       setDiasUteis(data.dias_uteis || 3);
       setDataRef(data.data_ref || '');
@@ -62,7 +65,7 @@ export const EmailDispatcher: React.FC<EmailDispatcherProps> = ({
 
   useEffect(() => {
     loadSummary();
-  }, [executionId]);
+  }, [executionId, tipoFiltro]);
 
   const toggleSelectContact = (id: string) => {
     setSelectedContactIds((prev) =>
@@ -84,7 +87,7 @@ export const EmailDispatcher: React.FC<EmailDispatcherProps> = ({
   const handleOpenPreview = async (contactId: string) => {
     setLoadingPreviewContactId(contactId);
     try {
-      const preview = await emailsApi.preview(contactId, executionId || undefined);
+      const preview = await emailsApi.preview(contactId, executionId || undefined, tipoFiltro);
       setPreviewData(preview);
       setPreviewTab('visual');
     } catch (err: any) {
@@ -100,6 +103,7 @@ export const EmailDispatcher: React.FC<EmailDispatcherProps> = ({
       const res = await emailsApi.send({
         execution_id: executionId || undefined,
         contact_ids: [contactId],
+        tipo_filtro: tipoFiltro,
       });
       const item = res.results.find((r) => r.contact_id === contactId);
       if (item) {
@@ -134,6 +138,7 @@ export const EmailDispatcher: React.FC<EmailDispatcherProps> = ({
         execution_id: executionId || undefined,
         contact_ids: idsToSend,
         send_all_with_errors: sendAllWithErrors,
+        tipo_filtro: tipoFiltro,
       });
 
       const newStatuses = { ...sendStatuses };
@@ -248,18 +253,36 @@ export const EmailDispatcher: React.FC<EmailDispatcherProps> = ({
 
       {/* Barra de Ações e Filtro de Contatos */}
       <div className="bg-lider-card border border-lider-border rounded-md p-4 shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-lider-tertiary absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Filtrar por nome, e-mail ou local atribuído..."
-            className="w-full pl-9 pr-3 py-2 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood text-lider-primary"
-          />
+        <div className="flex flex-wrap items-center gap-3 flex-1">
+          <div className="relative min-w-[200px] flex-1 max-w-sm">
+            <Search className="w-4 h-4 text-lider-tertiary absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Filtrar por nome, e-mail ou local..."
+              className="w-full pl-9 pr-3 py-1.5 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood text-lider-primary"
+            />
+          </div>
+
+          {/* Seletor de Tipo de Insumo (C / P / TODOS) */}
+          <div className="flex items-center space-x-1.5">
+            <label className="text-[11px] font-semibold text-lider-secondary shrink-0">
+              Tipo:
+            </label>
+            <select
+              value={tipoFiltro}
+              onChange={(e) => setTipoFiltro(e.target.value as 'TODOS' | 'P' | 'C')}
+              className="px-2.5 py-1.5 text-xs bg-lider-canvas border border-lider-border rounded-sm font-medium focus:outline-none focus:border-lider-wood text-lider-primary"
+            >
+              <option value="TODOS">Todos (Produzidos e Comprados)</option>
+              <option value="P">Apenas Produzidos (P)</option>
+              <option value="C">Apenas Comprados (C)</option>
+            </select>
+          </div>
         </div>
 
-        <div className="flex items-center space-x-3 text-xs">
+        <div className="flex items-center space-x-3 text-xs shrink-0">
           <div className="flex items-center space-x-2">
             <button
               type="button"
@@ -544,50 +567,49 @@ export const EmailDispatcher: React.FC<EmailDispatcherProps> = ({
                           <th className="p-2.5">OP</th>
                           <th className="p-2.5">Produto</th>
                           <th className="p-2.5">Componente</th>
+                          <th className="p-2.5 text-center">Tipo</th>
                           <th className="p-2.5">Local</th>
                           <th className="p-2.5">Entrega</th>
-                          <th className="p-2.5 text-right">Qtd Nec.</th>
-                          <th className="p-2.5 text-right">Saldo Local</th>
                           <th className="p-2.5 text-right">Déficit</th>
-                          <th className="p-2.5 text-center">Status</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-lider-divider">
                         {previewData.records.length === 0 ? (
                           <tr>
-                            <td colSpan={9} className="p-6 text-center text-emerald-700">
+                            <td colSpan={7} className="p-6 text-center text-emerald-700">
                               Nenhuma divergência identificada para os locais deste contato.
                             </td>
                           </tr>
                         ) : (
-                          previewData.records.map((r) => (
-                            <tr key={r.id} className="hover:bg-lider-canvas/40">
-                              <td className="p-2.5 font-mono font-medium">{r.op}</td>
-                              <td className="p-2.5 text-lider-secondary">{r.produto_op}</td>
-                              <td className="p-2.5">
-                                <div className="font-medium text-lider-primary">{r.codigo_componente}</div>
-                                <div className="text-[10px] text-lider-tertiary truncate max-w-xs">{r.descricao_componente}</div>
-                              </td>
-                              <td className="p-2.5 font-mono text-[11px]">{r.local_producao}</td>
-                              <td className="p-2.5 font-mono text-[11px]">{r.data_entrega}</td>
-                              <td className="p-2.5 text-right font-mono">{r.qtd_necessaria}</td>
-                              <td className="p-2.5 text-right font-mono">{r.saldo_inicial_local}</td>
-                              <td className="p-2.5 text-right font-mono font-bold text-lider-danger">
-                                -{r.deficit_saldo}
-                              </td>
-                              <td className="p-2.5 text-center">
-                                <span
-                                  className={`px-1.5 py-0.5 rounded-xs text-[10px] font-semibold ${
-                                    r.status_divergencia === 'SALDO_ZERADO_NO_LOCAL'
-                                      ? 'bg-lider-dangerLight text-lider-danger'
-                                      : 'bg-amber-100 text-amber-800'
-                                  }`}
-                                >
-                                  {r.status_divergencia === 'SALDO_ZERADO_NO_LOCAL' ? 'ZERADO' : 'INSUFICIENTE'}
-                                </span>
-                              </td>
-                            </tr>
-                          ))
+                          previewData.records.map((r) => {
+                            const isP = (r.tipo_componente || 'C').toUpperCase() === 'P';
+                            return (
+                              <tr key={r.id} className="hover:bg-lider-canvas/40">
+                                <td className="p-2.5 font-mono font-medium">{r.op}</td>
+                                <td className="p-2.5 text-lider-secondary">{r.produto_op}</td>
+                                <td className="p-2.5">
+                                  <div className="font-medium text-lider-primary">{r.codigo_componente}</div>
+                                  <div className="text-[10px] text-lider-tertiary truncate max-w-xs">{r.descricao_componente}</div>
+                                </td>
+                                <td className="p-2.5 text-center">
+                                  <span
+                                    className={`px-1.5 py-0.5 rounded text-[10px] font-bold border ${
+                                      isP
+                                        ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                        : 'bg-amber-50 text-amber-700 border-amber-200'
+                                    }`}
+                                  >
+                                    {isP ? 'P' : 'C'}
+                                  </span>
+                                </td>
+                                <td className="p-2.5 font-mono text-[11px]">{r.local_producao}</td>
+                                <td className="p-2.5 font-mono text-[11px]">{r.data_entrega}</td>
+                                <td className="p-2.5 text-right font-mono font-bold text-lider-danger">
+                                  -{r.deficit_saldo}
+                                </td>
+                              </tr>
+                            );
+                          })
                         )}
                       </tbody>
                     </table>

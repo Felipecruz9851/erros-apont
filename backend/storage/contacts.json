@@ -10,35 +10,14 @@
     "updated_at": "2026-10-22T14:38:03.001988"
   },
   {
-    "id": "ct_29ce76a5",
-    "nome": "Herivelton",
-    "email": "herivelton.oliveira@lider.design",
+    "id": "ct_9422e495",
+    "nome": "Frank",
+    "email": "frank.nogueira@lider.design",
     "locais": [
       "AT KIT",
       "KIT"
     ],
-    "created_at": "2026-10-22T14:01:43.368559",
-    "updated_at": "2026-10-22T14:47:10.441203"
-  },
-  {
-    "id": "ct_5b7f5f1d",
-    "nome": "Supervisora Marcenaria",
-    "email": "marcenaria@lider.com.br",
-    "locais": [
-      "CC FABRI01",
-      "COLCHOES"
-    ],
-    "created_at": "2026-10-22T14:42:38.886479",
-    "updated_at": "2026-10-22T14:42:38.886479"
-  },
-  {
-    "id": "ct_8a53f869",
-    "nome": "Supervisor Vidros",
-    "email": "vidros@lider.com.br",
-    "locais": [
-      "VIDRACARIA"
-    ],
-    "created_at": "2026-10-22T14:42:38.910368",
-    "updated_at": "2026-10-22T14:42:38.910368"
+    "created_at": "2026-10-22T15:24:57.066802",
+    "updated_at": "2026-10-22T15:26:41.203223"
   }
 ]

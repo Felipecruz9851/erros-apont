@@ -38,6 +38,7 @@ class ConsumoRecord(BaseModel):
     op: str
     codigo_componente: str
     descricao_componente: str = ""
+    tipo_componente: Optional[str] = "C"
     baixa_automatica: bool = True
     qtd_necessaria: float
     unidade_medida: Optional[str] = "UN"
@@ -63,6 +64,7 @@ class ErroApontamento(BaseModel):
     local_producao: str
     codigo_componente: str
     descricao_componente: str = ""
+    tipo_componente: Optional[str] = "C"
     baixa_automatica: bool = True
     qtd_necessaria: float
     saldo_inicial_local: float

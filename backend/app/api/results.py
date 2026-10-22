@@ -19,6 +19,7 @@ async def get_results(
     fabrica: Optional[str] = Query(None, description="Filtrar por fábrica"),
     local_producao: Optional[str] = Query(None, description="Filtrar por local de produção"),
     status_divergencia: Optional[str] = Query(None, description="Filtrar por tipo de divergência"),
+    tipo_componente: Optional[str] = Query(None, description="Filtrar por tipo de componente ('C', 'P')"),
     limit: int = Query(5000, ge=1, le=50000, description="Limite de registros por página"),
     offset: int = Query(0, ge=0, description="Deslocamento para paginação"),
 ):
@@ -49,6 +50,10 @@ async def get_results(
     if status_divergencia:
         div_norm = status_divergencia.strip().upper()
         filtered = [r for r in filtered if r.get("status_divergencia", "").upper() == div_norm]
+    if tipo_componente:
+        tipo_norm = tipo_componente.strip().upper()
+        if tipo_norm in ["C", "P"]:
+            filtered = [r for r in filtered if str(r.get("tipo_componente", "C")).upper() == tipo_norm]
 
     total_filtered = len(filtered)
     paged_records = filtered[offset : offset + limit]
@@ -72,6 +77,7 @@ async def export_results(
     execution_id: str,
     format: Literal["csv", "json"] = Query("csv", description="Formato do arquivo exportado"),
     fabrica: Optional[str] = Query(None, description="Filtrar fábrica na exportação"),
+    tipo_componente: Optional[str] = Query(None, description="Filtrar tipo de componente ('C', 'P') na exportação"),
 ):
     ctx = orchestrator.get_context(execution_id)
     if not ctx:
@@ -86,6 +92,11 @@ async def export_results(
 
     if not df.empty and fabrica:
         df = df[df["fabrica"].str.upper() == fabrica.strip().upper()]
+
+    if not df.empty and tipo_componente and "tipo_componente" in df.columns:
+        tipo_norm = tipo_componente.strip().upper()
+        if tipo_norm in ["C", "P"]:
+            df = df[df["tipo_componente"].str.upper() == tipo_norm]
 
     if format == "csv":
         stream = io.StringIO()

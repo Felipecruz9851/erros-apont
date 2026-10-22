@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
   Contact,
   EmailPreviewData,
+  EmailSendPayload,
   EmailSendResponse,
   EmailSummaryResponse,
   ResultsResponse,
@@ -39,6 +40,7 @@ export const pipelineApi = {
       fabrica?: string;
       local_producao?: string;
       status_divergencia?: string;
+      tipo_componente?: string;
       limit?: number;
       offset?: number;
     }
@@ -47,9 +49,11 @@ export const pipelineApi = {
     return response.data;
   },
 
-  getExportUrl(executionId: string, format: 'csv' | 'json' = 'csv', fabrica?: string): string {
-    const baseUrl = `/api/v1/results/${executionId}/export?format=${format}`;
-    return fabrica ? `${baseUrl}&fabrica=${encodeURIComponent(fabrica)}` : baseUrl;
+  getExportUrl(executionId: string, format: 'csv' | 'json' = 'csv', fabrica?: string, tipo_componente?: string): string {
+    let url = `/api/v1/results/${executionId}/export?format=${format}`;
+    if (fabrica) url += `&fabrica=${encodeURIComponent(fabrica)}`;
+    if (tipo_componente && tipo_componente !== 'ALL') url += `&tipo_componente=${encodeURIComponent(tipo_componente)}`;
+    return url;
   },
 };
 
@@ -83,25 +87,24 @@ export const contactsApi = {
 };
 
 export const emailsApi = {
-  async getSummary(executionId?: string): Promise<EmailSummaryResponse> {
-    const params = executionId ? { execution_id: executionId } : undefined;
-    const response = await api.get<EmailSummaryResponse>('/emails/summary', { params });
+  async getSummary(executionId?: string, tipoFiltro?: string): Promise<EmailSummaryResponse> {
+    const params: Record<string, string> = {};
+    if (executionId) params.execution_id = executionId;
+    if (tipoFiltro && tipoFiltro !== 'TODOS') params.tipo_filtro = tipoFiltro;
+    const response = await api.get<EmailSummaryResponse>('/emails/summary', { params: Object.keys(params).length ? params : undefined });
     return response.data;
   },
 
-  async preview(contactId: string, executionId?: string): Promise<EmailPreviewData> {
+  async preview(contactId: string, executionId?: string, tipoFiltro?: string): Promise<EmailPreviewData> {
     const response = await api.post<EmailPreviewData>('/emails/preview', {
       contact_id: contactId,
       execution_id: executionId,
+      tipo_filtro: tipoFiltro || 'TODOS',
     });
     return response.data;
   },
 
-  async send(payload: {
-    execution_id?: string;
-    contact_ids?: string[];
-    send_all_with_errors?: boolean;
-  }): Promise<EmailSendResponse> {
+  async send(payload: EmailSendPayload): Promise<EmailSendResponse> {
     const response = await api.post<EmailSendResponse>('/emails/send', payload);
     return response.data;
   },

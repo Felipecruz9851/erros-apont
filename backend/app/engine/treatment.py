@@ -99,6 +99,7 @@ class TreatmentEngine:
                     "fabrica",
                     "codigo_componente",
                     "descricao_componente",
+                    "tipo_componente",
                     "baixa_automatica",
                     "qtd_necessaria",
                     "unidade_medida",
@@ -142,6 +143,8 @@ class TreatmentEngine:
                 target = "data_abertura"
             elif norm in ["data_entrega", "dat_entrega", "datf", "entrega"]:
                 target = "data_entrega"
+            elif norm in ["tipo", "tipo_item", "tipo_componente"]:
+                target = "tipo_componente"
 
             if target and target not in assigned_targets:
                 rename_map[col] = target
@@ -155,6 +158,8 @@ class TreatmentEngine:
             df["op"] = "SEM_OP"
         if "codigo_componente" not in df.columns:
             df["codigo_componente"] = "SEM_CODIGO"
+        if "tipo_componente" not in df.columns:
+            df["tipo_componente"] = "C"
         if "local_producao" not in df.columns:
             df["local_producao"] = local_filtro_series if local_filtro_series is not None else "GERAL"
         if "fabrica" not in df.columns:
@@ -171,6 +176,14 @@ class TreatmentEngine:
         # Limpeza e tipagem
         df["op"] = df["op"].apply(self._clean_op)
         df["codigo_componente"] = df["codigo_componente"].apply(self._clean_item_code)
+        df["tipo_componente"] = (
+            df["tipo_componente"]
+            .fillna("C")
+            .astype(str)
+            .str.strip()
+            .str.upper()
+            .apply(lambda x: "P" if x.startswith("P") else ("C" if x.startswith("C") else (x or "C")))
+        )
         df["fabrica"] = df["fabrica"].astype(str).str.strip().str.upper()
         df["local_producao"] = df["local_producao"].astype(str).str.strip().str.upper()
 
@@ -265,10 +278,6 @@ class TreatmentEngine:
         df["local_estoque"] = df["local_estoque"].apply(self._clean_local_estoque)
         df = df[~df["codigo_item"].isin(["", "SEM_ITEM", "NONE", "NAN"])].copy()
         df = df[~df["codigo_item"].str.upper().str.startswith(("TOTAL", "0 ITENS"))].copy()
-
-        # Mantém apenas itens que sofrem baixa automática (Sofre Baixa? == S / SIM)
-        if "sofre_baixa" in df.columns:
-            df = df[df["sofre_baixa"].astype(str).str.strip().str.upper().isin(["S", "SIM", "TRUE", "1"])].copy()
 
         def _parse_float(val):
             try:

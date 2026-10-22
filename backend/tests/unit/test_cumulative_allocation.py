@@ -216,4 +216,75 @@ def test_empty_product_falls_back_to_item_code_from_ordens():
     assert c_clean.iloc[0]["produto_op"] == "1BCLN140003495"
 
 
+def test_inactive_item_stock_allocation_kit():
+    """
+    Garante que itens com cadastro inativo (sit == 'I', como 4RIP0110500074)
+    mas com saldo físico no local de produção (ex: KIT) sejam devidamente
+    reconhecidos e consumidos, evitando falsos erros de SALDO_ZERADO_NO_LOCAL.
+    """
+    from backend.app.engine.treatment import treatment_engine
+
+    df_consumo_raw = pd.DataFrame([
+        {
+            "Tipo": "P",
+            "Grupo": "OSSO ESTAR",
+            "Item": "4RIP0110500074 -UN",
+            "Local Estoque": "KIT",
+            "Baixa": "S",
+            "Situação": "I",
+            "Den. Item": "CORTE RIPA COMPRADA AVULSA 1050 MM",
+            "Consumo": "5,0000",
+            "Local Prod.": "KIT",
+            "OP": "1926093",
+            "Familia": "PAI",
+        }
+    ])
+
+    df_estoque_raw = pd.DataFrame([
+        {
+            "Item": "4RIP0110500074",
+            "Descrição": "CORTE RIPA COMPRADA AVULSA 1050 MM",
+            "FAM": "PAI",
+            "Sit.": "I",
+            "Local - Sit": "KIT - L",
+            "Qtde.": "20,00",
+            "Unidade": "UN",
+            "Qt.Reser": "0,00",
+            "Sofre Baixa?": "SIM",
+            "Local Prod.": "KIT",
+        }
+    ])
+
+    df_ordens_raw = pd.DataFrame([
+        {
+            "Ordem": "1926093",
+            "Item": "PROD-01",
+            "Descrição do Item": "PAINEL RIPADO",
+            "Data Entrega": "2026-10-23",
+            "Data Abertura": "2026-10-15",
+        }
+    ])
+
+    c_clean, e_clean = treatment_engine.clean_and_normalize(df_consumo_raw, df_estoque_raw, df_ordens_raw)
+    assert not e_clean.empty
+    assert e_clean.iloc[0]["codigo_item"] == "4RIP0110500074"
+    assert e_clean.iloc[0]["saldo_disponivel"] == 20.0
+
+    divergences = calculation_engine.calculate_pointing_errors(
+        c_clean,
+        e_clean,
+        data_atual="2026-10-22",
+        include_ok=True,
+        dias_uteis=3,
+    )
+
+    assert len(divergences) == 1
+    row = divergences.iloc[0]
+    assert row["codigo_componente"] == "4RIP0110500074"
+    assert row["status_divergencia"] == "OK"
+    assert row["saldo_inicial_local"] == 20.0
+    assert row["saldo_remanescente"] == 20.0
+
+
+
 
