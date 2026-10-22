@@ -104,3 +104,116 @@ def test_clean_item_code_without_space_before_unit_suffix():
     assert treatment_engine._clean_item_code("3COUPCOU378    -M2") == "3COUPCOU378"
     assert treatment_engine._clean_item_code("COMP-001") == "COMP-001"
 
+
+def test_empty_delivery_date_is_ignored():
+    """
+    Garante que ordens sem data de entrega (ou data vazia) sejam desconsideradas
+    do cálculo, pois não pertencem ao recorte temporal de próximos X dias.
+    """
+    df_consumo = pd.DataFrame([
+        {
+            "op": "OP-VALIDA",
+            "fabrica": "F01",
+            "codigo_componente": "CMP-01",
+            "descricao_componente": "COMPONENTE",
+            "baixa_automatica": True,
+            "qtd_necessaria": 10.0,
+            "local_producao": "LOC-01",
+            "data_abertura": "2026-10-15",
+            "data_entrega": "2026-10-23",
+        },
+        {
+            "op": "OP-SEM-ENTREGA",
+            "fabrica": "F01",
+            "codigo_componente": "CMP-01",
+            "descricao_componente": "COMPONENTE",
+            "baixa_automatica": True,
+            "qtd_necessaria": 5.0,
+            "local_producao": "LOC-01",
+            "data_abertura": "2026-10-15",
+            "data_entrega": "",  # Vazia
+        },
+    ])
+
+    df_estoque = pd.DataFrame([
+        {
+            "codigo_item": "CMP-01",
+            "local_estoque": "LOC-01",
+            "saldo_disponivel": 20.0,
+            "saldo_fisico": 20.0,
+            "saldo_reservado": 0.0,
+        }
+    ])
+
+    res = calculation_engine.calculate_pointing_errors(
+        df_consumo,
+        df_estoque,
+        data_atual="2026-10-22",
+        include_ok=True,
+        dias_uteis=3,
+    )
+
+    # Apenas OP-VALIDA deve constar; OP-SEM-ENTREGA deve ser ignorada
+    assert len(res) == 1
+    assert res.iloc[0]["op"] == "OP-VALIDA"
+    assert res.iloc[0]["data_entrega"] == "2026-10-23"
+
+
+def test_clean_op_with_leaked_php():
+    """
+    Garante que trechos de PHP vazados na coluna Ordem de relatórios legados
+    sejam limpos corretamente para a identificação da OP numérica.
+    """
+    from backend.app.engine.treatment import treatment_engine
+
+    dirty = '1985883 if ($exibir_codbar == "S") { $bar = new WBarCode("{$r[\'num_ordem\']}"); } ?>'
+    assert treatment_engine._clean_op(dirty) == "1985883"
+    assert treatment_engine._clean_op("  OP-1234  ") == "OP-1234"
+    assert treatment_engine._clean_op("") == ""
+
+
+def test_empty_product_falls_back_to_item_code_from_ordens():
+    """
+    Garante que quando a descrição do produto for vazia, o sistema use
+    o código do item vindo da tabela de ordens atrasadas.
+    """
+    from backend.app.engine.treatment import treatment_engine
+
+    df_consumo = pd.DataFrame([
+        {
+            "op": "OP-700",
+            "fabrica": "COLCHOES",
+            "codigo_componente": "CMP-01",
+            "descricao_componente": "PARAFUSO",
+            "baixa_automatica": True,
+            "qtd_necessaria": 10.0,
+            "local_producao": "COLCHOES",
+            "data_abertura": "2026-10-15",
+            "data_entrega": "2026-10-23",
+            "produto_op": "",  # Vazio
+        }
+    ])
+
+    df_ordens = pd.DataFrame([
+        {
+            "Ordem": "OP-700",
+            "Item": "1BCLN140003495",  # Código do item na tabela ordens atrasadas
+            "Descrição do Item": "",    # Descrição vazia
+            "Data Entrega": "2026-10-23",
+            "Data Abertura": "2026-10-15",
+        }
+    ])
+
+    df_estoque = pd.DataFrame([
+        {
+            "codigo_item": "CMP-01",
+            "local_estoque": "COLCHOES",
+            "saldo_disponivel": 50.0,
+        }
+    ])
+
+    c_clean, _ = treatment_engine.clean_and_normalize(df_consumo, df_estoque, df_ordens)
+    assert c_clean.iloc[0]["produto_op"] == "1BCLN140003495"
+
+
+

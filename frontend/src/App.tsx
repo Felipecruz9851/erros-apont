@@ -5,6 +5,8 @@ import { LoginCard } from './components/auth/LoginCard';
 import { PipelineMonitor } from './components/monitor/PipelineMonitor';
 import { MetricsCards } from './components/dashboard/MetricsCards';
 import { PointingErrorsTable } from './components/dashboard/PointingErrorsTable';
+import { ContactsManager } from './components/contacts/ContactsManager';
+import { EmailDispatcher } from './components/emails/EmailDispatcher';
 import { pipelineApi } from './services/api';
 
 export default function App() {
@@ -18,6 +20,7 @@ export default function App() {
     reset,
   } = usePipeline();
 
+  const [currentTab, setCurrentTab] = useState<'auditoria' | 'emails' | 'contatos'>('auditoria');
   const [selectedFabrica, setSelectedFabrica] = useState<string>('ALL');
 
   const handleExportCsv = () => {
@@ -32,41 +35,65 @@ export default function App() {
     window.location.href = pipelineApi.getExportUrl(executionId, 'json', fabFilter);
   };
 
+  const handleNewAnalysis = () => {
+    reset();
+    setCurrentTab('auditoria');
+  };
+
   return (
     <MainLayout
       summary={results?.summary}
       selectedFabrica={selectedFabrica}
       onSelectFabrica={setSelectedFabrica}
-      onNewAnalysis={reset}
+      currentTab={currentTab}
+      onSelectTab={setCurrentTab}
+      onNewAnalysis={handleNewAnalysis}
       onExportCsv={handleExportCsv}
+      onNavigateToEmails={() => setCurrentTab('emails')}
       hasResults={!!results && results.records.length > 0}
       isProcessing={isLoading}
     >
-      {/* Estado 1: Tela Inicial de Login e Delimitação de Janela Temporal */}
-      {!executionId && (
-        <div className="py-8">
-          <LoginCard onStart={startAnalysis} isLoading={isLoading} error={error} />
+      {/* Aba 1: Auditoria e Resultados */}
+      {currentTab === 'auditoria' && (
+        <div className="space-y-6">
+          {/* Estado 1: Tela Inicial de Login e Delimitação de Janela Temporal */}
+          {!executionId && (
+            <div className="py-8">
+              <LoginCard onStart={startAnalysis} isLoading={isLoading} error={error} />
+            </div>
+          )}
+
+          {/* Estado 2: Monitor em Tempo Real */}
+          {status && (
+            <div>
+              <PipelineMonitor status={status} />
+            </div>
+          )}
+
+          {/* Estado 3: Resultados e Dashboard Analítico */}
+          {results && (
+            <div>
+              <MetricsCards summary={results.summary} />
+              <PointingErrorsTable
+                records={results.records}
+                onExportCsv={handleExportCsv}
+                onExportJson={handleExportJson}
+              />
+            </div>
+          )}
         </div>
       )}
 
-      {/* Estado 2: Monitor em Tempo Real */}
-      {status && (
-        <div>
-          <PipelineMonitor status={status} />
-        </div>
+      {/* Aba 2: Disparo de E-mails */}
+      {currentTab === 'emails' && (
+        <EmailDispatcher
+          executionId={executionId}
+          onNavigateToAnalysis={() => setCurrentTab('auditoria')}
+        />
       )}
 
-      {/* Estado 3: Resultados e Dashboard Analítico */}
-      {results && (
-        <div>
-          <MetricsCards summary={results.summary} />
-          <PointingErrorsTable
-            records={results.records}
-            onExportCsv={handleExportCsv}
-            onExportJson={handleExportJson}
-          />
-        </div>
-      )}
+      {/* Aba 3: Cadastro de Contatos e Locais */}
+      {currentTab === 'contatos' && <ContactsManager />}
     </MainLayout>
   );
 }

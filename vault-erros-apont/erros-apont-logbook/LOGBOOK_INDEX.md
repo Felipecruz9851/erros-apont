@@ -5,5 +5,6 @@
 | 2026-10-19 | Constituição, Mapeamento de Endpoints, Implementação Ponta a Ponta e Porta 8484 | CONCLUIDO | [[2026-10-19]] |
 | 2026-10-20 | Login Individual por Worker (`ExtractionWorker.login`) e Motor de Análise de Erros de Apontamento (Janela de 3 Dias) | CONCLUIDO | [[2026-10-20]] |
 | 2026-10-21 | Commit da Correção de Códigos de 15 Caracteres (`3LEDDP73000K24V`) e Limpeza Automática de Snapshots HTML | CONCLUIDO | [[2026-10-21]] |
+| 2026-10-22 | Filtro Obrigatório de Data, Cadastro de Contatos, Disparo Automático de E-mails e Janela em Dias Úteis | CONCLUIDO | [[2026-10-22]] |
 
-- [[2026-10-22]] — Filtro data_atual obrigatório a partir do frontend
+- [[2026-10-22]] — Camada de Notificações, Contatos e Cálculo em Dias Úteis com Feriados

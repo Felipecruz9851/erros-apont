@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.app.api.pipeline import router as pipeline_router
 from backend.app.api.results import router as results_router
+from backend.app.api.contacts import router as contacts_router
+from backend.app.api.emails import router as emails_router
 from backend.app.core.config import settings
 
 app = FastAPI(
@@ -39,6 +41,16 @@ app.include_router(
     results_router,
     prefix=f"{settings.API_V1_STR}/results",
     tags=["Resultados"],
+)
+app.include_router(
+    contacts_router,
+    prefix=f"{settings.API_V1_STR}/contacts",
+    tags=["Contatos"],
+)
+app.include_router(
+    emails_router,
+    prefix=f"{settings.API_V1_STR}/emails",
+    tags=["Emails"],
 )
 
 

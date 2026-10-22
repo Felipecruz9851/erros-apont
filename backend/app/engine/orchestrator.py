@@ -22,6 +22,8 @@ class ExecutionContext:
         self.tasks_total: int = 0
         self.tasks_completed: int = 0
         self.error_message: Optional[str] = None
+        self.dias_uteis: int = 3
+        self.data_ref: str = ""
         
         # Estruturas de dados em memória
         self.raw_results: List[Dict[str, Any]] = []
@@ -77,6 +79,7 @@ class PipelineOrchestrator:
         password: str,
         data_inicio: str,
         data_fim: str,
+        dias_uteis: int = 3,
         fabricas: Optional[List[str]] = None,
         cookies: Optional[Dict[str, str]] = None,
         debug: bool = False,
@@ -86,6 +89,9 @@ class PipelineOrchestrator:
         if not ctx:
             return
 
+        ctx.dias_uteis = dias_uteis
+        ctx.data_ref = data_fim
+
         asyncio.create_task(
             self._run_stages(
                 ctx=ctx,
@@ -93,6 +99,7 @@ class PipelineOrchestrator:
                 password=password,
                 data_inicio=data_inicio,
                 data_fim=data_fim,
+                dias_uteis=dias_uteis,
                 fabricas=fabricas,
                 cookies=cookies,
                 debug=debug,
@@ -106,8 +113,9 @@ class PipelineOrchestrator:
         password: str,
         data_inicio: str,
         data_fim: str,
-        fabricas: Optional[List[str]],
-        cookies: Optional[Dict[str, str]],
+        dias_uteis: int = 3,
+        fabricas: Optional[List[str]] = None,
+        cookies: Optional[Dict[str, str]] = None,
         debug: bool = False,
     ) -> None:
         try:
@@ -244,6 +252,7 @@ class PipelineOrchestrator:
                 df_estoque=cleaned_estoque,
                 data_atual=data_fim,
                 include_ok=True,
+                dias_uteis=dias_uteis,
             )
             ctx.divergences_df = divergences_df
             ctx.stages.calculation = "COMPLETED"
@@ -265,6 +274,8 @@ class PipelineOrchestrator:
                 total_ops_analisadas=total_ops_janela,
                 total_componentes_baixa_auto=len(divergences_df) if not divergences_df.empty else 0,
                 elapsed_seconds=ctx.get_elapsed_seconds(),
+                dias_uteis=dias_uteis,
+                data_referencia=data_fim,
             )
             ctx.final_response = final_json
             ctx.stages.serialization = "COMPLETED"

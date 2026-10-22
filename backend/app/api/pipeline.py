@@ -27,6 +27,7 @@ async def start_pipeline(
 
     data_inicio = request.data_inicio or "2000-01-01"
     debug_flag = bool(debug or request.debug)
+    dias_uteis = request.dias_uteis if request.dias_uteis is not None else 3
 
     # Cria contexto de execução
     ctx = orchestrator.create_execution()
@@ -38,6 +39,7 @@ async def start_pipeline(
         password=request.password or "",
         data_inicio=data_inicio,
         data_fim=request.data_fim,
+        dias_uteis=dias_uteis,
         fabricas=request.fabricas,
         debug=debug_flag,
     )

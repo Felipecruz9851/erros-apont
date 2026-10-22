@@ -21,8 +21,19 @@ export function usePipeline() {
   const loadResults = useCallback(
     async (execId: string, filters?: { fabrica?: string; local_producao?: string; status_divergencia?: string }) => {
       try {
-        const data = await pipelineApi.getResults(execId, filters);
-        setResults(data);
+        // Busca TODAS as páginas: o backend limita a resposta (padrão 5000) e os registros vêm
+        // ordenados por data de entrega crescente. Sem paginar, uma data de referência futura
+        // exibia só as entregas mais próximas de hoje.
+        const PAGE_SIZE = 50000;
+        const first = await pipelineApi.getResults(execId, { ...filters, limit: PAGE_SIZE, offset: 0 });
+        const records = [...first.records];
+        const total = first.pagination?.total ?? records.length;
+        while (records.length < total) {
+          const page = await pipelineApi.getResults(execId, { ...filters, limit: PAGE_SIZE, offset: records.length });
+          if (!page.records.length) break;
+          records.push(...page.records);
+        }
+        setResults({ ...first, records, pagination: { ...first.pagination, total, limit: records.length, offset: 0 } });
       } catch (err: any) {
         setError(err.response?.data?.detail || 'Erro ao carregar resultados da análise.');
       }

@@ -110,7 +110,7 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
               }}
               className="px-2 py-1.5 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood text-lider-primary"
             >
-              <option value="ALL">Todas as Fábricas ({records.length})</option>
+              <option value="ALL">Todas as Fábricas</option>
               {fabricas.map((fab) => (
                 <option key={fab} value={fab}>
                   {fab}
@@ -228,13 +228,13 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
                   <td className="py-3 px-4 font-medium text-lider-primary whitespace-nowrap">{r.fabrica}</td>
                   <td className="py-3 px-4 whitespace-nowrap">
                     <span className="font-semibold text-lider-primary">{r.op}</span>
-                    {r.produto_op && (
+                    {/*{r.produto_op && (
                       <div className="text-[10px] text-lider-tertiary truncate max-w-[180px]">{r.produto_op}</div>
-                    )}
+                    )}*/}
                   </td>
                   <td className="py-3 px-4 whitespace-nowrap text-lider-secondary">
                     <div>{r.data_entrega || '-'}</div>
-                    <div className="text-[10px] text-lider-tertiary">Fila #{r.prioridade_fila}</div>
+                    {/*<div className="text-[10px] text-lider-tertiary">Fila #{r.prioridade_fila}</div>*/}
                   </td>
                   <td className="py-3 px-4 whitespace-nowrap text-lider-secondary font-mono text-[11px]">
                     {r.local_producao}

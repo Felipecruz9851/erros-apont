@@ -47,7 +47,18 @@ class TreatmentEngine:
         m_iso = re.search(r"(\d{4})-(\d{2})-(\d{2})", s)
         if m_iso:
             return f"{m_iso.group(1)}-{m_iso.group(2)}-{m_iso.group(3)}"
-        return s
+        return ""
+
+    def _clean_op(self, val: object) -> str:
+        """
+        Limpa o identificador da OP removendo espaços e eventuais trechos de código PHP
+        ou tags vazadas no HTML legado (ex: '1985883 if ($exibir_codbar == "S") ...' -> '1985883').
+        """
+        if pd.isna(val) or val is None:
+            return ""
+        s = str(val).strip()
+        m = re.match(r"^([A-Za-z0-9\-_]+)", s)
+        return m.group(1).upper() if m else s.upper()
 
     def _clean_item_code(self, val: object) -> str:
         """
@@ -158,7 +169,7 @@ class TreatmentEngine:
             df["data_entrega"] = ""
 
         # Limpeza e tipagem
-        df["op"] = df["op"].astype(str).str.strip().str.upper()
+        df["op"] = df["op"].apply(self._clean_op)
         df["codigo_componente"] = df["codigo_componente"].apply(self._clean_item_code)
         df["fabrica"] = df["fabrica"].astype(str).str.strip().str.upper()
         df["local_producao"] = df["local_producao"].astype(str).str.strip().str.upper()
@@ -309,7 +320,9 @@ class TreatmentEngine:
                 target = "ordem_data_entrega"
             elif norm in ["data_abertura", "abertura"]:
                 target = "ordem_data_abertura"
-            elif norm in ["descricao_do_item"]:
+            elif norm in ["item", "codigo_item", "cod_item"]:
+                target = "ordem_codigo_produto"
+            elif norm in ["descricao_do_item", "desc_item", "descricao", "descricao_item"]:
                 target = "ordem_produto"
             elif norm in ["fabrica"]:
                 target = "ordem_fabrica"
@@ -321,7 +334,7 @@ class TreatmentEngine:
         if "op" not in df_o.columns:
             return df_consumo
 
-        df_o["op"] = df_o["op"].astype(str).str.strip().str.upper()
+        df_o["op"] = df_o["op"].apply(self._clean_op)
         df_o = df_o[~df_o["op"].isin(["", "NONE", "NAN", "."])].copy()
         df_o = df_o[~df_o["op"].str.startswith(("0 ITENS", "TOTAL"))].copy()
         if "ordem_data_entrega" in df_o.columns:
@@ -330,7 +343,7 @@ class TreatmentEngine:
             df_o["ordem_data_abertura"] = df_o["ordem_data_abertura"].apply(self._parse_date_iso)
 
         cols_to_merge = ["op"]
-        for c in ["ordem_data_entrega", "ordem_data_abertura", "ordem_produto", "ordem_fabrica"]:
+        for c in ["ordem_data_entrega", "ordem_data_abertura", "ordem_produto", "ordem_codigo_produto", "ordem_fabrica"]:
             if c in df_o.columns:
                 cols_to_merge.append(c)
 
@@ -343,9 +356,29 @@ class TreatmentEngine:
         if "ordem_data_abertura" in merged.columns:
             merged["data_abertura"] = merged["ordem_data_abertura"].replace("", pd.NA).fillna(merged.get("data_abertura", "")).fillna("")
             merged = merged.drop(columns=["ordem_data_abertura"])
-        if "ordem_produto" in merged.columns:
-            merged["produto_op"] = merged["ordem_produto"].replace("", pd.NA).fillna(merged.get("produto_op", "")).fillna("")
-            merged = merged.drop(columns=["ordem_produto"])
+
+        # Define produto_op: se o produto vier como vazio/não informado, pega o código do item de ordens atrasadas
+        def _resolver_produto(row):
+            desc = str(row.get("ordem_produto", "") or "").strip()
+            cod = str(row.get("ordem_codigo_produto", "") or "").strip()
+            prod_atual = str(row.get("produto_op", "") or "").strip()
+
+            # 1. Se tem descrição válida da OP vinda de ordens, usa a descrição
+            if desc and desc not in ["PRODUTO NÃO INFORMADO", "None", "NAN", "."]:
+                return desc
+            # 2. Se produto_op no consumo já for válido, mantém
+            if prod_atual and prod_atual not in ["PRODUTO NÃO INFORMADO", "None", "NAN", "."]:
+                return prod_atual
+            # 3. Se o produto vier vazio / não informado, pega o código do item da tabela ordens atrasadas
+            if cod and cod not in ["", "None", "NAN", "."]:
+                return cod
+            return "PRODUTO NÃO INFORMADO"
+
+        merged["produto_op"] = merged.apply(_resolver_produto, axis=1)
+
+        for col_to_drop in ["ordem_produto", "ordem_codigo_produto"]:
+            if col_to_drop in merged.columns:
+                merged = merged.drop(columns=[col_to_drop])
         if "ordem_fabrica" in merged.columns:
             ordem_fab = merged["ordem_fabrica"].astype(str).str.strip().str.upper()
             # No consumo_alt.php, uma OP da fábrica X pode ter componente produzido no local Y,

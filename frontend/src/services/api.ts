@@ -1,5 +1,13 @@
 import axios from 'axios';
-import { ResultsResponse, StartPipelinePayload, StatusResponse } from '../types';
+import {
+  Contact,
+  EmailPreviewData,
+  EmailSendResponse,
+  EmailSummaryResponse,
+  ResultsResponse,
+  StartPipelinePayload,
+  StatusResponse,
+} from '../types';
 
 const api = axios.create({
   baseURL: '/api/v1',
@@ -42,6 +50,60 @@ export const pipelineApi = {
   getExportUrl(executionId: string, format: 'csv' | 'json' = 'csv', fabrica?: string): string {
     const baseUrl = `/api/v1/results/${executionId}/export?format=${format}`;
     return fabrica ? `${baseUrl}&fabrica=${encodeURIComponent(fabrica)}` : baseUrl;
+  },
+};
+
+export const contactsApi = {
+  async list(): Promise<Contact[]> {
+    const response = await api.get<Contact[]>('/contacts');
+    return response.data;
+  },
+
+  async getLocations(): Promise<string[]> {
+    const response = await api.get<string[]>('/contacts/locations');
+    return response.data;
+  },
+
+  async create(payload: { nome: string; email: string; locais: string[] }): Promise<Contact> {
+    const response = await api.post<Contact>('/contacts', payload);
+    return response.data;
+  },
+
+  async update(
+    contactId: string,
+    payload: { nome?: string; email?: string; locais?: string[] }
+  ): Promise<Contact> {
+    const response = await api.put<Contact>(`/contacts/${contactId}`, payload);
+    return response.data;
+  },
+
+  async delete(contactId: string): Promise<void> {
+    await api.delete(`/contacts/${contactId}`);
+  },
+};
+
+export const emailsApi = {
+  async getSummary(executionId?: string): Promise<EmailSummaryResponse> {
+    const params = executionId ? { execution_id: executionId } : undefined;
+    const response = await api.get<EmailSummaryResponse>('/emails/summary', { params });
+    return response.data;
+  },
+
+  async preview(contactId: string, executionId?: string): Promise<EmailPreviewData> {
+    const response = await api.post<EmailPreviewData>('/emails/preview', {
+      contact_id: contactId,
+      execution_id: executionId,
+    });
+    return response.data;
+  },
+
+  async send(payload: {
+    execution_id?: string;
+    contact_ids?: string[];
+    send_all_with_errors?: boolean;
+  }): Promise<EmailSendResponse> {
+    const response = await api.post<EmailSendResponse>('/emails/send', payload);
+    return response.data;
   },
 };
 

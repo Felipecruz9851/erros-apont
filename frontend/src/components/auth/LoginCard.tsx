@@ -15,6 +15,7 @@ export const LoginCard: React.FC<LoginCardProps> = ({ onStart, isLoading, error 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [dataAtual, setDataAtual] = useState(today);
+  const [diasUteis, setDiasUteis] = useState<number>(3);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,6 +24,7 @@ export const LoginCard: React.FC<LoginCardProps> = ({ onStart, isLoading, error 
       password,
       data_inicio: '2000-01-01',
       data_fim: dataAtual,
+      dias_uteis: Number(diasUteis) || 3,
     });
   };
 
@@ -72,7 +74,7 @@ export const LoginCard: React.FC<LoginCardProps> = ({ onStart, isLoading, error 
           </div>
         </div>
 
-        <div className="pt-2">
+        <div className="pt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-medium text-lider-secondary mb-1 flex items-center space-x-1">
               <Calendar className="w-3.5 h-3.5 text-lider-tertiary" />
@@ -86,7 +88,26 @@ export const LoginCard: React.FC<LoginCardProps> = ({ onStart, isLoading, error 
               className="w-full px-3 py-2 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood transition-colors text-lider-primary"
             />
             <p className="text-[11px] text-lider-tertiary mt-1">
-              Analisa ordens abertas até esta data (desde 01/01/2000) com entrega em até 3 dias.
+              Analisa ordens abertas até esta data (desde 01/01/2000).
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-lider-secondary mb-1 flex items-center space-x-1">
+              <Calendar className="w-3.5 h-3.5 text-lider-tertiary" />
+              <span>Janela de Entrega (Dias Úteis)</span>
+            </label>
+            <input
+              type="number"
+              required
+              min={1}
+              max={60}
+              value={diasUteis}
+              onChange={(e) => setDiasUteis(Math.max(1, parseInt(e.target.value) || 1))}
+              className="w-full px-3 py-2 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood transition-colors text-lider-primary font-medium"
+            />
+            <p className="text-[11px] text-lider-tertiary mt-1">
+              Padrão 3 dias úteis. Desconsidera fins de semana e feriados da base.
             </p>
           </div>
         </div>

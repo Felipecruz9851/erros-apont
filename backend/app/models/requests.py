@@ -8,6 +8,7 @@ class StartPipelineRequest(BaseModel):
     password: Optional[str] = Field(default="", description="Senha corporativa da intranet")
     data_inicio: Optional[str] = Field(default="2000-01-01", description="Data de início (YYYY-MM-DD), padrão 2000-01-01")
     data_fim: str = Field(..., description="Data atual de referência preenchida no frontend (YYYY-MM-DD)")
+    dias_uteis: Optional[int] = Field(default=3, ge=1, le=60, description="Número de dias úteis para a janela de entrega")
     fabricas: Optional[List[str]] = Field(default=None, description="Filtro opcional de fábricas")
     debug: Optional[bool] = Field(default=False, description="Quando True, preserva os arquivos HTML temporários")
 
@@ -44,6 +45,8 @@ class SummaryMetrics(BaseModel):
     total_erros_apontamento: int = 0
     total_ops_com_erro: int = 0
     taxa_conformidade_pct: float = 100.0
+    dias_uteis: int = 3
+    data_referencia: Optional[str] = None
     distribuicao_por_fabrica: Dict[str, Dict] = Field(default_factory=dict)
     tempo_processamento_segundos: float = 0.0
 

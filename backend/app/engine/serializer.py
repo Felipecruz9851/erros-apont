@@ -8,6 +8,8 @@ def serialize_results(
     total_ops_analisadas: int,
     total_componentes_baixa_auto: int,
     elapsed_seconds: float,
+    dias_uteis: int = 3,
+    data_referencia: str = "",
 ) -> Dict[str, Any]:
     """
     Serializa o DataFrame de divergências em formato JSON estruturado,
@@ -58,6 +60,8 @@ def serialize_results(
             "total_erros_apontamento": total_erros,
             "total_ops_com_erro": total_ops_com_erro,
             "taxa_conformidade_pct": taxa_conf,
+            "dias_uteis": dias_uteis,
+            "data_referencia": data_referencia,
             "distribuicao_por_fabrica": distribuicao,
             "tempo_processamento_segundos": elapsed_seconds,
         },

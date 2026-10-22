@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
-from typing import List, Optional
+from pathlib import Path
+from typing import List, Optional, Set
 import pandas as pd
 
 
@@ -13,11 +14,11 @@ class CalculationEngine:
     3. Abate cumulativamente o estoque disponível (Qtde física no local de produção da ordem)
        a cada ordem atendida para o mesmo componente e local de produção.
     4. Avalia a janela de entrega em relação à data_atual:
-       - Ordens com data de entrega <= data_atual + 3 dias (incluindo atrasadas e janela de 0 a 3 dias):
+       - Ordens com data de entrega <= data_atual + N dias úteis (desconsiderando sábados, domingos e feriados):
          - Se não houver saldo suficiente no local de produção da ordem -> Passível de Erro de Apontamento
            (SALDO_INSUFICIENTE ou SALDO_ZERADO_NO_LOCAL).
          - Se houver saldo suficiente no local de produção da ordem -> Marcada como OK.
-       - Ordens com data de entrega > data_atual + 3 dias -> Ignoradas do resultado final.
+       - Ordens com data de entrega > data_atual + N dias úteis -> Ignoradas do resultado final.
     """
 
     def _parse_dt(self, val: object) -> Optional[datetime]:
@@ -31,12 +32,50 @@ class CalculationEngine:
                 continue
         return None
 
+    def load_feriados(self) -> Set[str]:
+        """
+        Carrega lista de feriados em YYYY-MM-DD do arquivo feriados.txt.
+        """
+        feriados_file = Path(__file__).resolve().parent.parent / "feriados.txt"
+        if not feriados_file.exists():
+            return set()
+        try:
+            with open(feriados_file, "r", encoding="utf-8") as f:
+                return {
+                    line.strip()
+                    for line in f
+                    if line.strip() and not line.strip().startswith("#")
+                }
+        except Exception:
+            return set()
+
+    def add_business_days(
+        self, start_date: datetime, days: int, holidays: Optional[Set[str]] = None
+    ) -> datetime:
+        """
+        Calcula a data limite avançando N dias úteis (segunda a sexta-feira),
+        desconsiderando finais de semana e feriados constantes na base.
+        """
+        if holidays is None:
+            holidays = self.load_feriados()
+        if days <= 0:
+            return start_date
+        curr = start_date
+        added = 0
+        while added < days:
+            curr += timedelta(days=1)
+            # weekday: 0=segunda ... 4=sexta, 5=sábado, 6=domingo
+            if curr.weekday() < 5 and curr.strftime("%Y-%m-%d") not in holidays:
+                added += 1
+        return curr
+
     def calculate_pointing_errors(
         self,
         df_consumo: pd.DataFrame,
         df_estoque: pd.DataFrame,
         data_atual: Optional[str] = None,
         include_ok: bool = True,
+        dias_uteis: int = 3,
     ) -> pd.DataFrame:
         cols = [
             "id",
@@ -73,7 +112,7 @@ class CalculationEngine:
                 f"Data atual de referência inválida ou ausente: {data_atual!r}. "
                 "Informe a data no frontend (formato YYYY-MM-DD)."
             )
-        limit_dt = ref_dt + timedelta(days=3)
+        limit_dt = self.add_business_days(ref_dt, days=dias_uteis)
 
         # 2. Filtra ordens com data de abertura <= data_atual (quando ambas existirem)
         if "data_abertura" in df_c.columns:
@@ -87,12 +126,22 @@ class CalculationEngine:
             if df_c.empty:
                 return pd.DataFrame(columns=cols)
 
-        # 3. Ordena cronologicamente pela data de entrega (das mais antigas/atrasadas para as mais futuras)
+        # 3. Filtra ordens com data de entrega válida dentro do limite (ordens sem data de entrega não pertencem à janela)
         if "data_entrega" in df_c.columns:
-            df_c["_sort_data_entrega"] = df_c["data_entrega"].replace("", "9999-12-31").fillna("9999-12-31")
-        else:
-            df_c["_sort_data_entrega"] = "9999-12-31"
+            def _entrega_valida(val: object) -> bool:
+                dt_ent = self._parse_dt(val)
+                if dt_ent is None:
+                    return False
+                if limit_dt is not None:
+                    return dt_ent <= limit_dt
+                return True
 
+            df_c = df_c[df_c["data_entrega"].apply(_entrega_valida)].copy()
+            if df_c.empty:
+                return pd.DataFrame(columns=cols)
+
+        # 4. Ordena cronologicamente pela data de entrega (das mais antigas/atrasadas para as mais futuras)
+        df_c["_sort_data_entrega"] = df_c["data_entrega"].astype(str)
         if "data_abertura" in df_c.columns:
             df_c["_sort_data_abertura"] = df_c["data_abertura"].replace("", "9999-12-31").fillna("9999-12-31")
         else:
@@ -125,10 +174,11 @@ class CalculationEngine:
                 data_ent_str = str(row.get("data_entrega", "") or "").strip()
                 dt_ent = self._parse_dt(data_ent_str)
 
-                # Se a ordem tem data de entrega para mais de 3 dias no futuro da data_atual, é ignorada
-                if limit_dt is not None and dt_ent is not None:
-                    if dt_ent > limit_dt:
-                        continue
+                # Se a ordem não possui data de entrega válida ou ultrapassa a janela limite, é ignorada
+                if dt_ent is None:
+                    continue
+                if limit_dt is not None and dt_ent > limit_dt:
+                    continue
 
                 saldo_rem = saldo_corrente
 
