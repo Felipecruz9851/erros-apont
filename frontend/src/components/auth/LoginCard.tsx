@@ -9,7 +9,9 @@ interface LoginCardProps {
 }
 
 export const LoginCard: React.FC<LoginCardProps> = ({ onStart, isLoading, error }) => {
-  const today = new Date().toISOString().split('T')[0];
+  // Data local (toISOString usa UTC e adianta o dia após 21h em UTC-3)
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [dataAtual, setDataAtual] = useState(today);

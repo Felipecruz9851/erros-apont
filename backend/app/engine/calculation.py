@@ -65,11 +65,18 @@ class CalculationEngine:
         if df_c.empty:
             return pd.DataFrame(columns=cols)
 
-        ref_dt = self._parse_dt(data_atual) if data_atual else None
-        limit_dt = (ref_dt + timedelta(days=3)) if ref_dt else None
+        # A data de referência é SEMPRE a informada no frontend (campo "Data atual" -> data_fim).
+        # Não há fallback silencioso: sem data válida, os filtros de abertura/entrega seriam ignorados.
+        ref_dt = self._parse_dt(data_atual)
+        if ref_dt is None:
+            raise ValueError(
+                f"Data atual de referência inválida ou ausente: {data_atual!r}. "
+                "Informe a data no frontend (formato YYYY-MM-DD)."
+            )
+        limit_dt = ref_dt + timedelta(days=3)
 
         # 2. Filtra ordens com data de abertura <= data_atual (quando ambas existirem)
-        if ref_dt is not None and "data_abertura" in df_c.columns:
+        if "data_abertura" in df_c.columns:
             def _abertura_valida(val: object) -> bool:
                 dt_ab = self._parse_dt(val)
                 if dt_ab is None:

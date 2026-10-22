@@ -48,6 +48,7 @@ def test_full_pipeline_offline():
     divergences_df = calculation_engine.calculate_pointing_errors(
         df_consumo=df_consumo_clean,
         df_estoque=df_estoque_clean,
+        data_atual="2026-10-28",  # cobre todas as aberturas/entregas do mock_atrasadas.html
     )
 
     # 5. Validação das Regras Cardeais de Negócio
