@@ -99,631 +99,631 @@
     "updated_at": "2026-11-10T15:51:21.011732"
   },
   "extracao_estoque_local_BOX": {
-    "last_duration_seconds": 0.423,
-    "avg_duration_seconds": 0.262,
+    "last_duration_seconds": 0.362,
+    "avg_duration_seconds": 0.276,
     "min_duration_seconds": 0.13,
     "max_duration_seconds": 0.423,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "estoque_local",
     "local": "BOX",
-    "updated_at": "2026-11-10T16:12:31.394446"
+    "updated_at": "2026-11-10T16:16:00.433362"
   },
   "extracao_estoque_local_COZINHA": {
-    "last_duration_seconds": 0.233,
-    "avg_duration_seconds": 0.216,
+    "last_duration_seconds": 0.346,
+    "avg_duration_seconds": 0.235,
     "min_duration_seconds": 0.159,
-    "max_duration_seconds": 0.319,
-    "count": 6,
+    "max_duration_seconds": 0.346,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "estoque_local",
     "local": "COZINHA",
-    "updated_at": "2026-11-10T16:12:31.366285"
+    "updated_at": "2026-11-10T16:16:00.782684"
   },
   "extracao_estoque_local_COLCHOES": {
-    "last_duration_seconds": 0.338,
-    "avg_duration_seconds": 0.271,
+    "last_duration_seconds": 0.615,
+    "avg_duration_seconds": 0.32,
     "min_duration_seconds": 0.13,
-    "max_duration_seconds": 0.38,
-    "count": 6,
+    "max_duration_seconds": 0.615,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "estoque_local",
     "local": "COLCHOES",
-    "updated_at": "2026-11-10T16:12:31.241042"
+    "updated_at": "2026-11-10T16:16:00.653568"
   },
   "extracao_estoque_local_ARMARIO_UL": {
-    "last_duration_seconds": 0.285,
-    "avg_duration_seconds": 0.217,
+    "last_duration_seconds": 0.393,
+    "avg_duration_seconds": 0.242,
     "min_duration_seconds": 0.109,
     "max_duration_seconds": 0.399,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "estoque_local",
     "local": "ARMARIO UL",
-    "updated_at": "2026-11-10T16:12:31.490163"
+    "updated_at": "2026-11-10T16:16:00.815401"
   },
   "extracao_estoque_local_VIDRACARIA": {
-    "last_duration_seconds": 0.339,
-    "avg_duration_seconds": 0.294,
+    "last_duration_seconds": 0.544,
+    "avg_duration_seconds": 0.33,
     "min_duration_seconds": 0.169,
-    "max_duration_seconds": 0.436,
-    "count": 6,
+    "max_duration_seconds": 0.544,
+    "count": 7,
     "last_rows_extracted": 16,
     "grupo": "estoque_local",
     "local": "VIDRACARIA",
-    "updated_at": "2026-11-10T16:12:31.052269"
+    "updated_at": "2026-11-10T16:16:00.449665"
   },
   "extracao_estoque_local_LAMINAD_UL": {
-    "last_duration_seconds": 0.51,
-    "avg_duration_seconds": 0.351,
+    "last_duration_seconds": 0.655,
+    "avg_duration_seconds": 0.394,
     "min_duration_seconds": 0.21,
-    "max_duration_seconds": 0.51,
-    "count": 6,
+    "max_duration_seconds": 0.655,
+    "count": 7,
     "last_rows_extracted": 4,
     "grupo": "estoque_local",
     "local": "LAMINAD UL",
-    "updated_at": "2026-11-10T16:12:31.128510"
+    "updated_at": "2026-11-10T16:16:00.145760"
   },
   "extracao_estoque_local_PES_ACABA": {
-    "last_duration_seconds": 0.764,
-    "avg_duration_seconds": 0.627,
+    "last_duration_seconds": 0.709,
+    "avg_duration_seconds": 0.639,
     "min_duration_seconds": 0.426,
     "max_duration_seconds": 0.783,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 77,
     "grupo": "estoque_local",
     "local": "PES ACABA",
-    "updated_at": "2026-11-10T16:12:30.671227"
+    "updated_at": "2026-11-10T16:15:58.944059"
   },
   "extracao_estoque_local_PORTAS": {
-    "last_duration_seconds": 0.663,
-    "avg_duration_seconds": 0.496,
+    "last_duration_seconds": 0.403,
+    "avg_duration_seconds": 0.483,
     "min_duration_seconds": 0.301,
     "max_duration_seconds": 0.779,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 24,
     "grupo": "estoque_local",
     "local": "PORTAS",
-    "updated_at": "2026-11-10T16:12:30.879389"
+    "updated_at": "2026-11-10T16:15:59.382227"
   },
   "extracao_estoque_local_TAMPOS_UL": {
-    "last_duration_seconds": 0.487,
-    "avg_duration_seconds": 0.361,
+    "last_duration_seconds": 0.593,
+    "avg_duration_seconds": 0.394,
     "min_duration_seconds": 0.233,
-    "max_duration_seconds": 0.492,
-    "count": 6,
+    "max_duration_seconds": 0.593,
+    "count": 7,
     "last_rows_extracted": 46,
     "grupo": "estoque_local",
     "local": "TAMPOS UL",
-    "updated_at": "2026-11-10T16:12:30.993814"
+    "updated_at": "2026-11-10T16:16:00.067202"
   },
   "extracao_estoque_local_CORTE_LE": {
-    "last_duration_seconds": 0.567,
-    "avg_duration_seconds": 0.46,
+    "last_duration_seconds": 0.51,
+    "avg_duration_seconds": 0.467,
     "min_duration_seconds": 0.269,
     "max_duration_seconds": 0.579,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 27,
     "grupo": "estoque_local",
     "local": "CORTE LE",
-    "updated_at": "2026-11-10T16:12:30.897973"
+    "updated_at": "2026-11-10T16:15:59.639101"
   },
   "extracao_estoque_local_CORTE": {
-    "last_duration_seconds": 0.334,
-    "avg_duration_seconds": 0.383,
+    "last_duration_seconds": 0.576,
+    "avg_duration_seconds": 0.411,
     "min_duration_seconds": 0.307,
-    "max_duration_seconds": 0.456,
-    "count": 6,
+    "max_duration_seconds": 0.576,
+    "count": 7,
     "last_rows_extracted": 38,
     "grupo": "estoque_local",
     "local": "CORTE",
-    "updated_at": "2026-11-10T16:12:30.707242"
+    "updated_at": "2026-11-10T16:15:59.964071"
   },
   "extracao_estoque_local_PEZINHO": {
-    "last_duration_seconds": 0.892,
-    "avg_duration_seconds": 0.55,
+    "last_duration_seconds": 1.017,
+    "avg_duration_seconds": 0.617,
     "min_duration_seconds": 0.365,
-    "max_duration_seconds": 0.892,
-    "count": 6,
+    "max_duration_seconds": 1.017,
+    "count": 7,
     "last_rows_extracted": 59,
     "grupo": "estoque_local",
     "local": "PEZINHO",
-    "updated_at": "2026-11-10T16:12:31.022092"
+    "updated_at": "2026-11-10T16:15:59.659549"
   },
   "extracao_estoque_local_CC_FABRI03": {
-    "last_duration_seconds": 0.631,
-    "avg_duration_seconds": 0.491,
+    "last_duration_seconds": 1.428,
+    "avg_duration_seconds": 0.625,
     "min_duration_seconds": 0.304,
-    "max_duration_seconds": 0.631,
-    "count": 6,
+    "max_duration_seconds": 1.428,
+    "count": 7,
     "last_rows_extracted": 54,
     "grupo": "estoque_local",
     "local": "CC FABRI03",
-    "updated_at": "2026-11-10T16:12:30.914713"
+    "updated_at": "2026-11-10T16:16:00.542230"
   },
   "extracao_estoque_local_LE_FABRI03": {
-    "last_duration_seconds": 0.551,
-    "avg_duration_seconds": 0.399,
+    "last_duration_seconds": 1.479,
+    "avg_duration_seconds": 0.553,
     "min_duration_seconds": 0.264,
-    "max_duration_seconds": 0.551,
-    "count": 6,
+    "max_duration_seconds": 1.479,
+    "count": 7,
     "last_rows_extracted": 10,
     "grupo": "estoque_local",
     "local": "LE FABRI03",
-    "updated_at": "2026-11-10T16:12:30.939102"
+    "updated_at": "2026-11-10T16:16:00.646204"
   },
   "extracao_estoque_local_UL_FABRI01": {
-    "last_duration_seconds": 1.311,
-    "avg_duration_seconds": 1.118,
+    "last_duration_seconds": 2.015,
+    "avg_duration_seconds": 1.246,
     "min_duration_seconds": 0.715,
-    "max_duration_seconds": 1.638,
-    "count": 6,
+    "max_duration_seconds": 2.015,
+    "count": 7,
     "last_rows_extracted": 142,
     "grupo": "estoque_local",
     "local": "UL FABRI01",
-    "updated_at": "2026-11-10T16:12:30.363585"
+    "updated_at": "2026-11-10T16:15:59.470378"
   },
   "extracao_estoque_local_ALMOFADAS": {
-    "last_duration_seconds": 0.184,
-    "avg_duration_seconds": 0.245,
+    "last_duration_seconds": 0.529,
+    "avg_duration_seconds": 0.286,
     "min_duration_seconds": 0.184,
-    "max_duration_seconds": 0.343,
-    "count": 6,
+    "max_duration_seconds": 0.529,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "estoque_local",
     "local": "ALMOFADAS",
-    "updated_at": "2026-11-10T16:12:31.105567"
+    "updated_at": "2026-11-10T16:16:00.669228"
   },
   "extracao_estoque_local_LE_FABRI06": {
-    "last_duration_seconds": 0.545,
-    "avg_duration_seconds": 0.556,
+    "last_duration_seconds": 1.478,
+    "avg_duration_seconds": 0.688,
     "min_duration_seconds": 0.48,
-    "max_duration_seconds": 0.607,
-    "count": 6,
+    "max_duration_seconds": 1.478,
+    "count": 7,
     "last_rows_extracted": 56,
     "grupo": "estoque_local",
     "local": "LE FABRI06",
-    "updated_at": "2026-11-10T16:12:30.500608"
+    "updated_at": "2026-11-10T16:15:59.901116"
   },
   "extracao_estoque_local_FIBRA": {
-    "last_duration_seconds": 1.055,
-    "avg_duration_seconds": 0.839,
+    "last_duration_seconds": 2.033,
+    "avg_duration_seconds": 1.01,
     "min_duration_seconds": 0.578,
-    "max_duration_seconds": 1.404,
-    "count": 6,
+    "max_duration_seconds": 2.033,
+    "count": 7,
     "last_rows_extracted": 128,
     "grupo": "estoque_local",
     "local": "FIBRA",
-    "updated_at": "2026-11-10T16:12:30.612680"
+    "updated_at": "2026-11-10T16:15:59.946173"
   },
   "extracao_estoque_local_CC_ACABA01": {
-    "last_duration_seconds": 2.781,
-    "avg_duration_seconds": 1.498,
+    "last_duration_seconds": 1.779,
+    "avg_duration_seconds": 1.538,
     "min_duration_seconds": 0.664,
     "max_duration_seconds": 2.781,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 337,
     "grupo": "estoque_local",
     "local": "CC ACABA01",
-    "updated_at": "2026-11-10T16:12:31.581702"
+    "updated_at": "2026-11-10T16:15:58.215970"
   },
   "extracao_estoque_local_ALUMINIO": {
-    "last_duration_seconds": 0.439,
-    "avg_duration_seconds": 0.301,
+    "last_duration_seconds": 0.704,
+    "avg_duration_seconds": 0.359,
     "min_duration_seconds": 0.181,
-    "max_duration_seconds": 0.459,
-    "count": 6,
+    "max_duration_seconds": 0.704,
+    "count": 7,
     "last_rows_extracted": 26,
     "grupo": "estoque_local",
     "local": "ALUMINIO",
-    "updated_at": "2026-11-10T16:12:31.184370"
+    "updated_at": "2026-11-10T16:16:00.565052"
   },
   "extracao_estoque_local_PLASMA": {
-    "last_duration_seconds": 0.318,
-    "avg_duration_seconds": 0.211,
+    "last_duration_seconds": 0.279,
+    "avg_duration_seconds": 0.221,
     "min_duration_seconds": 0.163,
     "max_duration_seconds": 0.318,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 6,
     "grupo": "estoque_local",
     "local": "PLASMA",
-    "updated_at": "2026-11-10T16:12:31.539002"
+    "updated_at": "2026-11-10T16:16:00.778010"
   },
   "extracao_estoque_local_INOX": {
-    "last_duration_seconds": 0.445,
-    "avg_duration_seconds": 0.294,
+    "last_duration_seconds": 0.466,
+    "avg_duration_seconds": 0.319,
     "min_duration_seconds": 0.186,
-    "max_duration_seconds": 0.445,
-    "count": 6,
+    "max_duration_seconds": 0.466,
+    "count": 7,
     "last_rows_extracted": 19,
     "grupo": "estoque_local",
     "local": "INOX",
-    "updated_at": "2026-11-10T16:12:31.318803"
+    "updated_at": "2026-11-10T16:16:00.418196"
   },
   "extracao_estoque_local_CAPAS_LE": {
-    "last_duration_seconds": 1.648,
-    "avg_duration_seconds": 1.246,
+    "last_duration_seconds": 1.03,
+    "avg_duration_seconds": 1.215,
     "min_duration_seconds": 0.708,
     "max_duration_seconds": 1.788,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 128,
     "grupo": "estoque_local",
     "local": "CAPAS LE",
-    "updated_at": "2026-11-10T16:12:30.634287"
+    "updated_at": "2026-11-10T16:15:58.418703"
   },
   "extracao_estoque_local_ATELIE2": {
-    "last_duration_seconds": 0.386,
-    "avg_duration_seconds": 0.241,
+    "last_duration_seconds": 0.556,
+    "avg_duration_seconds": 0.286,
     "min_duration_seconds": 0.152,
-    "max_duration_seconds": 0.386,
-    "count": 6,
+    "max_duration_seconds": 0.556,
+    "count": 7,
     "last_rows_extracted": 4,
     "grupo": "estoque_local",
     "local": "ATELIE2",
-    "updated_at": "2026-11-10T16:12:31.549552"
+    "updated_at": "2026-11-10T16:16:00.707240"
   },
   "extracao_estoque_local_ATELIE": {
-    "last_duration_seconds": 0.351,
-    "avg_duration_seconds": 0.529,
+    "last_duration_seconds": 0.727,
+    "avg_duration_seconds": 0.557,
     "min_duration_seconds": 0.351,
     "max_duration_seconds": 0.733,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 50,
     "grupo": "estoque_local",
     "local": "ATELIE",
-    "updated_at": "2026-11-10T16:12:30.280330"
+    "updated_at": "2026-11-10T16:15:59.675001"
   },
   "extracao_estoque_local_METALURGIA": {
-    "last_duration_seconds": 1.322,
-    "avg_duration_seconds": 1.554,
+    "last_duration_seconds": 1.404,
+    "avg_duration_seconds": 1.533,
     "min_duration_seconds": 0.989,
     "max_duration_seconds": 2.385,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 203,
     "grupo": "estoque_local",
     "local": "METALURGIA",
-    "updated_at": "2026-11-10T16:12:28.373764"
+    "updated_at": "2026-11-10T16:15:57.384809"
   },
   "extracao_estoque_local_UL_ACABA01": {
-    "last_duration_seconds": 4.272,
-    "avg_duration_seconds": 2.07,
+    "last_duration_seconds": 3.836,
+    "avg_duration_seconds": 2.322,
     "min_duration_seconds": 1.138,
     "max_duration_seconds": 4.272,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 382,
     "grupo": "estoque_local",
     "local": "UL ACABA01",
-    "updated_at": "2026-11-10T16:12:31.158235"
+    "updated_at": "2026-11-10T16:15:57.517872"
   },
   "extracao_estoque_local_CADEIRAS": {
-    "last_duration_seconds": 4.59,
-    "avg_duration_seconds": 2.64,
+    "last_duration_seconds": 6.356,
+    "avg_duration_seconds": 3.171,
     "min_duration_seconds": 2.008,
-    "max_duration_seconds": 4.59,
-    "count": 6,
+    "max_duration_seconds": 6.356,
+    "count": 7,
     "last_rows_extracted": 648,
     "grupo": "estoque_local",
     "local": "CADEIRAS",
-    "updated_at": "2026-11-10T16:12:28.914497"
+    "updated_at": "2026-11-10T16:15:57.184835"
   },
   "extracao_estoque_local_AT_INSUMO": {
-    "last_duration_seconds": 0.233,
-    "avg_duration_seconds": 0.195,
+    "last_duration_seconds": 0.296,
+    "avg_duration_seconds": 0.212,
     "min_duration_seconds": 0.158,
-    "max_duration_seconds": 0.233,
-    "count": 5,
+    "max_duration_seconds": 0.296,
+    "count": 6,
     "last_rows_extracted": 0,
     "grupo": "estoque_local",
     "local": "AT INSUMO",
-    "updated_at": "2026-11-10T16:12:31.467132"
+    "updated_at": "2026-11-10T16:16:00.801869"
   },
   "extracao_estoque_local_REVENDA": {
-    "last_duration_seconds": 0.521,
-    "avg_duration_seconds": 0.338,
+    "last_duration_seconds": 0.476,
+    "avg_duration_seconds": 0.358,
     "min_duration_seconds": 0.162,
     "max_duration_seconds": 0.521,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 14,
     "grupo": "estoque_local",
     "local": "REVENDA",
-    "updated_at": "2026-11-10T16:12:31.200115"
+    "updated_at": "2026-11-10T16:16:00.118807"
   },
   "extracao_estoque_local_LE_FABRI02": {
-    "last_duration_seconds": 6.024,
-    "avg_duration_seconds": 4.046,
+    "last_duration_seconds": 3.562,
+    "avg_duration_seconds": 3.977,
     "min_duration_seconds": 1.993,
     "max_duration_seconds": 6.024,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 749,
     "grupo": "estoque_local",
     "local": "LE FABRI02",
-    "updated_at": "2026-11-10T16:12:15.703945"
+    "updated_at": "2026-11-10T16:15:33.224125"
   },
   "extracao_estoque_local_AT_SOFA": {
-    "last_duration_seconds": 0.565,
-    "avg_duration_seconds": 0.288,
+    "last_duration_seconds": 0.562,
+    "avg_duration_seconds": 0.327,
     "min_duration_seconds": 0.121,
     "max_duration_seconds": 0.565,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 8,
     "grupo": "estoque_local",
     "local": "AT SOFA",
-    "updated_at": "2026-11-10T16:12:31.526704"
+    "updated_at": "2026-11-10T16:16:00.530005"
   },
   "extracao_estoque_local_AT_VIDRO": {
-    "last_duration_seconds": 0.483,
-    "avg_duration_seconds": 0.258,
+    "last_duration_seconds": 0.47,
+    "avg_duration_seconds": 0.288,
     "min_duration_seconds": 0.168,
     "max_duration_seconds": 0.483,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "estoque_local",
     "local": "AT VIDRO",
-    "updated_at": "2026-11-10T16:12:31.595439"
+    "updated_at": "2026-11-10T16:16:00.578074"
   },
   "extracao_estoque_local_ESTOF_UL": {
-    "last_duration_seconds": 4.613,
-    "avg_duration_seconds": 4.149,
+    "last_duration_seconds": 9.084,
+    "avg_duration_seconds": 4.854,
     "min_duration_seconds": 2.722,
-    "max_duration_seconds": 5.846,
-    "count": 6,
+    "max_duration_seconds": 9.084,
+    "count": 7,
     "last_rows_extracted": 896,
     "grupo": "estoque_local",
     "local": "ESTOF UL",
-    "updated_at": "2026-11-10T16:12:09.674183"
+    "updated_at": "2026-11-10T16:15:37.606901"
   },
   "extracao_estoque_local_AT_KIT": {
-    "last_duration_seconds": 0.317,
-    "avg_duration_seconds": 0.305,
+    "last_duration_seconds": 0.375,
+    "avg_duration_seconds": 0.315,
     "min_duration_seconds": 0.217,
-    "max_duration_seconds": 0.347,
-    "count": 6,
+    "max_duration_seconds": 0.375,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "estoque_local",
     "local": "AT KIT",
-    "updated_at": "2026-11-10T16:12:30.957979"
+    "updated_at": "2026-11-10T16:16:00.132366"
   },
   "extracao_estoque_local_UL_ALMOX05": {
-    "last_duration_seconds": 1.163,
-    "avg_duration_seconds": 0.696,
+    "last_duration_seconds": 1.853,
+    "avg_duration_seconds": 0.861,
     "min_duration_seconds": 0.373,
-    "max_duration_seconds": 1.163,
-    "count": 6,
+    "max_duration_seconds": 1.853,
+    "count": 7,
     "last_rows_extracted": 65,
     "grupo": "estoque_local",
     "local": "UL-ALMOX05",
-    "updated_at": "2026-11-10T16:12:30.951235"
+    "updated_at": "2026-11-10T16:16:00.035509"
   },
   "extracao_estoque_local_TAPA_FURO": {
-    "last_duration_seconds": 0.234,
-    "avg_duration_seconds": 0.22,
+    "last_duration_seconds": 0.272,
+    "avg_duration_seconds": 0.227,
     "min_duration_seconds": 0.12,
     "max_duration_seconds": 0.4,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "estoque_local",
     "local": "TAPA FURO",
-    "updated_at": "2026-11-10T16:12:31.302885"
+    "updated_at": "2026-11-10T16:16:00.554903"
   },
   "extracao_estoque_local_COLMEIAS": {
-    "last_duration_seconds": 0.374,
-    "avg_duration_seconds": 0.307,
+    "last_duration_seconds": 0.4,
+    "avg_duration_seconds": 0.32,
     "min_duration_seconds": 0.224,
     "max_duration_seconds": 0.406,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 18,
     "grupo": "estoque_local",
     "local": "COLMEIAS",
-    "updated_at": "2026-11-10T16:12:31.064124"
+    "updated_at": "2026-11-10T16:16:00.080460"
   },
   "extracao_estoque_local_MOSTRUARIO": {
-    "last_duration_seconds": 0.274,
-    "avg_duration_seconds": 0.247,
+    "last_duration_seconds": 0.483,
+    "avg_duration_seconds": 0.281,
     "min_duration_seconds": 0.16,
-    "max_duration_seconds": 0.318,
-    "count": 6,
+    "max_duration_seconds": 0.483,
+    "count": 7,
     "last_rows_extracted": 2,
     "grupo": "estoque_local",
     "local": "MOSTRUARIO",
-    "updated_at": "2026-11-10T16:12:31.229967"
+    "updated_at": "2026-11-10T16:16:00.606032"
   },
   "extracao_estoque_local_LAMINACAO1": {
-    "last_duration_seconds": 0.295,
+    "last_duration_seconds": 0.222,
     "avg_duration_seconds": 0.22,
     "min_duration_seconds": 0.16,
     "max_duration_seconds": 0.295,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "estoque_local",
     "local": "LAMINACAO1",
-    "updated_at": "2026-11-10T16:12:31.484389"
+    "updated_at": "2026-11-10T16:16:00.632534"
   },
   "extracao_estoque_local_C_PILOTO": {
-    "last_duration_seconds": 0.404,
-    "avg_duration_seconds": 0.274,
+    "last_duration_seconds": 0.492,
+    "avg_duration_seconds": 0.305,
     "min_duration_seconds": 0.157,
-    "max_duration_seconds": 0.404,
-    "count": 6,
+    "max_duration_seconds": 0.492,
+    "count": 7,
     "last_rows_extracted": 7,
     "grupo": "estoque_local",
     "local": "C PILOTO",
-    "updated_at": "2026-11-10T16:12:31.349895"
+    "updated_at": "2026-11-10T16:16:00.491321"
   },
   "extracao_estoque_local_OSSOPAINEL": {
-    "last_duration_seconds": 0.186,
-    "avg_duration_seconds": 0.212,
+    "last_duration_seconds": 0.498,
+    "avg_duration_seconds": 0.26,
     "min_duration_seconds": 0.154,
-    "max_duration_seconds": 0.282,
-    "count": 5,
+    "max_duration_seconds": 0.498,
+    "count": 6,
     "last_rows_extracted": 0,
     "grupo": "estoque_local",
     "local": "OSSOPAINEL",
-    "updated_at": "2026-11-10T16:12:31.244713"
+    "updated_at": "2026-11-10T16:16:00.976014"
   },
   "extracao_estoque_local_EMBALAGEM": {
-    "last_duration_seconds": 0.19,
-    "avg_duration_seconds": 0.214,
+    "last_duration_seconds": 0.263,
+    "avg_duration_seconds": 0.221,
     "min_duration_seconds": 0.146,
     "max_duration_seconds": 0.304,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "estoque_local",
     "local": "EMBALAGEM",
-    "updated_at": "2026-11-10T16:12:31.216580"
+    "updated_at": "2026-11-10T16:16:00.718000"
   },
   "extracao_estoque_local_LE_FABRI01": {
-    "last_duration_seconds": 0.425,
-    "avg_duration_seconds": 0.262,
+    "last_duration_seconds": 0.322,
+    "avg_duration_seconds": 0.271,
     "min_duration_seconds": 0.175,
     "max_duration_seconds": 0.425,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 2,
     "grupo": "estoque_local",
     "local": "LE FABRI01",
-    "updated_at": "2026-11-10T16:12:31.423133"
+    "updated_at": "2026-11-10T16:16:00.406495"
   },
   "extracao_estoque_local_TAPETES": {
-    "last_duration_seconds": 0.592,
-    "avg_duration_seconds": 0.318,
+    "last_duration_seconds": 0.329,
+    "avg_duration_seconds": 0.32,
     "min_duration_seconds": 0.18,
     "max_duration_seconds": 0.592,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "estoque_local",
     "local": "TAPETES",
-    "updated_at": "2026-11-10T16:12:31.477859"
+    "updated_at": "2026-11-10T16:15:59.994157"
   },
   "extracao_estoque_local_PLAN_ESP": {
-    "last_duration_seconds": 0.516,
-    "avg_duration_seconds": 0.382,
+    "last_duration_seconds": 0.327,
+    "avg_duration_seconds": 0.374,
     "min_duration_seconds": 0.219,
     "max_duration_seconds": 0.574,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 29,
     "grupo": "estoque_local",
     "local": "PLAN_ESP",
-    "updated_at": "2026-11-10T16:12:30.964853"
+    "updated_at": "2026-11-10T16:15:59.753194"
   },
   "extracao_estoque_local_ACESSORIOS": {
-    "last_duration_seconds": 2.283,
-    "avg_duration_seconds": 1.456,
+    "last_duration_seconds": 2.298,
+    "avg_duration_seconds": 1.576,
     "min_duration_seconds": 0.946,
-    "max_duration_seconds": 2.283,
-    "count": 6,
+    "max_duration_seconds": 2.298,
+    "count": 7,
     "last_rows_extracted": 217,
     "grupo": "estoque_local",
     "local": "ACESSORIOS",
-    "updated_at": "2026-11-10T16:12:30.869858"
+    "updated_at": "2026-11-10T16:15:59.486902"
   },
   "extracao_ordens_atrasadas_BOX": {
-    "last_duration_seconds": 0.81,
-    "avg_duration_seconds": 0.973,
+    "last_duration_seconds": 1.601,
+    "avg_duration_seconds": 1.063,
     "min_duration_seconds": 0.698,
-    "max_duration_seconds": 1.423,
-    "count": 6,
+    "max_duration_seconds": 1.601,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "ordens_producao",
     "local": "BOX",
-    "updated_at": "2026-11-10T16:12:30.123578"
+    "updated_at": "2026-11-10T16:15:59.123566"
   },
   "extracao_ordens_atrasadas_COLCHOES": {
-    "last_duration_seconds": 1.004,
-    "avg_duration_seconds": 1.174,
+    "last_duration_seconds": 2.421,
+    "avg_duration_seconds": 1.352,
     "min_duration_seconds": 1.004,
-    "max_duration_seconds": 1.4,
-    "count": 6,
+    "max_duration_seconds": 2.421,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "ordens_producao",
     "local": "COLCHOES",
-    "updated_at": "2026-11-10T16:12:29.923736"
+    "updated_at": "2026-11-10T16:15:59.856439"
   },
   "extracao_ordens_atrasadas_ARMARIO_UL": {
-    "last_duration_seconds": 0.851,
-    "avg_duration_seconds": 0.853,
+    "last_duration_seconds": 1.23,
+    "avg_duration_seconds": 0.907,
     "min_duration_seconds": 0.598,
-    "max_duration_seconds": 1.042,
-    "count": 6,
+    "max_duration_seconds": 1.23,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "ordens_producao",
     "local": "ARMARIO UL",
-    "updated_at": "2026-11-10T16:12:30.213549"
+    "updated_at": "2026-11-10T16:15:59.110862"
   },
   "extracao_estoque_local_AT_MOVEIS": {
-    "last_duration_seconds": 2.306,
-    "avg_duration_seconds": 1.493,
+    "last_duration_seconds": 3.311,
+    "avg_duration_seconds": 1.753,
     "min_duration_seconds": 0.744,
-    "max_duration_seconds": 2.306,
-    "count": 6,
+    "max_duration_seconds": 3.311,
+    "count": 7,
     "last_rows_extracted": 351,
     "grupo": "estoque_local",
     "local": "AT MOVEIS",
-    "updated_at": "2026-11-10T16:12:30.684689"
+    "updated_at": "2026-11-10T16:16:00.472712"
   },
   "extracao_estoque_local_PLANEJADOS": {
-    "last_duration_seconds": 4.909,
-    "avg_duration_seconds": 4.257,
+    "last_duration_seconds": 6.359,
+    "avg_duration_seconds": 4.557,
     "min_duration_seconds": 2.895,
-    "max_duration_seconds": 5.549,
-    "count": 6,
+    "max_duration_seconds": 6.359,
+    "count": 7,
     "last_rows_extracted": 976,
     "grupo": "estoque_local",
     "local": "PLANEJADOS",
-    "updated_at": "2026-11-10T16:12:08.307121"
+    "updated_at": "2026-11-10T16:15:33.182807"
   },
   "extracao_ordens_atrasadas_COZINHA": {
-    "last_duration_seconds": 2.085,
-    "avg_duration_seconds": 2.177,
+    "last_duration_seconds": 6.539,
+    "avg_duration_seconds": 2.8,
     "min_duration_seconds": 1.285,
-    "max_duration_seconds": 3.679,
-    "count": 6,
+    "max_duration_seconds": 6.539,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "ordens_producao",
     "local": "COZINHA",
-    "updated_at": "2026-11-10T16:12:27.427148"
+    "updated_at": "2026-11-10T16:15:59.162886"
   },
   "extracao_ordens_atrasadas_LAMINAD_UL": {
-    "last_duration_seconds": 1.148,
-    "avg_duration_seconds": 0.754,
+    "last_duration_seconds": 0.928,
+    "avg_duration_seconds": 0.779,
     "min_duration_seconds": 0.554,
     "max_duration_seconds": 1.148,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "ordens_producao",
     "local": "LAMINAD UL",
-    "updated_at": "2026-11-10T16:12:30.740488"
+    "updated_at": "2026-11-10T16:15:58.974952"
   },
   "extracao_estoque_local_CC_FABRI01": {
-    "last_duration_seconds": 2.706,
-    "avg_duration_seconds": 3.864,
+    "last_duration_seconds": 4.923,
+    "avg_duration_seconds": 4.015,
     "min_duration_seconds": 2.426,
     "max_duration_seconds": 6.642,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 955,
     "grupo": "estoque_local",
     "local": "CC FABRI01",
-    "updated_at": "2026-11-10T16:12:06.128531"
+    "updated_at": "2026-11-10T16:15:38.150791"
   },
   "extracao_ordens_atrasadas_VIDRACARIA": {
-    "last_duration_seconds": 3.804,
-    "avg_duration_seconds": 2.931,
+    "last_duration_seconds": 5.946,
+    "avg_duration_seconds": 3.362,
     "min_duration_seconds": 2.105,
-    "max_duration_seconds": 3.822,
-    "count": 6,
+    "max_duration_seconds": 5.946,
+    "count": 7,
     "last_rows_extracted": 39,
     "grupo": "ordens_producao",
     "local": "VIDRACARIA",
-    "updated_at": "2026-11-10T16:12:25.644885"
+    "updated_at": "2026-11-10T16:15:53.677325"
   },
   "extracao_ordens_atrasadas_TAMPOS_UL": {
-    "last_duration_seconds": 2.879,
-    "avg_duration_seconds": 2.429,
+    "last_duration_seconds": 6.423,
+    "avg_duration_seconds": 3.0,
     "min_duration_seconds": 1.258,
-    "max_duration_seconds": 2.879,
-    "count": 6,
+    "max_duration_seconds": 6.423,
+    "count": 7,
     "last_rows_extracted": 40,
     "grupo": "ordens_producao",
     "local": "TAMPOS UL",
-    "updated_at": "2026-11-10T16:12:26.734622"
+    "updated_at": "2026-11-10T16:15:57.429812"
   },
   "extracao_ordens_atrasadas_CORTE": {
     "last_duration_seconds": 5.759,
@@ -770,15 +770,15 @@
     "updated_at": "2026-11-10T16:15:24.593461"
   },
   "extracao_ordens_atrasadas_CORTE_LE": {
-    "last_duration_seconds": 6.097,
-    "avg_duration_seconds": 3.706,
+    "last_duration_seconds": 5.62,
+    "avg_duration_seconds": 3.979,
     "min_duration_seconds": 1.63,
     "max_duration_seconds": 6.097,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 66,
     "grupo": "ordens_producao",
     "local": "CORTE LE",
-    "updated_at": "2026-11-10T16:12:20.889840"
+    "updated_at": "2026-11-10T16:15:40.612254"
   },
   "extracao_ordens_atrasadas_CADEIRAS": {
     "last_duration_seconds": 29.917,
@@ -792,15 +792,15 @@
     "updated_at": "2026-11-10T16:15:09.724806"
   },
   "extracao_ordens_atrasadas_LE_FABRI03": {
-    "last_duration_seconds": 2.189,
-    "avg_duration_seconds": 1.501,
+    "last_duration_seconds": 3.86,
+    "avg_duration_seconds": 1.838,
     "min_duration_seconds": 1.041,
-    "max_duration_seconds": 2.189,
-    "count": 6,
+    "max_duration_seconds": 3.86,
+    "count": 7,
     "last_rows_extracted": 4,
     "grupo": "ordens_producao",
     "local": "LE FABRI03",
-    "updated_at": "2026-11-10T16:12:30.381413"
+    "updated_at": "2026-11-10T16:16:00.278470"
   },
   "extracao_ordens_atrasadas_PEZINHO": {
     "last_duration_seconds": 5.98,
@@ -814,15 +814,15 @@
     "updated_at": "2026-11-10T16:15:30.577313"
   },
   "extracao_ordens_atrasadas_PORTAS": {
-    "last_duration_seconds": 26.949,
-    "avg_duration_seconds": 15.23,
+    "last_duration_seconds": 72.305,
+    "avg_duration_seconds": 23.384,
     "min_duration_seconds": 8.643,
-    "max_duration_seconds": 26.949,
-    "count": 6,
+    "max_duration_seconds": 72.305,
+    "count": 7,
     "last_rows_extracted": 514,
     "grupo": "ordens_producao",
     "local": "PORTAS",
-    "updated_at": "2026-11-10T16:12:07.668942"
+    "updated_at": "2026-11-10T16:15:52.109503"
   },
   "extracao_ordens_atrasadas_CC_ACABA01": {
     "last_duration_seconds": 48.796,
@@ -836,147 +836,147 @@
     "updated_at": "2026-11-10T16:15:28.596326"
   },
   "extracao_ordens_atrasadas_LE_FABRI06": {
-    "last_duration_seconds": 4.126,
-    "avg_duration_seconds": 3.371,
+    "last_duration_seconds": 3.482,
+    "avg_duration_seconds": 3.387,
     "min_duration_seconds": 2.112,
     "max_duration_seconds": 4.52,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 66,
     "grupo": "ordens_producao",
     "local": "LE FABRI06",
-    "updated_at": "2026-11-10T16:12:19.124219"
+    "updated_at": "2026-11-10T16:15:44.097637"
   },
   "extracao_ordens_atrasadas_FIBRA": {
-    "last_duration_seconds": 7.32,
-    "avg_duration_seconds": 4.478,
+    "last_duration_seconds": 10.78,
+    "avg_duration_seconds": 5.378,
     "min_duration_seconds": 2.542,
-    "max_duration_seconds": 7.32,
-    "count": 6,
+    "max_duration_seconds": 10.78,
+    "count": 7,
     "last_rows_extracted": 111,
     "grupo": "ordens_producao",
     "local": "FIBRA",
-    "updated_at": "2026-11-10T16:12:14.994038"
+    "updated_at": "2026-11-10T16:15:35.428155"
   },
   "extracao_ordens_atrasadas_UL_ACABA01": {
-    "last_duration_seconds": 32.844,
-    "avg_duration_seconds": 21.482,
+    "last_duration_seconds": 65.814,
+    "avg_duration_seconds": 27.815,
     "min_duration_seconds": 15.281,
-    "max_duration_seconds": 32.844,
-    "count": 6,
+    "max_duration_seconds": 65.814,
+    "count": 7,
     "last_rows_extracted": 835,
     "grupo": "ordens_producao",
     "local": "UL ACABA01",
-    "updated_at": "2026-11-10T16:12:13.558927"
+    "updated_at": "2026-11-10T16:15:45.613645"
   },
   "extracao_ordens_atrasadas_ALMOFADAS": {
-    "last_duration_seconds": 2.479,
-    "avg_duration_seconds": 2.244,
+    "last_duration_seconds": 3.86,
+    "avg_duration_seconds": 2.475,
     "min_duration_seconds": 1.51,
-    "max_duration_seconds": 3.218,
-    "count": 6,
+    "max_duration_seconds": 3.86,
+    "count": 7,
     "last_rows_extracted": 3,
     "grupo": "ordens_producao",
     "local": "ALMOFADAS",
-    "updated_at": "2026-11-10T16:12:27.648155"
+    "updated_at": "2026-11-10T16:15:55.974785"
   },
   "extracao_ordens_atrasadas_INOX": {
-    "last_duration_seconds": 2.629,
-    "avg_duration_seconds": 1.778,
+    "last_duration_seconds": 2.747,
+    "avg_duration_seconds": 1.916,
     "min_duration_seconds": 1.168,
-    "max_duration_seconds": 2.629,
-    "count": 6,
+    "max_duration_seconds": 2.747,
+    "count": 7,
     "last_rows_extracted": 15,
     "grupo": "ordens_producao",
     "local": "INOX",
-    "updated_at": "2026-11-10T16:12:29.552059"
+    "updated_at": "2026-11-10T16:15:57.318731"
   },
   "extracao_ordens_atrasadas_ALUMINIO": {
-    "last_duration_seconds": 3.301,
-    "avg_duration_seconds": 2.219,
+    "last_duration_seconds": 2.003,
+    "avg_duration_seconds": 2.188,
     "min_duration_seconds": 1.271,
     "max_duration_seconds": 3.505,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 31,
     "grupo": "ordens_producao",
     "local": "ALUMINIO",
-    "updated_at": "2026-11-10T16:12:29.357074"
+    "updated_at": "2026-11-10T16:15:54.477823"
   },
   "extracao_ordens_atrasadas_PLASMA": {
-    "last_duration_seconds": 2.076,
-    "avg_duration_seconds": 1.939,
+    "last_duration_seconds": 3.412,
+    "avg_duration_seconds": 2.149,
     "min_duration_seconds": 1.39,
-    "max_duration_seconds": 2.558,
-    "count": 6,
+    "max_duration_seconds": 3.412,
+    "count": 7,
     "last_rows_extracted": 30,
     "grupo": "ordens_producao",
     "local": "PLASMA",
-    "updated_at": "2026-11-10T16:12:28.187285"
+    "updated_at": "2026-11-10T16:15:57.875063"
   },
   "extracao_ordens_atrasadas_ATELIE": {
-    "last_duration_seconds": 5.699,
-    "avg_duration_seconds": 3.587,
+    "last_duration_seconds": 6.181,
+    "avg_duration_seconds": 3.958,
     "min_duration_seconds": 2.184,
-    "max_duration_seconds": 5.699,
-    "count": 6,
+    "max_duration_seconds": 6.181,
+    "count": 7,
     "last_rows_extracted": 65,
     "grupo": "ordens_producao",
     "local": "ATELIE",
-    "updated_at": "2026-11-10T16:12:21.312618"
+    "updated_at": "2026-11-10T16:15:42.096829"
   },
   "extracao_ordens_atrasadas_ATELIE2": {
-    "last_duration_seconds": 3.694,
-    "avg_duration_seconds": 2.931,
+    "last_duration_seconds": 4.993,
+    "avg_duration_seconds": 3.226,
     "min_duration_seconds": 1.797,
-    "max_duration_seconds": 4.404,
-    "count": 6,
+    "max_duration_seconds": 4.993,
+    "count": 7,
     "last_rows_extracted": 34,
     "grupo": "ordens_producao",
     "local": "ATELIE2",
-    "updated_at": "2026-11-10T16:12:25.166169"
+    "updated_at": "2026-11-10T16:15:53.332371"
   },
   "extracao_ordens_atrasadas_AT_INSUMO": {
-    "last_duration_seconds": 2.356,
-    "avg_duration_seconds": 2.237,
+    "last_duration_seconds": 2.458,
+    "avg_duration_seconds": 2.269,
     "min_duration_seconds": 1.606,
     "max_duration_seconds": 3.16,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 2,
     "grupo": "ordens_producao",
     "local": "AT INSUMO",
-    "updated_at": "2026-11-10T16:12:27.045662"
+    "updated_at": "2026-11-10T16:15:54.589372"
   },
   "extracao_ordens_atrasadas_UL_ALMOX05": {
-    "last_duration_seconds": 4.301,
-    "avg_duration_seconds": 3.536,
+    "last_duration_seconds": 3.895,
+    "avg_duration_seconds": 3.587,
     "min_duration_seconds": 1.822,
     "max_duration_seconds": 5.301,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 89,
     "grupo": "ordens_producao",
     "local": "UL-ALMOX05",
-    "updated_at": "2026-11-10T16:12:18.277320"
+    "updated_at": "2026-11-10T16:15:39.881536"
   },
   "extracao_ordens_atrasadas_REVENDA": {
-    "last_duration_seconds": 3.274,
-    "avg_duration_seconds": 3.455,
+    "last_duration_seconds": 7.449,
+    "avg_duration_seconds": 4.026,
     "min_duration_seconds": 2.435,
-    "max_duration_seconds": 4.321,
-    "count": 6,
+    "max_duration_seconds": 7.449,
+    "count": 7,
     "last_rows_extracted": 96,
     "grupo": "ordens_producao",
     "local": "REVENDA",
-    "updated_at": "2026-11-10T16:12:15.659375"
+    "updated_at": "2026-11-10T16:15:45.884999"
   },
   "extracao_ordens_atrasadas_AT_SOFA": {
-    "last_duration_seconds": 2.302,
-    "avg_duration_seconds": 2.358,
+    "last_duration_seconds": 4.737,
+    "avg_duration_seconds": 2.698,
     "min_duration_seconds": 1.696,
-    "max_duration_seconds": 3.481,
-    "count": 6,
+    "max_duration_seconds": 4.737,
+    "count": 7,
     "last_rows_extracted": 8,
     "grupo": "ordens_producao",
     "local": "AT SOFA",
-    "updated_at": "2026-11-10T16:12:25.966237"
+    "updated_at": "2026-11-10T16:15:55.788546"
   },
   "extracao_ordens_atrasadas_METALURGIA": {
     "last_duration_seconds": 18.494,
@@ -990,92 +990,92 @@
     "updated_at": "2026-11-10T16:15:14.099840"
   },
   "extracao_ordens_atrasadas_AT_VIDRO": {
-    "last_duration_seconds": 1.871,
-    "avg_duration_seconds": 2.228,
+    "last_duration_seconds": 2.219,
+    "avg_duration_seconds": 2.227,
     "min_duration_seconds": 1.321,
     "max_duration_seconds": 3.634,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "ordens_producao",
     "local": "AT VIDRO",
-    "updated_at": "2026-11-10T16:12:26.106753"
+    "updated_at": "2026-11-10T16:15:54.568251"
   },
   "extracao_ordens_atrasadas_AT_MOVEIS": {
-    "last_duration_seconds": 4.719,
-    "avg_duration_seconds": 3.955,
+    "last_duration_seconds": 4.022,
+    "avg_duration_seconds": 3.965,
     "min_duration_seconds": 3.26,
     "max_duration_seconds": 5.194,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 98,
     "grupo": "ordens_producao",
     "local": "AT MOVEIS",
-    "updated_at": "2026-11-10T16:12:13.030703"
+    "updated_at": "2026-11-10T16:15:35.982583"
   },
   "extracao_ordens_atrasadas_AT_KIT": {
-    "last_duration_seconds": 3.117,
-    "avg_duration_seconds": 2.915,
+    "last_duration_seconds": 3.239,
+    "avg_duration_seconds": 2.961,
     "min_duration_seconds": 1.617,
     "max_duration_seconds": 5.287,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 2,
     "grupo": "ordens_producao",
     "local": "AT KIT",
-    "updated_at": "2026-11-10T16:12:24.319105"
+    "updated_at": "2026-11-10T16:15:52.346147"
   },
   "extracao_ordens_atrasadas_CC_FABRI01": {
-    "last_duration_seconds": 18.721,
-    "avg_duration_seconds": 20.941,
+    "last_duration_seconds": 54.133,
+    "avg_duration_seconds": 25.683,
     "min_duration_seconds": 15.186,
-    "max_duration_seconds": 26.742,
-    "count": 6,
+    "max_duration_seconds": 54.133,
+    "count": 7,
     "last_rows_extracted": 820,
     "grupo": "ordens_producao",
     "local": "CC FABRI01",
-    "updated_at": "2026-11-10T16:11:59.434557"
+    "updated_at": "2026-11-10T16:15:33.933200"
   },
   "extracao_ordens_atrasadas_C_PILOTO": {
-    "last_duration_seconds": 2.646,
-    "avg_duration_seconds": 2.13,
+    "last_duration_seconds": 2.66,
+    "avg_duration_seconds": 2.206,
     "min_duration_seconds": 1.275,
     "max_duration_seconds": 3.701,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "ordens_producao",
     "local": "C PILOTO",
-    "updated_at": "2026-11-10T16:12:28.617188"
+    "updated_at": "2026-11-10T16:15:55.995042"
   },
   "extracao_ordens_atrasadas_COLMEIAS": {
-    "last_duration_seconds": 3.147,
-    "avg_duration_seconds": 3.084,
+    "last_duration_seconds": 6.581,
+    "avg_duration_seconds": 3.584,
     "min_duration_seconds": 2.331,
-    "max_duration_seconds": 3.834,
-    "count": 6,
+    "max_duration_seconds": 6.581,
+    "count": 7,
     "last_rows_extracted": 75,
     "grupo": "ordens_producao",
     "local": "COLMEIAS",
-    "updated_at": "2026-11-10T16:12:20.278762"
+    "updated_at": "2026-11-10T16:15:52.469706"
   },
   "extracao_ordens_atrasadas_PLANEJADOS": {
-    "last_duration_seconds": 40.48,
-    "avg_duration_seconds": 19.489,
+    "last_duration_seconds": 59.289,
+    "avg_duration_seconds": 25.175,
     "min_duration_seconds": 11.252,
-    "max_duration_seconds": 40.48,
-    "count": 6,
+    "max_duration_seconds": 59.289,
+    "count": 7,
     "last_rows_extracted": 677,
     "grupo": "ordens_producao",
     "local": "PLANEJADOS",
-    "updated_at": "2026-11-10T16:12:21.197512"
+    "updated_at": "2026-11-10T16:15:39.091409"
   },
   "extracao_ordens_atrasadas_MOSTRUARIO": {
-    "last_duration_seconds": 1.627,
-    "avg_duration_seconds": 1.956,
+    "last_duration_seconds": 2.065,
+    "avg_duration_seconds": 1.972,
     "min_duration_seconds": 1.464,
     "max_duration_seconds": 2.583,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "ordens_producao",
     "local": "MOSTRUARIO",
-    "updated_at": "2026-11-10T16:12:27.612792"
+    "updated_at": "2026-11-10T16:15:56.415268"
   },
   "extracao_ordens_atrasadas_ESTOF_UL": {
     "last_duration_seconds": 55.287,
@@ -1089,136 +1089,136 @@
     "updated_at": "2026-11-10T16:12:35.997703"
   },
   "extracao_ordens_atrasadas_LAMINACAO1": {
-    "last_duration_seconds": 2.249,
-    "avg_duration_seconds": 1.638,
+    "last_duration_seconds": 1.722,
+    "avg_duration_seconds": 1.65,
     "min_duration_seconds": 1.231,
     "max_duration_seconds": 2.249,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "ordens_producao",
     "local": "LAMINACAO1",
-    "updated_at": "2026-11-10T16:12:29.903154"
+    "updated_at": "2026-11-10T16:15:56.315714"
   },
   "extracao_ordens_atrasadas_EMBALAGEM": {
-    "last_duration_seconds": 2.241,
-    "avg_duration_seconds": 1.965,
+    "last_duration_seconds": 3.132,
+    "avg_duration_seconds": 2.132,
     "min_duration_seconds": 1.345,
-    "max_duration_seconds": 2.679,
-    "count": 6,
+    "max_duration_seconds": 3.132,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "ordens_producao",
     "local": "EMBALAGEM",
-    "updated_at": "2026-11-10T16:12:28.980899"
+    "updated_at": "2026-11-10T16:15:57.280434"
   },
   "extracao_ordens_atrasadas_TAPETES": {
-    "last_duration_seconds": 1.365,
-    "avg_duration_seconds": 1.558,
+    "last_duration_seconds": 4.31,
+    "avg_duration_seconds": 1.951,
     "min_duration_seconds": 1.119,
-    "max_duration_seconds": 2.487,
-    "count": 6,
+    "max_duration_seconds": 4.31,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "ordens_producao",
     "local": "TAPETES",
-    "updated_at": "2026-11-10T16:12:28.797294"
+    "updated_at": "2026-11-10T16:16:00.102757"
   },
   "extracao_ordens_atrasadas_OSSOPAINEL": {
-    "last_duration_seconds": 1.425,
-    "avg_duration_seconds": 1.532,
+    "last_duration_seconds": 2.638,
+    "avg_duration_seconds": 1.69,
     "min_duration_seconds": 0.831,
-    "max_duration_seconds": 1.93,
-    "count": 6,
+    "max_duration_seconds": 2.638,
+    "count": 7,
     "last_rows_extracted": 30,
     "grupo": "ordens_producao",
     "local": "OSSOPAINEL",
-    "updated_at": "2026-11-10T16:12:29.045463"
+    "updated_at": "2026-11-10T16:15:58.638081"
   },
   "extracao_consumo_insumos_COLCHOES": {
-    "last_duration_seconds": 2.435,
-    "avg_duration_seconds": 1.798,
+    "last_duration_seconds": 2.818,
+    "avg_duration_seconds": 1.944,
     "min_duration_seconds": 1.261,
-    "max_duration_seconds": 2.435,
-    "count": 6,
+    "max_duration_seconds": 2.818,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "consumo_ordem",
     "local": "COLCHOES",
-    "updated_at": "2026-11-10T16:12:29.308361"
+    "updated_at": "2026-11-10T16:15:57.301092"
   },
   "extracao_consumo_insumos_BOX": {
-    "last_duration_seconds": 1.671,
-    "avg_duration_seconds": 1.389,
+    "last_duration_seconds": 3.216,
+    "avg_duration_seconds": 1.65,
     "min_duration_seconds": 1.074,
-    "max_duration_seconds": 1.911,
-    "count": 6,
+    "max_duration_seconds": 3.216,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "consumo_ordem",
     "local": "BOX",
-    "updated_at": "2026-11-10T16:12:29.950986"
+    "updated_at": "2026-11-10T16:16:00.501531"
   },
   "extracao_ordens_atrasadas_PLAN_ESP": {
-    "last_duration_seconds": 2.743,
-    "avg_duration_seconds": 2.007,
+    "last_duration_seconds": 3.778,
+    "avg_duration_seconds": 2.26,
     "min_duration_seconds": 1.239,
-    "max_duration_seconds": 2.743,
-    "count": 6,
+    "max_duration_seconds": 3.778,
+    "count": 7,
     "last_rows_extracted": 2,
     "grupo": "ordens_producao",
     "local": "PLAN_ESP",
-    "updated_at": "2026-11-10T16:12:29.587565"
+    "updated_at": "2026-11-10T16:15:57.908180"
   },
   "extracao_ordens_atrasadas_LE_FABRI01": {
-    "last_duration_seconds": 4.579,
-    "avg_duration_seconds": 3.672,
+    "last_duration_seconds": 8.655,
+    "avg_duration_seconds": 4.384,
     "min_duration_seconds": 2.06,
-    "max_duration_seconds": 4.579,
-    "count": 6,
+    "max_duration_seconds": 8.655,
+    "count": 7,
     "last_rows_extracted": 75,
     "grupo": "ordens_producao",
     "local": "LE FABRI01",
-    "updated_at": "2026-11-10T16:12:17.127212"
+    "updated_at": "2026-11-10T16:15:43.736652"
   },
   "extracao_consumo_insumos_ARMARIO_UL": {
-    "last_duration_seconds": 1.821,
-    "avg_duration_seconds": 1.349,
+    "last_duration_seconds": 2.098,
+    "avg_duration_seconds": 1.456,
     "min_duration_seconds": 1.057,
-    "max_duration_seconds": 1.821,
-    "count": 6,
+    "max_duration_seconds": 2.098,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "consumo_ordem",
     "local": "ARMARIO UL",
-    "updated_at": "2026-11-10T16:12:30.442232"
+    "updated_at": "2026-11-10T16:15:59.421931"
   },
   "extracao_ordens_atrasadas_TAPA_FURO": {
-    "last_duration_seconds": 15.64,
-    "avg_duration_seconds": 10.778,
+    "last_duration_seconds": 55.886,
+    "avg_duration_seconds": 17.222,
     "min_duration_seconds": 7.197,
-    "max_duration_seconds": 15.64,
-    "count": 6,
+    "max_duration_seconds": 55.886,
+    "count": 7,
     "last_rows_extracted": 399,
     "grupo": "ordens_producao",
     "local": "TAPA FURO",
-    "updated_at": "2026-11-10T16:11:56.362499"
+    "updated_at": "2026-11-10T16:15:35.693223"
   },
   "extracao_consumo_insumos_COZINHA": {
-    "last_duration_seconds": 4.638,
-    "avg_duration_seconds": 3.299,
+    "last_duration_seconds": 10.025,
+    "avg_duration_seconds": 4.26,
     "min_duration_seconds": 2.725,
-    "max_duration_seconds": 4.638,
-    "count": 6,
+    "max_duration_seconds": 10.025,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "consumo_ordem",
     "local": "COZINHA",
-    "updated_at": "2026-11-10T16:12:23.081371"
+    "updated_at": "2026-11-10T16:15:52.126628"
   },
   "extracao_consumo_insumos_PES_ACABA": {
-    "last_duration_seconds": 3.723,
-    "avg_duration_seconds": 3.232,
+    "last_duration_seconds": 5.621,
+    "avg_duration_seconds": 3.573,
     "min_duration_seconds": 2.424,
-    "max_duration_seconds": 4.834,
-    "count": 6,
+    "max_duration_seconds": 5.621,
+    "count": 7,
     "last_rows_extracted": 82,
     "grupo": "consumo_ordem",
     "local": "PES ACABA",
-    "updated_at": "2026-11-10T16:12:19.430943"
+    "updated_at": "2026-11-10T16:15:49.223358"
   },
   "extracao_ordens_atrasadas_CAPAS_LE": {
     "last_duration_seconds": 29.183,
@@ -1232,48 +1232,48 @@
     "updated_at": "2026-11-10T16:15:08.985330"
   },
   "extracao_consumo_insumos_CC_ACABA01": {
-    "last_duration_seconds": 12.338,
-    "avg_duration_seconds": 7.011,
+    "last_duration_seconds": 25.347,
+    "avg_duration_seconds": 9.63,
     "min_duration_seconds": 4.417,
-    "max_duration_seconds": 12.338,
-    "count": 6,
+    "max_duration_seconds": 25.347,
+    "count": 7,
     "last_rows_extracted": 916,
     "grupo": "consumo_ordem",
     "local": "CC ACABA01",
-    "updated_at": "2026-11-10T16:12:09.537203"
+    "updated_at": "2026-11-10T16:15:35.077063"
   },
   "extracao_consumo_insumos_LAMINAD_UL": {
-    "last_duration_seconds": 2.044,
-    "avg_duration_seconds": 1.516,
+    "last_duration_seconds": 1.723,
+    "avg_duration_seconds": 1.546,
     "min_duration_seconds": 1.065,
     "max_duration_seconds": 2.044,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "consumo_ordem",
     "local": "LAMINAD UL",
-    "updated_at": "2026-11-10T16:12:29.785330"
+    "updated_at": "2026-11-10T16:15:58.042753"
   },
   "extracao_ordens_atrasadas_ACESSORIOS": {
-    "last_duration_seconds": 34.063,
-    "avg_duration_seconds": 16.961,
+    "last_duration_seconds": 61.667,
+    "avg_duration_seconds": 23.348,
     "min_duration_seconds": 8.208,
-    "max_duration_seconds": 34.063,
-    "count": 6,
+    "max_duration_seconds": 61.667,
+    "count": 7,
     "last_rows_extracted": 534,
     "grupo": "ordens_producao",
     "local": "ACESSORIOS",
-    "updated_at": "2026-11-10T16:12:14.782617"
+    "updated_at": "2026-11-10T16:15:41.470448"
   },
   "extracao_consumo_insumos_VIDRACARIA": {
-    "last_duration_seconds": 4.409,
-    "avg_duration_seconds": 2.666,
+    "last_duration_seconds": 4.783,
+    "avg_duration_seconds": 2.968,
     "min_duration_seconds": 1.826,
-    "max_duration_seconds": 4.409,
-    "count": 6,
+    "max_duration_seconds": 4.783,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "consumo_ordem",
     "local": "VIDRACARIA",
-    "updated_at": "2026-11-10T16:12:28.276244"
+    "updated_at": "2026-11-10T16:15:54.125712"
   },
   "extracao_consumo_insumos_PORTAS": {
     "last_duration_seconds": 3.457,
@@ -1287,37 +1287,37 @@
     "updated_at": "2026-11-10T16:15:32.056681"
   },
   "extracao_consumo_insumos_TAMPOS_UL": {
-    "last_duration_seconds": 4.194,
-    "avg_duration_seconds": 3.137,
+    "last_duration_seconds": 6.101,
+    "avg_duration_seconds": 3.56,
     "min_duration_seconds": 1.609,
-    "max_duration_seconds": 4.194,
-    "count": 6,
+    "max_duration_seconds": 6.101,
+    "count": 7,
     "last_rows_extracted": 6,
     "grupo": "consumo_ordem",
     "local": "TAMPOS UL",
-    "updated_at": "2026-11-10T16:12:23.628207"
+    "updated_at": "2026-11-10T16:15:51.719646"
   },
   "extracao_consumo_insumos_UL_FABRI01": {
-    "last_duration_seconds": 4.254,
-    "avg_duration_seconds": 3.914,
+    "last_duration_seconds": 5.243,
+    "avg_duration_seconds": 4.104,
     "min_duration_seconds": 3.147,
-    "max_duration_seconds": 5.137,
-    "count": 6,
+    "max_duration_seconds": 5.243,
+    "count": 7,
     "last_rows_extracted": 402,
     "grupo": "consumo_ordem",
     "local": "UL FABRI01",
-    "updated_at": "2026-11-10T16:12:12.538721"
+    "updated_at": "2026-11-10T16:15:38.430275"
   },
   "extracao_consumo_insumos_CORTE": {
-    "last_duration_seconds": 5.388,
-    "avg_duration_seconds": 3.365,
+    "last_duration_seconds": 5.909,
+    "avg_duration_seconds": 3.728,
     "min_duration_seconds": 1.961,
-    "max_duration_seconds": 5.388,
-    "count": 6,
+    "max_duration_seconds": 5.909,
+    "count": 7,
     "last_rows_extracted": 263,
     "grupo": "consumo_ordem",
     "local": "CORTE",
-    "updated_at": "2026-11-10T16:12:24.685282"
+    "updated_at": "2026-11-10T16:15:46.985938"
   },
   "extracao_consumo_insumos_UL_ACABA01": {
     "last_duration_seconds": 21.109,
@@ -1331,26 +1331,26 @@
     "updated_at": "2026-11-10T16:15:30.096998"
   },
   "extracao_consumo_insumos_CORTE_LE": {
-    "last_duration_seconds": 3.599,
-    "avg_duration_seconds": 3.472,
+    "last_duration_seconds": 2.915,
+    "avg_duration_seconds": 3.392,
     "min_duration_seconds": 1.543,
     "max_duration_seconds": 6.77,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 69,
     "grupo": "consumo_ordem",
     "local": "CORTE LE",
-    "updated_at": "2026-11-10T16:12:16.635013"
+    "updated_at": "2026-11-10T16:15:41.071037"
   },
   "extracao_consumo_insumos_PEZINHO": {
-    "last_duration_seconds": 3.653,
-    "avg_duration_seconds": 3.231,
+    "last_duration_seconds": 12.697,
+    "avg_duration_seconds": 4.583,
     "min_duration_seconds": 2.692,
-    "max_duration_seconds": 3.76,
-    "count": 6,
+    "max_duration_seconds": 12.697,
+    "count": 7,
     "last_rows_extracted": 179,
     "grupo": "consumo_ordem",
     "local": "PEZINHO",
-    "updated_at": "2026-11-10T16:12:19.318920"
+    "updated_at": "2026-11-10T16:15:56.438265"
   },
   "extracao_consumo_insumos_CADEIRAS": {
     "last_duration_seconds": 6.295,
@@ -1375,26 +1375,26 @@
     "updated_at": "2026-11-10T16:15:09.449946"
   },
   "extracao_consumo_insumos_LE_FABRI03": {
-    "last_duration_seconds": 3.947,
-    "avg_duration_seconds": 3.065,
+    "last_duration_seconds": 8.243,
+    "avg_duration_seconds": 3.805,
     "min_duration_seconds": 1.618,
-    "max_duration_seconds": 3.947,
-    "count": 6,
+    "max_duration_seconds": 8.243,
+    "count": 7,
     "last_rows_extracted": 10,
     "grupo": "consumo_ordem",
     "local": "LE FABRI03",
-    "updated_at": "2026-11-10T16:12:24.228316"
+    "updated_at": "2026-11-10T16:15:54.142274"
   },
   "extracao_consumo_insumos_LE_FABRI06": {
-    "last_duration_seconds": 4.538,
-    "avg_duration_seconds": 3.218,
+    "last_duration_seconds": 7.027,
+    "avg_duration_seconds": 3.762,
     "min_duration_seconds": 2.089,
-    "max_duration_seconds": 4.538,
-    "count": 6,
+    "max_duration_seconds": 7.027,
+    "count": 7,
     "last_rows_extracted": 65,
     "grupo": "consumo_ordem",
     "local": "LE FABRI06",
-    "updated_at": "2026-11-10T16:12:23.862317"
+    "updated_at": "2026-11-10T16:15:51.001521"
   },
   "extracao_ordens_atrasadas_CC_FABRI03": {
     "last_duration_seconds": 38.547,
@@ -1408,26 +1408,26 @@
     "updated_at": "2026-11-10T16:15:18.344482"
   },
   "extracao_consumo_insumos_ALMOFADAS": {
-    "last_duration_seconds": 4.752,
-    "avg_duration_seconds": 3.838,
+    "last_duration_seconds": 7.777,
+    "avg_duration_seconds": 4.401,
     "min_duration_seconds": 2.466,
-    "max_duration_seconds": 6.305,
-    "count": 6,
+    "max_duration_seconds": 7.777,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "consumo_ordem",
     "local": "ALMOFADAS",
-    "updated_at": "2026-11-10T16:12:14.292867"
+    "updated_at": "2026-11-10T16:15:41.713385"
   },
   "extracao_consumo_insumos_CC_FABRI01": {
-    "last_duration_seconds": 8.171,
-    "avg_duration_seconds": 7.064,
+    "last_duration_seconds": 41.532,
+    "avg_duration_seconds": 11.988,
     "min_duration_seconds": 5.649,
-    "max_duration_seconds": 8.767,
-    "count": 6,
+    "max_duration_seconds": 41.532,
+    "count": 7,
     "last_rows_extracted": 1672,
     "grupo": "consumo_ordem",
     "local": "CC FABRI01",
-    "updated_at": "2026-11-10T16:12:04.369914"
+    "updated_at": "2026-11-10T16:15:50.985516"
   },
   "extracao_consumo_insumos_CC_FABRI03": {
     "last_duration_seconds": 15.768,
@@ -1441,92 +1441,92 @@
     "updated_at": "2026-11-10T16:15:22.143116"
   },
   "extracao_consumo_insumos_FIBRA": {
-    "last_duration_seconds": 4.602,
-    "avg_duration_seconds": 4.016,
+    "last_duration_seconds": 5.809,
+    "avg_duration_seconds": 4.272,
     "min_duration_seconds": 1.973,
-    "max_duration_seconds": 4.832,
-    "count": 6,
+    "max_duration_seconds": 5.809,
+    "count": 7,
     "last_rows_extracted": 350,
     "grupo": "consumo_ordem",
     "local": "FIBRA",
-    "updated_at": "2026-11-10T16:12:12.381131"
+    "updated_at": "2026-11-10T16:15:35.911465"
   },
   "extracao_consumo_insumos_CAPAS_LE": {
-    "last_duration_seconds": 4.431,
-    "avg_duration_seconds": 3.298,
+    "last_duration_seconds": 14.65,
+    "avg_duration_seconds": 4.92,
     "min_duration_seconds": 2.62,
-    "max_duration_seconds": 4.431,
-    "count": 6,
+    "max_duration_seconds": 14.65,
+    "count": 7,
     "last_rows_extracted": 149,
     "grupo": "consumo_ordem",
     "local": "CAPAS LE",
-    "updated_at": "2026-11-10T16:12:21.839628"
+    "updated_at": "2026-11-10T16:15:57.450089"
   },
   "extracao_consumo_insumos_ALUMINIO": {
-    "last_duration_seconds": 3.366,
-    "avg_duration_seconds": 2.959,
+    "last_duration_seconds": 2.346,
+    "avg_duration_seconds": 2.871,
     "min_duration_seconds": 1.424,
     "max_duration_seconds": 4.635,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 43,
     "grupo": "consumo_ordem",
     "local": "ALUMINIO",
-    "updated_at": "2026-11-10T16:12:23.659131"
+    "updated_at": "2026-11-10T16:15:49.337113"
   },
   "extracao_consumo_insumos_INOX": {
-    "last_duration_seconds": 4.127,
-    "avg_duration_seconds": 3.238,
+    "last_duration_seconds": 7.325,
+    "avg_duration_seconds": 3.822,
     "min_duration_seconds": 2.005,
-    "max_duration_seconds": 5.93,
-    "count": 6,
+    "max_duration_seconds": 7.325,
+    "count": 7,
     "last_rows_extracted": 17,
     "grupo": "consumo_ordem",
     "local": "INOX",
-    "updated_at": "2026-11-10T16:12:21.862973"
+    "updated_at": "2026-11-10T16:15:50.824956"
   },
   "extracao_consumo_insumos_PLASMA": {
-    "last_duration_seconds": 2.842,
-    "avg_duration_seconds": 2.275,
+    "last_duration_seconds": 6.453,
+    "avg_duration_seconds": 2.872,
     "min_duration_seconds": 1.75,
-    "max_duration_seconds": 2.895,
-    "count": 6,
+    "max_duration_seconds": 6.453,
+    "count": 7,
     "last_rows_extracted": 29,
     "grupo": "consumo_ordem",
     "local": "PLASMA",
-    "updated_at": "2026-11-10T16:12:28.492137"
+    "updated_at": "2026-11-10T16:15:58.179664"
   },
   "extracao_consumo_insumos_ATELIE": {
-    "last_duration_seconds": 3.347,
-    "avg_duration_seconds": 3.345,
+    "last_duration_seconds": 7.383,
+    "avg_duration_seconds": 3.922,
     "min_duration_seconds": 1.654,
-    "max_duration_seconds": 5.182,
-    "count": 6,
+    "max_duration_seconds": 7.383,
+    "count": 7,
     "last_rows_extracted": 70,
     "grupo": "consumo_ordem",
     "local": "ATELIE",
-    "updated_at": "2026-11-10T16:12:17.406125"
+    "updated_at": "2026-11-10T16:15:49.101710"
   },
   "extracao_consumo_insumos_UL_ALMOX05": {
-    "last_duration_seconds": 3.284,
-    "avg_duration_seconds": 2.562,
+    "last_duration_seconds": 6.165,
+    "avg_duration_seconds": 3.077,
     "min_duration_seconds": 1.385,
-    "max_duration_seconds": 3.447,
-    "count": 6,
+    "max_duration_seconds": 6.165,
+    "count": 7,
     "last_rows_extracted": 26,
     "grupo": "consumo_ordem",
     "local": "UL-ALMOX05",
-    "updated_at": "2026-11-10T16:12:26.918211"
+    "updated_at": "2026-11-10T16:15:57.155621"
   },
   "extracao_consumo_insumos_REVENDA": {
-    "last_duration_seconds": 3.755,
-    "avg_duration_seconds": 2.786,
+    "last_duration_seconds": 5.231,
+    "avg_duration_seconds": 3.135,
     "min_duration_seconds": 1.514,
-    "max_duration_seconds": 4.926,
-    "count": 6,
+    "max_duration_seconds": 5.231,
+    "count": 7,
     "last_rows_extracted": 90,
     "grupo": "consumo_ordem",
     "local": "REVENDA",
-    "updated_at": "2026-11-10T16:12:26.839732"
+    "updated_at": "2026-11-10T16:15:54.457895"
   },
   "extracao_consumo_insumos_METALURGIA": {
     "last_duration_seconds": 11.01,
@@ -1540,37 +1540,37 @@
     "updated_at": "2026-11-10T16:15:25.115521"
   },
   "extracao_ordens_atrasadas_LE_FABRI02": {
-    "last_duration_seconds": 44.626,
-    "avg_duration_seconds": 33.201,
+    "last_duration_seconds": 62.997,
+    "avg_duration_seconds": 37.458,
     "min_duration_seconds": 22.046,
-    "max_duration_seconds": 44.626,
-    "count": 6,
-    "last_rows_extracted": 1563,
+    "max_duration_seconds": 62.997,
+    "count": 7,
+    "last_rows_extracted": 1562,
     "grupo": "ordens_producao",
     "local": "LE FABRI02",
-    "updated_at": "2026-11-10T16:12:25.338475"
+    "updated_at": "2026-11-10T16:15:42.794689"
   },
   "extracao_consumo_insumos_AT_INSUMO": {
-    "last_duration_seconds": 6.925,
-    "avg_duration_seconds": 3.639,
+    "last_duration_seconds": 6.352,
+    "avg_duration_seconds": 4.027,
     "min_duration_seconds": 2.485,
     "max_duration_seconds": 6.925,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 1,
     "grupo": "consumo_ordem",
     "local": "AT INSUMO",
-    "updated_at": "2026-11-10T16:12:26.053385"
+    "updated_at": "2026-11-10T16:15:41.785109"
   },
   "extracao_consumo_insumos_AT_MOVEIS": {
-    "last_duration_seconds": 5.391,
-    "avg_duration_seconds": 3.993,
+    "last_duration_seconds": 7.835,
+    "avg_duration_seconds": 4.542,
     "min_duration_seconds": 2.495,
-    "max_duration_seconds": 5.391,
-    "count": 6,
+    "max_duration_seconds": 7.835,
+    "count": 7,
     "last_rows_extracted": 271,
     "grupo": "consumo_ordem",
     "local": "AT MOVEIS",
-    "updated_at": "2026-11-10T16:12:14.391034"
+    "updated_at": "2026-11-10T16:15:38.418703"
   },
   "extracao_consumo_insumos_ATELIE2": {
     "last_duration_seconds": 4.54,
@@ -1595,92 +1595,92 @@
     "updated_at": "2026-11-10T16:14:55.601319"
   },
   "extracao_consumo_insumos_AT_KIT": {
-    "last_duration_seconds": 4.899,
-    "avg_duration_seconds": 3.534,
+    "last_duration_seconds": 6.358,
+    "avg_duration_seconds": 3.937,
     "min_duration_seconds": 2.277,
-    "max_duration_seconds": 4.899,
-    "count": 6,
+    "max_duration_seconds": 6.358,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "consumo_ordem",
     "local": "AT KIT",
-    "updated_at": "2026-11-10T16:12:19.293311"
+    "updated_at": "2026-11-10T16:15:43.969741"
   },
   "extracao_consumo_insumos_AT_VIDRO": {
-    "last_duration_seconds": 3.885,
-    "avg_duration_seconds": 3.348,
+    "last_duration_seconds": 9.574,
+    "avg_duration_seconds": 4.237,
     "min_duration_seconds": 2.709,
-    "max_duration_seconds": 4.361,
-    "count": 6,
+    "max_duration_seconds": 9.574,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "consumo_ordem",
     "local": "AT VIDRO",
-    "updated_at": "2026-11-10T16:12:18.440389"
+    "updated_at": "2026-11-10T16:15:51.049122"
   },
   "extracao_consumo_insumos_AT_SOFA": {
-    "last_duration_seconds": 2.731,
-    "avg_duration_seconds": 3.944,
+    "last_duration_seconds": 7.402,
+    "avg_duration_seconds": 4.438,
     "min_duration_seconds": 2.731,
-    "max_duration_seconds": 5.599,
-    "count": 6,
+    "max_duration_seconds": 7.402,
+    "count": 7,
     "last_rows_extracted": 10,
     "grupo": "consumo_ordem",
     "local": "AT SOFA",
-    "updated_at": "2026-11-10T16:12:05.655186"
+    "updated_at": "2026-11-10T16:15:39.463997"
   },
   "extracao_consumo_insumos_TAPA_FURO": {
-    "last_duration_seconds": 5.987,
-    "avg_duration_seconds": 3.393,
+    "last_duration_seconds": 7.841,
+    "avg_duration_seconds": 4.028,
     "min_duration_seconds": 2.251,
-    "max_duration_seconds": 5.987,
-    "count": 6,
+    "max_duration_seconds": 7.841,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "consumo_ordem",
     "local": "TAPA FURO",
-    "updated_at": "2026-11-10T16:12:26.881919"
+    "updated_at": "2026-11-10T16:15:47.725953"
   },
   "extracao_consumo_insumos_ACESSORIOS": {
-    "last_duration_seconds": 3.544,
-    "avg_duration_seconds": 3.629,
+    "last_duration_seconds": 7.9,
+    "avg_duration_seconds": 4.239,
     "min_duration_seconds": 2.425,
-    "max_duration_seconds": 4.834,
-    "count": 6,
+    "max_duration_seconds": 7.9,
+    "count": 7,
     "last_rows_extracted": 303,
     "grupo": "consumo_ordem",
     "local": "ACESSORIOS",
-    "updated_at": "2026-11-10T16:12:13.971291"
+    "updated_at": "2026-11-10T16:15:43.596641"
   },
   "extracao_consumo_insumos_OSSOPAINEL": {
-    "last_duration_seconds": 1.826,
-    "avg_duration_seconds": 1.388,
+    "last_duration_seconds": 3.312,
+    "avg_duration_seconds": 1.663,
     "min_duration_seconds": 1.055,
-    "max_duration_seconds": 1.826,
-    "count": 6,
+    "max_duration_seconds": 3.312,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "consumo_ordem",
     "local": "OSSOPAINEL",
-    "updated_at": "2026-11-10T16:12:30.321688"
+    "updated_at": "2026-11-10T16:16:00.617465"
   },
   "extracao_consumo_insumos_MOSTRUARIO": {
-    "last_duration_seconds": 5.569,
-    "avg_duration_seconds": 3.46,
+    "last_duration_seconds": 14.197,
+    "avg_duration_seconds": 4.994,
     "min_duration_seconds": 2.268,
-    "max_duration_seconds": 5.569,
-    "count": 6,
+    "max_duration_seconds": 14.197,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "consumo_ordem",
     "local": "MOSTRUARIO",
-    "updated_at": "2026-11-10T16:12:23.850207"
+    "updated_at": "2026-11-10T16:15:52.618987"
   },
   "extracao_consumo_insumos_EMBALAGEM": {
-    "last_duration_seconds": 6.714,
-    "avg_duration_seconds": 3.415,
+    "last_duration_seconds": 4.026,
+    "avg_duration_seconds": 3.502,
     "min_duration_seconds": 2.352,
     "max_duration_seconds": 6.714,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "consumo_ordem",
     "local": "EMBALAGEM",
-    "updated_at": "2026-11-10T16:12:28.581996"
+    "updated_at": "2026-11-10T16:15:43.494575"
   },
   "extracao_consumo_insumos_LAMINACAO1": {
     "last_duration_seconds": 2.848,
@@ -1694,59 +1694,59 @@
     "updated_at": "2026-11-10T16:15:30.760381"
   },
   "extracao_consumo_insumos_TAPETES": {
-    "last_duration_seconds": 6.419,
-    "avg_duration_seconds": 3.441,
+    "last_duration_seconds": 6.796,
+    "avg_duration_seconds": 3.92,
     "min_duration_seconds": 2.125,
-    "max_duration_seconds": 6.419,
-    "count": 6,
+    "max_duration_seconds": 6.796,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "consumo_ordem",
     "local": "TAPETES",
-    "updated_at": "2026-11-10T16:12:27.736280"
+    "updated_at": "2026-11-10T16:15:45.895538"
   },
   "extracao_consumo_insumos_C_PILOTO": {
-    "last_duration_seconds": 3.433,
-    "avg_duration_seconds": 3.316,
+    "last_duration_seconds": 6.547,
+    "avg_duration_seconds": 3.778,
     "min_duration_seconds": 2.063,
-    "max_duration_seconds": 4.371,
-    "count": 6,
+    "max_duration_seconds": 6.547,
+    "count": 7,
     "last_rows_extracted": 0,
     "grupo": "consumo_ordem",
     "local": "C PILOTO",
-    "updated_at": "2026-11-10T16:12:17.730954"
+    "updated_at": "2026-11-10T16:15:48.336071"
   },
   "extracao_consumo_insumos_LE_FABRI01": {
-    "last_duration_seconds": 4.102,
-    "avg_duration_seconds": 2.93,
+    "last_duration_seconds": 5.375,
+    "avg_duration_seconds": 3.279,
     "min_duration_seconds": 1.816,
-    "max_duration_seconds": 4.102,
-    "count": 6,
+    "max_duration_seconds": 5.375,
+    "count": 7,
     "last_rows_extracted": 41,
     "grupo": "consumo_ordem",
     "local": "LE FABRI01",
-    "updated_at": "2026-11-10T16:12:25.981323"
+    "updated_at": "2026-11-10T16:15:54.345838"
   },
   "extracao_consumo_insumos_COLMEIAS": {
-    "last_duration_seconds": 3.398,
-    "avg_duration_seconds": 3.973,
+    "last_duration_seconds": 4.221,
+    "avg_duration_seconds": 4.008,
     "min_duration_seconds": 3.172,
     "max_duration_seconds": 5.39,
-    "count": 6,
+    "count": 7,
     "last_rows_extracted": 13,
     "grupo": "consumo_ordem",
     "local": "COLMEIAS",
-    "updated_at": "2026-11-10T16:12:07.773218"
+    "updated_at": "2026-11-10T16:15:34.985850"
   },
   "extracao_consumo_insumos_PLAN_ESP": {
-    "last_duration_seconds": 3.65,
-    "avg_duration_seconds": 3.208,
+    "last_duration_seconds": 4.863,
+    "avg_duration_seconds": 3.444,
     "min_duration_seconds": 2.289,
-    "max_duration_seconds": 3.902,
-    "count": 6,
+    "max_duration_seconds": 4.863,
+    "count": 7,
     "last_rows_extracted": 4,
     "grupo": "consumo_ordem",
     "local": "PLAN_ESP",
-    "updated_at": "2026-11-10T16:12:20.290318"
+    "updated_at": "2026-11-10T16:15:48.963746"
   },
   "extracao_consumo_insumos_LE_FABRI02": {
     "last_duration_seconds": 47.021,
