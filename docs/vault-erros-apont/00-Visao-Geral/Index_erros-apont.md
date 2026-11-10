@@ -36,5 +36,5 @@ graph TD
 - [[04-Infra-Dados/Extrator_Workers_e_HTML]]
 - [[05-Automacoes/Gerador_Tarefas_Scraping]]
 - [[erros-apont-logbook/LOGBOOK_INDEX|Diário de Bordo]]
-- [[../.specify/memory/constitution.md|Constituição do Projeto (v1.1.0)]]
-- [[../specs/001-frontend-ui-layout/spec.md|Especificação Ativa: 001-frontend-ui-layout]]
+- [[../../../.specify/memory/constitution.md|Constituição do Projeto (v1.1.0)]]
+- [[../../specs/001-frontend-ui-layout/spec.md|Especificação Ativa: 001-frontend-ui-layout]]

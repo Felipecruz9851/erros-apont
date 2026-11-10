@@ -1,6 +1,10 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 import json
+
+SNAPSHOTS_DIR = os.path.join(os.path.dirname(__file__), "..", "storage", "snapshots")
+os.makedirs(SNAPSHOTS_DIR, exist_ok=True)
 
 cookies = {"PHPSESSID": "3eeero9cktl23hpo78aba98gai"}
 headers = {"User-Agent": "Mozilla/5.0"}
@@ -39,7 +43,7 @@ print("Fetching Consumo...")
 try:
     r_con = requests.post("http://192.168.0.6/pcp/consumo_alt.php", data=payload_consumo, cookies=cookies, headers=headers, timeout=60)
     print("Consumo status:", r_con.status_code, "Length:", len(r_con.content))
-    with open("storage/snapshots/consumo_result.html", "wb") as f:
+    with open(os.path.join(SNAPSHOTS_DIR, "consumo_result.html"), "wb") as f:
         f.write(r_con.content)
     soup_con = BeautifulSoup(r_con.content, "html.parser")
     tables = soup_con.find_all("table")
@@ -70,7 +74,7 @@ print("\nFetching Atrasadas...")
 try:
     r_atr = requests.post("http://192.168.0.6/pcp/atrasadas.php", data=payload_atrasadas, cookies=cookies, headers=headers, timeout=60)
     print("Atrasadas status:", r_atr.status_code, "Length:", len(r_atr.content))
-    with open("storage/snapshots/atrasadas_result.html", "wb") as f:
+    with open(os.path.join(SNAPSHOTS_DIR, "atrasadas_result.html"), "wb") as f:
         f.write(r_atr.content)
     soup_atr = BeautifulSoup(r_atr.content, "html.parser")
     tables = soup_atr.find_all("table")

@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from backend.app.main import app
+from backend.main import app
 
 client = TestClient(app)
 
@@ -24,3 +24,16 @@ def test_pipeline_validation():
 def test_results_not_found():
     response = client.get("/api/v1/results/exec_inexistente")
     assert response.status_code == 404
+
+
+def test_frontend_root_served():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "<!DOCTYPE html>" in response.text
+    assert "Erros de Apontamento" in response.text
+
+
+def test_frontend_unknown_api_returns_404():
+    response = client.get("/api/v1/rota_inexistente")
+    assert response.status_code == 404
+

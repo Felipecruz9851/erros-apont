@@ -9,7 +9,7 @@ tags: [automacao, script, tarefas, configuracao, pipeline, auth, esqueleto, expa
 
 # Automação: Gerador_Tarefas_Scraping
 
-**Objetivo:** Consumir as credenciais de login fornecidas pelo usuário no frontend, carregar o esqueleto de tarefas de [config/tarefas_esqueleto.json](file:///c:/Users/engli/Desktop/Erros-apont/config/tarefas_esqueleto.json) e expandir a lista de tarefas através de iteração por local (`for local in locais: tarefas.append(...)`), permitindo total flexibilidade e controle manual.
+**Objetivo:** Consumir as credenciais de login fornecidas pelo usuário no frontend, carregar o esqueleto de tarefas de [backend/config/tarefas_esqueleto.json](file:///c:/Users/engli/Desktop/Erros-apont/backend/config/tarefas_esqueleto.json) e expandir a lista de tarefas através de iteração por local (`for local in locais: tarefas.append(...)`), permitindo total flexibilidade e controle manual.
 
 ## Estratégia de Expansão por Local
 
@@ -71,6 +71,6 @@ def gerar_tarefas_expansao(config_templates, credentials, data_inicio, data_fim,
 
 ## Arquivos Afetados
 
-**➡️ Modifica/Lê:** [config/tarefas_esqueleto.json](file:///c:/Users/engli/Desktop/Erros-apont/config/tarefas_esqueleto.json)  
+**➡️ Modifica/Lê:** [backend/config/tarefas_esqueleto.json](file:///c:/Users/engli/Desktop/Erros-apont/backend/config/tarefas_esqueleto.json)  
 **➡️ Envia para:** [[04-Infra-Dados/Extrator_Workers_e_HTML]]  
 **⬅️ Invocado por:** [[02-Backend-API/Rotas_FastAPI_e_Sessao]]

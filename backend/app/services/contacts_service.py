@@ -118,8 +118,11 @@ class ContactsService:
         Retorna a lista de todos os locais de produção conhecidos a partir do tarefas_esqueleto.json.
         """
         locations = set()
-        root_dir = Path(__file__).resolve().parent.parent.parent.parent
-        skeleton_file = root_dir / "config" / "tarefas_esqueleto.json"
+        backend_dir = Path(__file__).resolve().parent.parent.parent
+        skeleton_file = backend_dir / "config" / "tarefas_esqueleto.json"
+        if not skeleton_file.exists():
+            root_dir = backend_dir.parent
+            skeleton_file = root_dir / "config" / "tarefas_esqueleto.json"
 
         if skeleton_file.exists():
             try:

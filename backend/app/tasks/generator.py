@@ -5,10 +5,12 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 
-DEFAULT_SKELETON_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))),
-    "config",
-    "tarefas_esqueleto.json",
+_BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_SKELETON_IN_BACKEND = os.path.join(_BACKEND_DIR, "config", "tarefas_esqueleto.json")
+_SKELETON_IN_ROOT = os.path.join(os.path.dirname(_BACKEND_DIR), "config", "tarefas_esqueleto.json")
+
+DEFAULT_SKELETON_PATH = (
+    _SKELETON_IN_BACKEND if os.path.exists(_SKELETON_IN_BACKEND) else _SKELETON_IN_ROOT
 )
 
 

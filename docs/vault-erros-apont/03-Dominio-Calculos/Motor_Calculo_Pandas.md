@@ -16,8 +16,9 @@ tags: [regras-negocio, calculo, parametros, pandas, json, tratamento, baixa-auto
    - Sanitização de códigos de itens no consumo: remoção do sufixo de unidade de medida precedido ou não por espaço (ex.: `'3COUPCOU378 -M2'` $\rightarrow$ `'3COUPCOU378'` e códigos de 15 caracteres colados na unidade como `'3LEDDP73000K24V-UN'` $\rightarrow$ `'3LEDDP73000K24V'`).
    - Sanitização de identificadores de OP (`_clean_op`): remoção de trechos residuais de código PHP/HTML vazados nos relatórios (ex.: `'1985883 if ($exibir_codbar == "S") ...'` $\rightarrow$ `'1985883'`), assegurando cruzamento correto com `atrasadas.php`.
    - Normalização do local de estoque em `estoque_lote.php` (remoção do sufixo de situação `' - L'` em `'Local - Sit'`, ex.: `'CAPAS LE - L'` $\rightarrow$ `'CAPAS LE'`).
-   - Padronização de datas (`DD/MM/YYYY.` $\rightarrow$ `YYYY-MM-DD`) e enriquecimento das OPs com `data_abertura`, `data_entrega`, `fabrica` e produto extraídas de `atrasadas.php` (consulta geral `2000-01-01` a `2050-12-31`).
+   - Padronização de datas (`DD/MM/YYYY.` $\rightarrow$ `YYYY-MM-DD`) e enriquecimento das OPs com `data_abertura`, `data_entrega`, `fabrica`, `ordem_saldo` e produto extraídas de `atrasadas.php` (consulta geral `2000-01-01` a `2050-12-31`).
    - Fallback de produto (`_resolver_produto`): quando a descrição do produto da OP estiver vazia ou ausente, adota automaticamente o código do item (`Item` em `atrasadas.php`).
+   - Fallback de quantidade necessária (`qtd_necessaria`): quando o consumo do componente vier zerado (`0,0000`) ou não informado no relatório legado, adota automaticamente o saldo da OP (`ordem_saldo`) ou piso de 1.0 unidade, assegurando que componentes com baixa automática obrigatória sem saldo no local de produção sejam devidamente apontados como erro (`SALDO_ZERADO_NO_LOCAL`) com déficit correspondente.
    - Definição de `saldo_disponivel = saldo_fisico` (`Qtde.`, ignorando `Qt.Reser`).
 2. **Filtro de Baixa Automática, Data de Abertura e Data de Entrega Válida (`calculate_pointing_errors`):**
    - Seleção estrita dos componentes onde `baixa_automatica == True`.

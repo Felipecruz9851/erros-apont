@@ -286,5 +286,70 @@ def test_inactive_item_stock_allocation_kit():
     assert row["saldo_remanescente"] == 20.0
 
 
+def test_zero_consumption_item_falls_back_to_order_saldo_and_flags_error():
+    """
+    Garante que itens com baixa automática (baixa == 'S') cujo consumo venha
+    zerado (ex: '0,0000') no relatório legado de consumo não sejam marcados
+    indevidamente como 'OK' quando não houver saldo no local de produção.
+    O sistema deve adotar o saldo da OP (ou piso de 1.0) como quantidade necessária,
+    apontando SALDO_ZERADO_NO_LOCAL e severidade ALTA.
+    Caso: OP 1960672 com falta do componente 3CH0190000MDPI em AT INSUMO.
+    """
+    from backend.app.engine.treatment import treatment_engine
+
+    df_consumo_raw = pd.DataFrame([
+        {
+            "Tipo": "C",
+            "Grupo": "MADEIRAS/INDUSTRIALIZADAS",
+            "Item": "3CH0190000MDPI -M2",
+            "Local Estoque": "UL ALMOXCH",
+            "Baixa": "S",
+            "Situação": "I",
+            "Den. Item": "#AGLOMERADO IMBUIA 1A - 2750 X 1850 X 19 MM - 2F - DECORBRAS",
+            "Consumo": "0,0000",
+            "Local Prod.": "0",
+            "OP": "1960672",
+            "Familia": "MIN",
+            "_local_filtro": "AT INSUMO",
+        }
+    ])
+
+    df_estoque_raw = pd.DataFrame([])  # Sem estoque do item no local
+
+    df_ordens_raw = pd.DataFrame([
+        {
+            "Fábrica": "AT INSUMO",
+            "Ordem": "1960672",
+            "Item": "1INSUMO0ATMOVI",
+            "Descrição do Item": "INSUMO AT MOVEIS",
+            "Saldo": "1,000",
+            "Data Entrega": "2026-10-07",
+            "Data Abertura": "2026-10-07",
+        }
+    ])
+
+    c_clean, e_clean = treatment_engine.clean_and_normalize(df_consumo_raw, df_estoque_raw, df_ordens_raw)
+    assert c_clean.iloc[0]["qtd_necessaria"] == 1.0
+
+    divergences = calculation_engine.calculate_pointing_errors(
+        c_clean,
+        e_clean,
+        data_atual="2026-10-23",
+        include_ok=True,
+        dias_uteis=3,
+    )
+
+    assert len(divergences) == 1
+    row = divergences.iloc[0]
+    assert row["op"] == "1960672"
+    assert row["codigo_componente"] == "3CH0190000MDPI"
+    assert row["qtd_necessaria"] == 1.0
+    assert row["saldo_inicial_local"] == 0.0
+    assert row["deficit_saldo"] == 1.0
+    assert row["status_divergencia"] == "SALDO_ZERADO_NO_LOCAL"
+    assert row["severidade"] == "ALTA"
+
+
+
 
 

@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from fastapi.testclient import TestClient
-from backend.app.main import app
+from backend.main import app
 from backend.app.engine.orchestrator import orchestrator
 from backend.app.engine.serializer import serialize_results
 from backend.app.services.contacts_service import contacts_service

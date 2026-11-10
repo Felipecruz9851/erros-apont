@@ -22,6 +22,8 @@ tags: [codigo, backend, api, fastapi, pydantic]
 * `GET /api/v1/emails/summary` (`emails.py`): Retorna resumo agregado de divergências filtradas por contato e seus locais atribuídos.
 * `POST /api/v1/emails/preview` (`emails.py`): Gera prévia do assunto, saudação condicional (Bom dia/Boa tarde) e tabela de divergências do contato.
 * `POST /api/v1/emails/send` (`emails.py`): Executa disparo de e-mails em lote ou individual via SMTP ou simulação registrada.
+* `GET /` e `GET /{full_path:path}` (`backend/main.py`): Serve a interface Single Page Application (SPA) React compilada (`frontend/dist`), montando `/assets` e redirecionando rotas internas de navegação para `index.html`.
+
 
 ## Dependências (Grafo)
 **⬅️ Quem chama este módulo (Entrada):**

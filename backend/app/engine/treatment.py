@@ -335,6 +335,8 @@ class TreatmentEngine:
                 target = "ordem_produto"
             elif norm in ["fabrica"]:
                 target = "ordem_fabrica"
+            elif norm in ["saldo", "qtd_saldo", "saldo_ordem"]:
+                target = "ordem_saldo"
             if target and target not in assigned:
                 ordem_map[col] = target
                 assigned.add(target)
@@ -350,14 +352,39 @@ class TreatmentEngine:
             df_o["ordem_data_entrega"] = df_o["ordem_data_entrega"].apply(self._parse_date_iso)
         if "ordem_data_abertura" in df_o.columns:
             df_o["ordem_data_abertura"] = df_o["ordem_data_abertura"].apply(self._parse_date_iso)
+        if "ordem_saldo" in df_o.columns:
+            def _parse_saldo(v):
+                try:
+                    if pd.isna(v) or v == "":
+                        return 0.0
+                    return float(str(v).replace(".", "").replace(",", "."))
+                except Exception:
+                    return 0.0
+            df_o["ordem_saldo"] = df_o["ordem_saldo"].apply(_parse_saldo)
 
         cols_to_merge = ["op"]
-        for c in ["ordem_data_entrega", "ordem_data_abertura", "ordem_produto", "ordem_codigo_produto", "ordem_fabrica"]:
+        for c in ["ordem_data_entrega", "ordem_data_abertura", "ordem_produto", "ordem_codigo_produto", "ordem_fabrica", "ordem_saldo"]:
             if c in df_o.columns:
                 cols_to_merge.append(c)
 
         df_o_unique = df_o[cols_to_merge].drop_duplicates(subset=["op"])
         merged = pd.merge(df_consumo, df_o_unique, on="op", how="left")
+
+        # Fallback de quantidade necessária: se vier zerada ou não informada do relatório de consumo,
+        # adota o saldo da ordem (ou 1.0 como piso) para garantir que a OP aponte erro se faltar o insumo
+        if "qtd_necessaria" in merged.columns:
+            mask_zero_qtd = (merged["qtd_necessaria"].isna()) | (merged["qtd_necessaria"] <= 0.0)
+            if mask_zero_qtd.any():
+                if "ordem_saldo" in merged.columns:
+                    fallback_qtd = merged.loc[mask_zero_qtd, "ordem_saldo"].fillna(1.0).apply(
+                        lambda x: float(x) if float(x) > 0 else 1.0
+                    )
+                else:
+                    fallback_qtd = 1.0
+                merged.loc[mask_zero_qtd, "qtd_necessaria"] = fallback_qtd
+
+        if "ordem_saldo" in merged.columns:
+            merged = merged.drop(columns=["ordem_saldo"])
 
         if "ordem_data_entrega" in merged.columns:
             merged["data_entrega"] = merged["ordem_data_entrega"].replace("", pd.NA).fillna(merged.get("data_entrega", "")).fillna("")

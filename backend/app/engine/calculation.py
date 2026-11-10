@@ -172,6 +172,10 @@ class CalculationEngine:
                 op = str(row["op"]).strip()
                 fabrica = str(row.get("fabrica", loc_prod)).strip()
                 qtd_necessaria = float(row.get("qtd_necessaria", 0.0))
+                # Piso de segurança: se a quantidade necessária for <= 0, assume 1.0
+                # para que ordens com componentes faltantes não sejam marcadas indevidamente como OK
+                if qtd_necessaria <= 0.0:
+                    qtd_necessaria = 1.0
                 data_ent_str = str(row.get("data_entrega", "") or "").strip()
                 dt_ent = self._parse_dt(data_ent_str)
 

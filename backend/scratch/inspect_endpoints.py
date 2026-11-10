@@ -19,7 +19,8 @@ headers = {
     "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
 }
 
-os.makedirs("storage/snapshots", exist_ok=True)
+SNAPSHOTS_DIR = os.path.join(os.path.dirname(__file__), "..", "storage", "snapshots")
+os.makedirs(SNAPSHOTS_DIR, exist_ok=True)
 results = {}
 
 for url in urls:
@@ -31,7 +32,7 @@ for url in urls:
         print(f"Status: {resp.status_code} | Encoding: {resp.encoding} | Content-Length: {len(resp.content)}")
         
         # Save raw HTML
-        snapshot_path = f"storage/snapshots/{filename}.html"
+        snapshot_path = os.path.join(SNAPSHOTS_DIR, f"{filename}.html")
         with open(snapshot_path, "wb") as f:
             f.write(resp.content)
         print(f"Saved snapshot to {snapshot_path}")
@@ -98,7 +99,8 @@ for url in urls:
         print(f"Error connecting to {url}: {e}")
         results[url] = {"error": str(e)}
 
-with open("storage/snapshots/endpoint_inspection.json", "w", encoding="utf-8") as f:
+inspection_file = os.path.join(SNAPSHOTS_DIR, "endpoint_inspection.json")
+with open(inspection_file, "w", encoding="utf-8") as f:
     json.dump(results, f, ensure_ascii=False, indent=2)
 
-print("\nFinished inspection. Results written to storage/snapshots/endpoint_inspection.json")
+print(f"\nFinished inspection. Results written to {inspection_file}")

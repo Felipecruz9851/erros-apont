@@ -1,7 +1,7 @@
 import tempfile
 import pytest
 from fastapi.testclient import TestClient
-from backend.app.main import app
+from backend.main import app
 from backend.app.services.contacts_service import ContactsService
 from backend.app.services.email_service import email_service
 import backend.app.services.contacts_service as cs_module

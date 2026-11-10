@@ -26,20 +26,25 @@ npm install
 
 ---
 
-## 2. Running the Development Servers
+## 2. Running the Servers
 
-### 2.1 Start Backend Server
+### 2.1 Single Server (Production / Standalone - Backend + Frontend SPA)
+Ao executar o servidor FastAPI, a interface SPA compilada (`frontend/dist`) é servida diretamente no endereço e porta padrão do projeto:
 ```powershell
-uvicorn backend.app.main:app --reload --port 8484
+python -m backend.main
+# ou
+uvicorn backend.main:app --reload --port 8484
 ```
-- API Documentation available at: `http://localhost:8484/docs`
+- **Web Application & Dashboard**: `http://localhost:8484`
+- **Swagger / OpenAPI Docs**: `http://localhost:8484/docs`
 
-### 2.2 Start Frontend Dev Server
+### 2.2 Optional: Frontend Hot-Reloading Dev Server
+Caso deseje desenvolver componentes do frontend com Hot Module Replacement (HMR):
 ```powershell
 cd frontend
 npm run dev
 ```
-- Web Application available at: `http://localhost:5173`
+- Dev Server disponível em: `http://localhost:3000` (com proxy de `/api` redirecionado para `http://localhost:8484`)
 
 ---
 
