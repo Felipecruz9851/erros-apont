@@ -191,7 +191,7 @@ class PipelineOrchestrator:
                     username=username,
                     password=password,
                     cookies=cookies,
-                    concurrency_limit=10,
+                    concurrency_limit=20,
                     on_auth_completed=_on_auth_done,
                     on_task_completed=_on_task_done,
                 )
@@ -263,16 +263,26 @@ class PipelineOrchestrator:
             ctx.stages.serialization = "IN_PROGRESS"
 
             from backend.app.engine.serializer import serialize_results
-            total_ops_janela = (
-                int(divergences_df["op"].nunique())
-                if not divergences_df.empty and "op" in divergences_df.columns
-                else 0
-            )
+            if hasattr(divergences_df, "is_empty"):
+                total_ops_janela = (
+                    int(divergences_df["op"].n_unique())
+                    if not divergences_df.is_empty() and "op" in divergences_df.columns
+                    else 0
+                )
+                total_comp = len(divergences_df) if not divergences_df.is_empty() else 0
+            else:
+                total_ops_janela = (
+                    int(divergences_df["op"].nunique())
+                    if not divergences_df.empty and "op" in divergences_df.columns
+                    else 0
+                )
+                total_comp = len(divergences_df) if not divergences_df.empty else 0
+
             final_json = serialize_results(
                 execution_id=ctx.execution_id,
                 divergences_df=divergences_df,
                 total_ops_analisadas=total_ops_janela,
-                total_componentes_baixa_auto=len(divergences_df) if not divergences_df.empty else 0,
+                total_componentes_baixa_auto=total_comp,
                 elapsed_seconds=ctx.get_elapsed_seconds(),
                 dias_uteis=dias_uteis,
                 data_referencia=data_fim,

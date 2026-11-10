@@ -1,5 +1,5 @@
 import os
-import requests
+import httpx
 from bs4 import BeautifulSoup
 import json
 
@@ -41,7 +41,7 @@ for loc in locais:
 
 print("Fetching Consumo...")
 try:
-    r_con = requests.post("http://192.168.0.6/pcp/consumo_alt.php", data=payload_consumo, cookies=cookies, headers=headers, timeout=60)
+    r_con = httpx.post("http://192.168.0.6/pcp/consumo_alt.php", data=payload_consumo, cookies=cookies, headers=headers, timeout=60)
     print("Consumo status:", r_con.status_code, "Length:", len(r_con.content))
     with open(os.path.join(SNAPSHOTS_DIR, "consumo_result.html"), "wb") as f:
         f.write(r_con.content)
@@ -72,7 +72,7 @@ for loc in locais:
 
 print("\nFetching Atrasadas...")
 try:
-    r_atr = requests.post("http://192.168.0.6/pcp/atrasadas.php", data=payload_atrasadas, cookies=cookies, headers=headers, timeout=60)
+    r_atr = httpx.post("http://192.168.0.6/pcp/atrasadas.php", data=payload_atrasadas, cookies=cookies, headers=headers, timeout=60)
     print("Atrasadas status:", r_atr.status_code, "Length:", len(r_atr.content))
     with open(os.path.join(SNAPSHOTS_DIR, "atrasadas_result.html"), "wb") as f:
         f.write(r_atr.content)

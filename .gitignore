@@ -57,6 +57,7 @@ Thumbs.db
 backend/storage/snapshots/*.html
 backend/storage/snapshots/*.json
 backend/storage/snapshots/*.pkl
+backend/storage/snapshots/*.parquet
 !backend/storage/snapshots/.gitkeep
 backend/storage/*.tmp
 backend/storage/sent_emails.json

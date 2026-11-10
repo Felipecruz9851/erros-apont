@@ -68,6 +68,15 @@ class Settings(BaseModel):
         )
     )
 
+    # Task execution profiling and LPT scheduling storage file
+    TASK_TIMES_FILE: str = Field(
+        default_factory=lambda: os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+            "storage",
+            "task_execution_times.json",
+        )
+    )
+
     # SMTP Configuration
     SMTP_HOST: str = Field(default_factory=lambda: os.getenv("SMTP_HOST", ""))
     SMTP_PORT: int = Field(default_factory=lambda: int(os.getenv("SMTP_PORT", "587")))

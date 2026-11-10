@@ -1,10 +1,12 @@
 import asyncio
+import time
 from typing import Any, Callable, Dict, List, Optional
 import httpx
 import pandas as pd
 from backend.app.core.config import settings
 from backend.app.extraction.parser import table_parser
 from backend.app.extraction.snapshot import snapshot_manager
+from backend.app.tasks.profiler import task_profiler
 
 
 class ExtractionWorker:
@@ -45,12 +47,18 @@ class ExtractionWorker:
         self.LOGIN_POST = f"{self.BASE_URL}/home/login/"
 
         self._initial_cookies = dict(cookies or {})
+        limits = httpx.Limits(
+            max_connections=50,
+            max_keepalive_connections=20,
+            keepalive_expiry=30.0,
+        )
         self.session: httpx.AsyncClient = httpx.AsyncClient(
             cookies=dict(self._initial_cookies),
             timeout=self.timeout,
             follow_redirects=True,
+            limits=limits,
         )
-        self._logged_in: bool = False
+        self._logged_in: bool = bool(self._initial_cookies and "PHPSESSID" in self._initial_cookies)
 
     async def __aenter__(self) -> "ExtractionWorker":
         return self
@@ -71,7 +79,8 @@ class ExtractionWorker:
         if self._logged_in:
             return
 
-        await self.session.get(self.LOGIN_PAGE, timeout=10.0)
+        login_timeout = max(30.0, self.timeout)
+        await self.session.get(self.LOGIN_PAGE, timeout=login_timeout)
 
         response = await self.session.post(
             self.LOGIN_POST,
@@ -88,7 +97,7 @@ class ExtractionWorker:
                 "User-Agent": "Mozilla/5.0",
             },
             follow_redirects=True,
-            timeout=10.0,
+            timeout=login_timeout,
         )
 
         response.raise_for_status()
@@ -128,6 +137,7 @@ class ExtractionWorker:
         grupo = task.get("grupo", "geral")
         local = task.get("local")
 
+        t0 = time.perf_counter()
         try:
             # Garante que o worker fez login uma única vez em seu ciclo de vida
             if not self._logged_in:
@@ -142,13 +152,15 @@ class ExtractionWorker:
             response.raise_for_status()
             html_text = response.text
 
-            # 1. Salva o snapshot imutável em disco (Princípio III)
-            snapshot_path = snapshot_manager.save_snapshot(execution_id, task_id, html_text)
+            # 1. Salva o snapshot imutável em disco e executa o parsing fora do loop asyncio (desacoplamento I/O vs CPU)
+            def _save_and_parse():
+                s_path = snapshot_manager.save_snapshot(execution_id, task_id, html_text)
+                parsed = table_parser.parse_html_to_dataframe(html_text)
+                return s_path, parsed
 
-            # 2. Executa o parser de tabela heurístico (Princípio IV)
-            df = table_parser.parse_html_to_dataframe(html_text)
+            snapshot_path, df = await asyncio.to_thread(_save_and_parse)
 
-            # 3. Anexa metadados da tarefa ao DataFrame se não for vazio
+            # 2. Anexa metadados da tarefa ao DataFrame se não for vazio
             if not df.empty:
                 df["_task_id"] = task_id
                 df["_grupo"] = grupo
@@ -156,6 +168,7 @@ class ExtractionWorker:
                 if local:
                     df["_local_filtro"] = local
 
+            dur = round(time.perf_counter() - t0, 3)
             return {
                 "task_id": task_id,
                 "worker_id": self.worker_id,
@@ -163,10 +176,12 @@ class ExtractionWorker:
                 "snapshot_path": snapshot_path,
                 "rows_extracted": len(df),
                 "dataframe": df,
+                "elapsed_seconds": dur,
                 "error": None,
             }
 
         except Exception as e:
+            dur = round(time.perf_counter() - t0, 3)
             return {
                 "task_id": task_id,
                 "worker_id": self.worker_id,
@@ -174,6 +189,7 @@ class ExtractionWorker:
                 "snapshot_path": None,
                 "rows_extracted": 0,
                 "dataframe": pd.DataFrame(),
+                "elapsed_seconds": dur,
                 "error": str(e),
             }
 
@@ -184,7 +200,7 @@ async def execute_task_pool(
     username: str = "",
     password: str = "",
     cookies: Optional[Dict[str, str]] = None,
-    concurrency_limit: int = 10,
+    concurrency_limit: int = 20,
     on_auth_completed: Optional[Callable[[], None]] = None,
     on_task_completed: Optional[Callable[[Dict[str, Any]], None]] = None,
 ) -> List[Dict[str, Any]]:
@@ -212,14 +228,25 @@ async def execute_task_pool(
         for i in range(num_workers)
     ]
 
-    results: List[Optional[Dict[str, Any]]] = [None] * len(tasks)
+    # Escalonamento LPT: Reordena as tarefas colocando as mais lentas primeiro
+    tasks_ordered = task_profiler.order_tasks_lpt(tasks)
+
+    results: List[Optional[Dict[str, Any]]] = [None] * len(tasks_ordered)
     queue: asyncio.Queue = asyncio.Queue()
-    for idx, task in enumerate(tasks):
+    for idx, task in enumerate(tasks_ordered):
         queue.put_nowait((idx, task))
 
     try:
-        # 1. Cada worker realiza seu login individual uma única vez no início do ciclo de vida
-        await asyncio.gather(*(w.login() for w in workers))
+        # 1. Cada worker realiza seu login individual uma única vez no início do ciclo de vida,
+        # com controle de concorrência na autenticação para não sobrecarregar o servidor Apache/PHP
+        login_sem = asyncio.Semaphore(3)
+
+        async def _safe_login(w: ExtractionWorker) -> None:
+            async with login_sem:
+                await w.login()
+                await asyncio.sleep(0.05)
+
+        await asyncio.gather(*(_safe_login(w) for w in workers))
 
         if on_auth_completed:
             on_auth_completed()
@@ -235,6 +262,17 @@ async def execute_task_pool(
                 try:
                     res = await worker.execute_task(execution_id, task)
                     results[idx] = res
+
+                    # Registra a telemetria da tarefa no profiler JSON
+                    if res and res.get("status") == "SUCCESS":
+                        task_profiler.record_duration(
+                            task_id=task.get("task_id", ""),
+                            duration_seconds=res.get("elapsed_seconds", 0.0),
+                            grupo=task.get("grupo", ""),
+                            local=task.get("local"),
+                            rows_extracted=res.get("rows_extracted", 0),
+                        )
+
                     if on_task_completed:
                         on_task_completed(res)
                 finally:

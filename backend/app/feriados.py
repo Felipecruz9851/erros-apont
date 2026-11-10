@@ -1,4 +1,4 @@
-import requests
+import httpx
 from getpass import getpass
 import datetime as dt
 import time
@@ -12,7 +12,7 @@ FERIADOS_URL = f"{BASE_URL}/pcp/feriados.php"
 usuario = input("Usuário: ")
 senha = getpass("Senha: ")
 
-session = requests.Session()
+session = httpx.Client(follow_redirects=True)
 
 # 1) GET inicial (gera PHPSESSID)
 session.get(LOGIN_PAGE, timeout=10)
@@ -32,14 +32,13 @@ resp = session.post(
         "Origin": BASE_URL,
         "User-Agent": "Mozilla/5.0",
     },
-    allow_redirects=True,
     timeout=10,
 )
 
 resp.raise_for_status()
 
 print("URL final:", resp.url)
-print("Cookies:", session.cookies.get_dict())
+print("Cookies:", dict(session.cookies))
 
 # sinal real de sucesso: acesso ao app ou sessão ativa
 if "/home/app" not in resp.url and "PHPSESSID" not in session.cookies:

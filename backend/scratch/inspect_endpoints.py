@@ -1,6 +1,6 @@
 import os
 import json
-import requests
+import httpx
 from bs4 import BeautifulSoup
 
 urls = [
@@ -28,7 +28,7 @@ for url in urls:
     print(f"\n==========================================")
     print(f"Connecting to {url}...")
     try:
-        resp = requests.get(url, cookies=cookies, headers=headers, timeout=10)
+        resp = httpx.get(url, cookies=cookies, headers=headers, timeout=10)
         print(f"Status: {resp.status_code} | Encoding: {resp.encoding} | Content-Length: {len(resp.content)}")
         
         # Save raw HTML

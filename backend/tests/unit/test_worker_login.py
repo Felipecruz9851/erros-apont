@@ -156,7 +156,7 @@ def test_pool_each_worker_logs_in_independently_once(monkeypatch):
             tasks=tasks,
             username="operador",
             password="123",
-            concurrency_limit=10,
+            concurrency_limit=3,
             on_auth_completed=_on_auth,
         )
     )
