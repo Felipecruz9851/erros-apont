@@ -184,7 +184,7 @@ async def execute_task_pool(
     username: str = "",
     password: str = "",
     cookies: Optional[Dict[str, str]] = None,
-    concurrency_limit: int = 15,
+    concurrency_limit: int = 10,
     on_auth_completed: Optional[Callable[[], None]] = None,
     on_task_completed: Optional[Callable[[Dict[str, Any]], None]] = None,
 ) -> List[Dict[str, Any]]:

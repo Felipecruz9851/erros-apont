@@ -24,7 +24,7 @@ class ExecutionContext:
         self.error_message: Optional[str] = None
         self.dias_uteis: int = 3
         self.data_ref: str = ""
-        
+
         # Estruturas de dados em memória
         self.raw_results: List[Dict[str, Any]] = []
         self.dfs_by_group: Dict[str, pd.DataFrame] = {}
@@ -191,7 +191,7 @@ class PipelineOrchestrator:
                     username=username,
                     password=password,
                     cookies=cookies,
-                    concurrency_limit=15,
+                    concurrency_limit=10,
                     on_auth_completed=_on_auth_done,
                     on_task_completed=_on_task_done,
                 )
