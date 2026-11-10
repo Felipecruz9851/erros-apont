@@ -231,8 +231,8 @@ def test_tipo_componente_separation_in_email():
 
 def test_dispatch_selected_records_to_locais_and_target_email(isolated_contacts, monkeypatch):
     """Valida envio de linhas selecionadas para responsáveis de locais e envio para e-mail específico."""
-    c1 = isolated_contacts.create_contact(nome="Resp Acessorios", email="acess@lider.com.br", locais=["ACESSORIOS"])
-    c2 = isolated_contacts.create_contact(nome="Resp Colchoes", email="colch@lider.com.br", locais=["COLCHOES"])
+    isolated_contacts.create_contact(nome="Resp Acessorios", email="acess@lider.com.br", locais=["ACESSORIOS"])
+    isolated_contacts.create_contact(nome="Resp Colchoes", email="colch@lider.com.br", locais=["COLCHOES"])
 
     mock_records = [
         {

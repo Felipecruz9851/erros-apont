@@ -1,4 +1,3 @@
-import polars as pl
 from backend.app.extraction.parser import LegacyTableParser, table_parser
 
 

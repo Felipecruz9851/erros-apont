@@ -3,7 +3,10 @@ import time
 import uuid
 from typing import Any, Dict, List, Optional
 import pandas as pd
-from backend.app.core.security import security_manager
+from backend.app.core.config import settings
+from backend.app.engine.calculation import calculation_engine
+from backend.app.engine.serializer import serialize_results
+from backend.app.engine.treatment import treatment_engine
 from backend.app.extraction.snapshot import snapshot_manager
 from backend.app.extraction.worker import execute_task_pool
 from backend.app.models.domain import ExecutionState
@@ -81,7 +84,6 @@ class PipelineOrchestrator:
         data_fim: str,
         dias_uteis: int = 3,
         fabricas: Optional[List[str]] = None,
-        cookies: Optional[Dict[str, str]] = None,
         debug: bool = False,
     ) -> None:
         """Dispara a execução completa em background."""
@@ -101,7 +103,6 @@ class PipelineOrchestrator:
                 data_fim=data_fim,
                 dias_uteis=dias_uteis,
                 fabricas=fabricas,
-                cookies=cookies,
                 debug=debug,
             )
         )
@@ -115,7 +116,6 @@ class PipelineOrchestrator:
         data_fim: str,
         dias_uteis: int = 3,
         fabricas: Optional[List[str]] = None,
-        cookies: Optional[Dict[str, str]] = None,
         debug: bool = False,
     ) -> None:
         try:
@@ -159,14 +159,12 @@ class PipelineOrchestrator:
                 ctx.stages.auth = "IN_PROGRESS"
                 ctx.progress_pct = 5
 
-                security_manager.store_credentials(ctx.execution_id, username, password)
-
                 # Gera tarefas expandidas por local conforme config/tarefas_esqueleto.json
                 tasks = self.task_generator.generate_tasks(
                     data_inicio=data_inicio,
                     data_fim=data_fim,
                     locais_filtro=fabricas,
-                    empresa_padrao="11",
+                    empresa_padrao=settings.DEFAULT_COD_EMPRESA,
                 )
                 ctx.tasks_total = len(tasks)
                 ctx.tasks_completed = 0
@@ -190,7 +188,6 @@ class PipelineOrchestrator:
                     tasks=tasks,
                     username=username,
                     password=password,
-                    cookies=cookies,
                     concurrency_limit=20,
                     on_auth_completed=_on_auth_done,
                     on_task_completed=_on_task_done,
@@ -229,7 +226,6 @@ class PipelineOrchestrator:
             ctx.stages.treatment = "IN_PROGRESS"
             ctx.progress_pct = 60
 
-            from backend.app.engine.treatment import treatment_engine
             cleaned_consumo, cleaned_estoque = treatment_engine.clean_and_normalize(
                 df_consumo=ctx.dfs_by_group["consumo"],
                 df_estoque=ctx.dfs_by_group["estoque"],
@@ -246,7 +242,6 @@ class PipelineOrchestrator:
             ctx.stages.calculation = "IN_PROGRESS"
             ctx.progress_pct = 80
 
-            from backend.app.engine.calculation import calculation_engine
             divergences_df = calculation_engine.calculate_pointing_errors(
                 df_consumo=cleaned_consumo,
                 df_estoque=cleaned_estoque,
@@ -262,21 +257,11 @@ class PipelineOrchestrator:
             ctx.state = "SERIALIZING"
             ctx.stages.serialization = "IN_PROGRESS"
 
-            from backend.app.engine.serializer import serialize_results
-            if hasattr(divergences_df, "is_empty"):
-                total_ops_janela = (
-                    int(divergences_df["op"].n_unique())
-                    if not divergences_df.is_empty() and "op" in divergences_df.columns
-                    else 0
-                )
-                total_comp = len(divergences_df) if not divergences_df.is_empty() else 0
-            else:
-                total_ops_janela = (
-                    int(divergences_df["op"].nunique())
-                    if not divergences_df.empty and "op" in divergences_df.columns
-                    else 0
-                )
-                total_comp = len(divergences_df) if not divergences_df.empty else 0
+            has_rows = not divergences_df.empty
+            total_ops_janela = (
+                int(divergences_df["op"].nunique()) if has_rows and "op" in divergences_df.columns else 0
+            )
+            total_comp = len(divergences_df)
 
             final_json = serialize_results(
                 execution_id=ctx.execution_id,
@@ -315,9 +300,6 @@ class PipelineOrchestrator:
             ctx.state = "FAILED"
             ctx.error_message = str(e)
             ctx.end_time = time.time()
-        finally:
-            # Purga senhas em memória após a finalização
-            security_manager.purge_execution(ctx.execution_id)
 
 
 # Instância global singleton

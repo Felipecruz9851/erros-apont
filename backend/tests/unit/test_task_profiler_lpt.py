@@ -1,6 +1,5 @@
 import json
 import os
-import pytest
 from backend.app.tasks.profiler import TaskProfiler
 
 

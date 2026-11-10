@@ -24,58 +24,37 @@ def _load_env_file() -> None:
 
 _load_env_file()
 
+# Diretório de armazenamento em runtime (backend/storage)
+_STORAGE_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    "storage",
+)
+
 
 class Settings(BaseModel):
     PROJECT_NAME: str = "Erros de Apontamento"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
 
-    # Intranet default host and endpoints
+    # Intranet default host
     INTRANET_HOST: str = Field(
         default_factory=lambda: os.getenv("INTRANET_HOST", "http://192.168.0.6")
-    )
-    INTRANET_BASE_URL: str = Field(
-        default_factory=lambda: os.getenv("INTRANET_BASE_URL", "http://192.168.0.6/pcp")
     )
     DEFAULT_COD_EMPRESA: str = "11"
 
     # Snapshot storage directory
-    SNAPSHOT_DIR: str = Field(
-        default_factory=lambda: os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-            "storage",
-            "snapshots",
-        )
-    )
+    SNAPSHOT_DIR: str = os.path.join(_STORAGE_DIR, "snapshots")
 
     PORT: int = Field(default_factory=lambda: int(os.getenv("PORT", "8484")))
 
     # Contacts storage file
-    CONTACTS_FILE: str = Field(
-        default_factory=lambda: os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-            "storage",
-            "contacts.json",
-        )
-    )
+    CONTACTS_FILE: str = os.path.join(_STORAGE_DIR, "contacts.json")
 
     # Sent emails log file
-    SENT_EMAILS_FILE: str = Field(
-        default_factory=lambda: os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-            "storage",
-            "sent_emails.json",
-        )
-    )
+    SENT_EMAILS_FILE: str = os.path.join(_STORAGE_DIR, "sent_emails.json")
 
     # Task execution profiling and LPT scheduling storage file
-    TASK_TIMES_FILE: str = Field(
-        default_factory=lambda: os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-            "storage",
-            "task_execution_times.json",
-        )
-    )
+    TASK_TIMES_FILE: str = os.path.join(_STORAGE_DIR, "task_execution_times.json")
 
     # SMTP Configuration
     SMTP_HOST: str = Field(default_factory=lambda: os.getenv("SMTP_HOST", ""))

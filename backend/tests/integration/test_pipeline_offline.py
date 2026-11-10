@@ -1,5 +1,4 @@
 import os
-import pytest
 from backend.app.extraction.parser import table_parser
 from backend.app.engine.treatment import treatment_engine
 from backend.app.engine.calculation import calculation_engine

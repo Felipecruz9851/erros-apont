@@ -1,6 +1,5 @@
 import html
 import json
-import os
 import smtplib
 import threading
 from datetime import datetime

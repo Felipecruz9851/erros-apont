@@ -5,6 +5,7 @@ import numpy as np
 import pytest
 from backend.app.engine.calculation import calculation_engine
 from backend.app.engine.treatment import treatment_engine
+from backend.tests.unit.legacy_pandas_oracle import calculate_pointing_errors_pandas
 
 
 @pytest.fixture(scope="module")
@@ -46,7 +47,8 @@ def test_confrontation_pandas_vs_polars_exact_precision(real_snapshot_data):
 
     # 2. Executa Motor Legado em Pandas (Medindo tempo)
     t0_pd = time.perf_counter()
-    res_pandas = calculation_engine.calculate_pointing_errors_pandas(
+    res_pandas = calculate_pointing_errors_pandas(
+        calculation_engine,
         df_consumo=c_clean,
         df_estoque=e_clean,
         data_atual=data_referencia,

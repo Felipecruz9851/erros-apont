@@ -3,7 +3,6 @@ from typing import Literal, Optional
 from fastapi import APIRouter, HTTPException, Query, Response, status
 from fastapi.responses import JSONResponse
 import pandas as pd
-import polars as pl
 from backend.app.engine.orchestrator import orchestrator
 from backend.app.models.requests import PaginationInfo, ResultsResponse, SummaryMetrics
 
@@ -91,32 +90,19 @@ async def export_results(
     if df is None:
         df = pd.DataFrame()
 
-    is_pl = hasattr(df, "is_empty")
-    is_empty = df.is_empty() if is_pl else df.empty
-
-    if not is_empty and fabrica:
+    if not df.empty and fabrica:
         fab_norm = fabrica.strip().upper()
-        if is_pl:
-            df = df.filter(pl.col("fabrica").cast(pl.Utf8).str.to_uppercase() == fab_norm)
-        else:
-            df = df[df["fabrica"].str.upper() == fab_norm]
+        df = df[df["fabrica"].str.upper() == fab_norm]
 
-    is_empty = df.is_empty() if is_pl else df.empty
-    if not is_empty and tipo_componente and "tipo_componente" in df.columns:
+    if not df.empty and tipo_componente and "tipo_componente" in df.columns:
         tipo_norm = tipo_componente.strip().upper()
         if tipo_norm in ["C", "P"]:
-            if is_pl:
-                df = df.filter(pl.col("tipo_componente").cast(pl.Utf8).str.to_uppercase() == tipo_norm)
-            else:
-                df = df[df["tipo_componente"].str.upper() == tipo_norm]
+            df = df[df["tipo_componente"].str.upper() == tipo_norm]
 
     if format == "csv":
-        if is_pl:
-            csv_bytes = df.write_csv(separator=";").encode("utf-8-sig")
-        else:
-            stream = io.StringIO()
-            df.to_csv(stream, index=False, sep=";", encoding="utf-8-sig")
-            csv_bytes = stream.getvalue().encode("utf-8-sig")
+        stream = io.StringIO()
+        df.to_csv(stream, index=False, sep=";", encoding="utf-8-sig")
+        csv_bytes = stream.getvalue().encode("utf-8-sig")
 
         return Response(
             content=csv_bytes,
@@ -127,10 +113,7 @@ async def export_results(
             },
         )
     else:
-        if is_pl:
-            records = df.to_dicts() if not df.is_empty() else []
-        else:
-            records = df.to_dict(orient="records") if not df.empty else []
+        records = df.to_dict(orient="records") if not df.empty else []
 
         return JSONResponse(
             content={
