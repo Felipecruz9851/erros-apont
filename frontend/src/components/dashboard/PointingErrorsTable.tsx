@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import {
   Search,
   ArrowUpDown,
@@ -15,6 +15,9 @@ import {
 } from 'lucide-react';
 import { ErroApontamento, Contact } from '../../types';
 import { emailsApi, contactsApi } from '../../services/api';
+
+const INITIAL_BATCH_SIZE = 40;
+const BATCH_INCREMENT = 40;
 
 interface PointingErrorsTableProps {
   records: ErroApontamento[];
@@ -33,8 +36,12 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
   const [selectedTipo, setSelectedTipo] = useState<string>('ALL');
   const [sortField, setSortField] = useState<keyof ErroApontamento>('data_entrega');
   const [sortAsc, setSortAsc] = useState<boolean>(true);
-  const [page, setPage] = useState<number>(1);
-  const pageSize = 15;
+
+  // Rolagem Infinita e Consumo Dinâmico
+  const [visibleCount, setVisibleCount] = useState<number>(INITIAL_BATCH_SIZE);
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   // Estado de seleção de linhas
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -100,12 +107,67 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
     });
   }, [filteredRecords, sortField, sortAsc]);
 
-  // Paginação
-  const totalPages = Math.ceil(sortedRecords.length / pageSize) || 1;
-  const pagedRecords = useMemo(() => {
-    const start = (page - 1) * pageSize;
-    return sortedRecords.slice(start, start + pageSize);
-  }, [sortedRecords, page]);
+  // Registros consumidos dinamicamente na rolagem infinita
+  const displayedRecords = useMemo(() => {
+    return sortedRecords.slice(0, visibleCount);
+  }, [sortedRecords, visibleCount]);
+
+  // Reseta para o lote inicial e scrolla ao topo ao alterar filtros ou ordenação
+  useEffect(() => {
+    setVisibleCount(INITIAL_BATCH_SIZE);
+    if (containerRef.current) {
+      containerRef.current.scrollTop = 0;
+    }
+  }, [searchTerm, selectedFabrica, selectedSeverity, selectedTipo, sortField, sortAsc]);
+
+  const loadMore = useCallback(() => {
+    if (isLoadingMore) return;
+    setVisibleCount((prev) => {
+      if (prev >= sortedRecords.length) return prev;
+      return Math.min(prev + BATCH_INCREMENT, sortedRecords.length);
+    });
+  }, [sortedRecords.length, isLoadingMore]);
+
+  const loadAll = useCallback(() => {
+    setVisibleCount(sortedRecords.length);
+  }, [sortedRecords.length]);
+
+  // Observer de rolagem infinita via IntersectionObserver
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (first.isIntersecting && visibleCount < sortedRecords.length) {
+          setIsLoadingMore(true);
+          setTimeout(() => {
+            loadMore();
+            setIsLoadingMore(false);
+          }, 80);
+        }
+      },
+      {
+        root: null, // Observa a viewport / container
+        rootMargin: '250px',
+        threshold: 0.05,
+      }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [loadMore, visibleCount, sortedRecords.length]);
+
+  // Scroll handler auxiliar para o container com scroll interno
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    if (target.scrollTop + target.clientHeight >= target.scrollHeight - 300) {
+      if (visibleCount < sortedRecords.length && !isLoadingMore) {
+        loadMore();
+      }
+    }
+  };
 
   const handleSort = (field: keyof ErroApontamento) => {
     if (sortField === field) {
@@ -129,18 +191,18 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
     });
   };
 
-  const isAllCurrentPageSelected = useMemo(() => {
-    if (pagedRecords.length === 0) return false;
-    return pagedRecords.every((r) => selectedIds.has(r.id));
-  }, [pagedRecords, selectedIds]);
+  const isAllVisibleSelected = useMemo(() => {
+    if (displayedRecords.length === 0) return false;
+    return displayedRecords.every((r) => selectedIds.has(r.id));
+  }, [displayedRecords, selectedIds]);
 
-  const toggleSelectAllCurrentPage = () => {
+  const toggleSelectAllVisible = () => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
-      if (isAllCurrentPageSelected) {
-        pagedRecords.forEach((r) => next.delete(r.id));
+      if (isAllVisibleSelected) {
+        displayedRecords.forEach((r) => next.delete(r.id));
       } else {
-        pagedRecords.forEach((r) => next.add(r.id));
+        displayedRecords.forEach((r) => next.add(r.id));
       }
       return next;
     });
@@ -314,10 +376,7 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
             <input
               type="text"
               value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setPage(1);
-              }}
+              onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Buscar por OP, componente ou local..."
               className="w-full pl-9 pr-3 py-1.5 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood text-lider-primary placeholder:text-lider-tertiary"
             />
@@ -328,10 +387,7 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
             <Filter className="w-3 h-3 text-lider-tertiary" />
             <select
               value={selectedFabrica}
-              onChange={(e) => {
-                setSelectedFabrica(e.target.value);
-                setPage(1);
-              }}
+              onChange={(e) => setSelectedFabrica(e.target.value)}
               className="px-2 py-1.5 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood text-lider-primary"
             >
               <option value="ALL">Todas as Fábricas</option>
@@ -346,10 +402,7 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
           {/* Filtro Severidade / Status */}
           <select
             value={selectedSeverity}
-            onChange={(e) => {
-              setSelectedSeverity(e.target.value);
-              setPage(1);
-            }}
+            onChange={(e) => setSelectedSeverity(e.target.value)}
             className="px-2 py-1.5 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood text-lider-primary"
           >
             <option value="ALL">Todos na Janela (Erros + OK)</option>
@@ -362,10 +415,7 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
           {/* Filtro Tipo de Componente: C ou P */}
           <select
             value={selectedTipo}
-            onChange={(e) => {
-              setSelectedTipo(e.target.value);
-              setPage(1);
-            }}
+            onChange={(e) => setSelectedTipo(e.target.value)}
             className="px-2 py-1.5 text-xs bg-lider-canvas border border-lider-border rounded-sm focus:outline-none focus:border-lider-wood text-lider-primary font-medium"
           >
             <option value="ALL">Tipos: Produzidos e Comprados</option>
@@ -440,79 +490,87 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
         </div>
       )}
 
-      {/* Tabela com bordas de 1px e respiro generoso */}
-      <div className="overflow-x-auto">
+      {/* Tabela com rolagem vertical suave e cabeçalhos fixos */}
+      <div
+        ref={containerRef}
+        onScroll={handleScroll}
+        className="overflow-x-auto max-h-[70vh] overflow-y-auto relative border-b border-lider-divider"
+      >
         <table className="w-full text-left border-collapse text-xs">
-          <thead>
-            <tr className="bg-lider-canvas/80 text-lider-secondary border-b border-lider-border uppercase tracking-wider text-[10px]">
-              <th className="py-3 px-3 w-10 text-center">
+          <thead className="sticky top-0 z-10 shadow-xs bg-lider-canvas">
+            <tr className="bg-lider-canvas text-lider-secondary border-b border-lider-border uppercase tracking-wider text-[10px]">
+              <th className="py-3 px-3 w-10 text-center sticky top-0 bg-lider-canvas z-20">
                 <input
                   type="checkbox"
-                  checked={isAllCurrentPageSelected}
-                  onChange={toggleSelectAllCurrentPage}
+                  checked={isAllVisibleSelected}
+                  onChange={toggleSelectAllVisible}
                   className="rounded border-lider-border text-lider-primary focus:ring-0 cursor-pointer"
-                  title="Marcar todas desta página"
+                  title={
+                    isAllVisibleSelected
+                      ? 'Desmarcar todas as linhas atualmente carregadas'
+                      : `Marcar todas as ${displayedRecords.length} linhas carregadas`
+                  }
                 />
               </th>
-              <th className="py-3 px-3 font-semibold cursor-pointer" onClick={() => handleSort('fabrica')}>
+              <th className="py-3 px-3 font-semibold cursor-pointer sticky top-0 bg-lider-canvas z-20" onClick={() => handleSort('fabrica')}>
                 <div className="flex items-center space-x-1">
                   <span>Fábrica</span>
                   <ArrowUpDown className="w-2.5 h-2.5" />
                 </div>
               </th>
-              <th className="py-3 px-3 font-semibold cursor-pointer" onClick={() => handleSort('op')}>
+              <th className="py-3 px-3 font-semibold cursor-pointer sticky top-0 bg-lider-canvas z-20" onClick={() => handleSort('op')}>
                 <div className="flex items-center space-x-1">
                   <span>OP / Ordem</span>
                   <ArrowUpDown className="w-2.5 h-2.5" />
                 </div>
               </th>
-              <th className="py-3 px-3 font-semibold cursor-pointer" onClick={() => handleSort('data_entrega')}>
+              <th className="py-3 px-3 font-semibold cursor-pointer sticky top-0 bg-lider-canvas z-20" onClick={() => handleSort('data_entrega')}>
                 <div className="flex items-center space-x-1">
                   <span>Entrega</span>
                   <ArrowUpDown className="w-2.5 h-2.5" />
                 </div>
               </th>
-              <th className="py-3 px-3 font-semibold cursor-pointer" onClick={() => handleSort('local_producao')}>
+              <th className="py-3 px-3 font-semibold cursor-pointer sticky top-0 bg-lider-canvas z-20" onClick={() => handleSort('local_producao')}>
                 <div className="flex items-center space-x-1">
                   <span>Local Produção</span>
                   <ArrowUpDown className="w-2.5 h-2.5" />
                 </div>
               </th>
-              <th className="py-3 px-3 font-semibold cursor-pointer" onClick={() => handleSort('codigo_componente')}>
+              <th className="py-3 px-3 font-semibold cursor-pointer sticky top-0 bg-lider-canvas z-20" onClick={() => handleSort('codigo_componente')}>
                 <div className="flex items-center space-x-1">
                   <span>Insumo / Componente</span>
                   <ArrowUpDown className="w-2.5 h-2.5" />
                 </div>
               </th>
-              <th className="py-3 px-3 font-semibold text-center cursor-pointer" onClick={() => handleSort('tipo_componente')}>
+              <th className="py-3 px-3 font-semibold text-center cursor-pointer sticky top-0 bg-lider-canvas z-20" onClick={() => handleSort('tipo_componente')}>
                 <div className="flex items-center justify-center space-x-1">
                   <span>Tipo</span>
                   <ArrowUpDown className="w-2.5 h-2.5" />
                 </div>
               </th>
-              <th className="py-3 px-3 font-semibold text-right cursor-pointer" onClick={() => handleSort('qtd_necessaria')}>
+              <th className="py-3 px-3 font-semibold text-right cursor-pointer sticky top-0 bg-lider-canvas z-20" onClick={() => handleSort('qtd_necessaria')}>
                 <div className="flex items-center justify-end space-x-1">
                   <span>Necessário</span>
                   <ArrowUpDown className="w-2.5 h-2.5" />
                 </div>
               </th>
-              <th className="py-3 px-3 font-semibold text-right cursor-pointer" onClick={() => handleSort('saldo_remanescente')}>
+              <th className="py-3 px-3 font-semibold text-right cursor-pointer sticky top-0 bg-lider-canvas z-20" onClick={() => handleSort('saldo_remanescente')}>
                 <div className="flex items-center justify-end space-x-1">
                   <span>Saldo Fila</span>
                   <ArrowUpDown className="w-2.5 h-2.5" />
                 </div>
               </th>
-              <th className="py-3 px-3 font-semibold text-right cursor-pointer" onClick={() => handleSort('deficit_saldo')}>
+              <th className="py-3 px-3 font-semibold text-right cursor-pointer sticky top-0 bg-lider-canvas z-20" onClick={() => handleSort('deficit_saldo')}>
                 <div className="flex items-center justify-end space-x-1">
                   <span>Déficit</span>
                   <ArrowUpDown className="w-2.5 h-2.5" />
                 </div>
               </th>
-              <th className="py-3 px-3 font-semibold text-center">Status / Severidade</th>
+              <th className="py-3 px-3 font-semibold text-center sticky top-0 bg-lider-canvas z-20">Status / Severidade</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-lider-divider">
-            {pagedRecords.length === 0 ? (
+            {displayedRecords.length === 0 ? (
               <tr>
                 <td colSpan={11} className="py-12 text-center text-lider-tertiary">
                   {records.length === 0
@@ -521,13 +579,21 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
                 </td>
               </tr>
             ) : (
-              pagedRecords.map((r) => {
+              displayedRecords.map((r, index) => {
                 const isSelected = selectedIds.has(r.id);
                 const isP = (r.tipo_componente || 'C').toUpperCase() === 'P';
 
                 return (
                   <tr
                     key={r.id}
+                    style={
+                      index >= INITIAL_BATCH_SIZE
+                        ? {
+                            contentVisibility: 'auto',
+                            containIntrinsicSize: 'auto none auto 48px',
+                          }
+                        : undefined
+                    }
                     className={`transition-colors ${
                       isSelected ? 'bg-amber-50/60 hover:bg-amber-50/80' : 'hover:bg-lider-canvas/50'
                     }`}
@@ -623,36 +689,62 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
             )}
           </tbody>
         </table>
+
+        {/* Sentinela de Rolagem Infinita e feedback dinâmico */}
+        <div ref={sentinelRef} className="py-3 flex items-center justify-center text-xs text-lider-tertiary">
+          {isLoadingMore ? (
+            <div className="flex items-center space-x-2 py-1">
+              <Loader2 className="w-4 h-4 animate-spin text-lider-wood" />
+              <span>Consumindo mais ocorrências...</span>
+            </div>
+          ) : displayedRecords.length < sortedRecords.length ? (
+            <span className="text-[11px] opacity-70">Role para carregar mais itens</span>
+          ) : null}
+        </div>
       </div>
 
-      {/* Paginação Líder */}
-      <div className="p-4 border-t border-lider-divider flex items-center justify-between text-xs text-lider-secondary">
+      {/* Rodapé Informativo de Rolagem Infinita */}
+      <div className="p-3.5 border-t border-lider-divider bg-lider-canvas/40 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs text-lider-secondary">
         <div>
-          Mostrando <span className="font-medium text-lider-primary">{sortedRecords.length > 0 ? (page - 1) * pageSize + 1 : 0}</span> a{' '}
-          <span className="font-medium text-lider-primary">
-            {Math.min(page * pageSize, sortedRecords.length)}
-          </span>{' '}
-          de <span className="font-medium text-lider-primary">{sortedRecords.length}</span> ocorrências
+          Exibindo <span className="font-semibold text-lider-primary">{displayedRecords.length}</span> de{' '}
+          <span className="font-semibold text-lider-primary">{sortedRecords.length}</span> ocorrências
+          {filteredRecords.length !== records.length && (
+            <span className="text-lider-tertiary ml-1 text-[11px]">
+              (filtradas de {records.length} no total)
+            </span>
+          )}
         </div>
 
-        <div className="flex items-center space-x-1.5">
-          <button
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page === 1}
-            className="px-2.5 py-1 text-xs border border-lider-border rounded-sm hover:bg-lider-canvas disabled:opacity-40 transition-colors"
-          >
-            Anterior
-          </button>
-          <span className="px-2 text-xs text-lider-tertiary">
-            Página {page} de {totalPages}
-          </span>
-          <button
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            disabled={page === totalPages}
-            className="px-2.5 py-1 text-xs border border-lider-border rounded-sm hover:bg-lider-canvas disabled:opacity-40 transition-colors"
-          >
-            Próxima
-          </button>
+        <div className="flex items-center space-x-2.5">
+          {displayedRecords.length < sortedRecords.length ? (
+            <>
+              <button
+                type="button"
+                onClick={loadMore}
+                disabled={isLoadingMore}
+                className="inline-flex items-center space-x-1 px-2.5 py-1 text-xs border border-lider-border rounded-sm bg-lider-card hover:bg-lider-canvas text-lider-primary transition-colors disabled:opacity-40 shadow-xs"
+                title="Carregar próximo lote de registros"
+              >
+                <span>+ {Math.min(BATCH_INCREMENT, sortedRecords.length - displayedRecords.length)} itens</span>
+              </button>
+              <button
+                type="button"
+                onClick={loadAll}
+                disabled={isLoadingMore}
+                className="inline-flex items-center space-x-1 px-2.5 py-1 text-xs border border-lider-border rounded-sm bg-lider-card hover:bg-lider-canvas text-lider-wood font-medium transition-colors disabled:opacity-40 shadow-xs"
+                title="Carregar todas as ocorrências de uma só vez"
+              >
+                <span>Carregar todas ({sortedRecords.length})</span>
+              </button>
+            </>
+          ) : (
+            sortedRecords.length > 0 && (
+              <div className="inline-flex items-center space-x-1 text-emerald-700 text-xs font-medium">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Todas as ocorrências carregadas</span>
+              </div>
+            )
+          )}
         </div>
       </div>
 
