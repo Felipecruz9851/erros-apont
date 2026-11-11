@@ -605,7 +605,7 @@ export const EmailDispatcher: React.FC<EmailDispatcherProps> = ({
                                 <td className="p-2.5 font-mono text-[11px]">{r.local_producao}</td>
                                 <td className="p-2.5 font-mono text-[11px]">{r.data_entrega}</td>
                                 <td className="p-2.5 text-right font-mono font-bold text-lider-danger">
-                                  -{r.deficit_saldo}
+                                  -{Number(r.deficit_saldo).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </td>
                               </tr>
                             );

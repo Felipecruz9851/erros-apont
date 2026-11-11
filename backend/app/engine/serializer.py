@@ -23,6 +23,12 @@ def serialize_results(
         distribuicao = {}
     else:
         records = df.to_dict(orient="records")
+        # Assegura que todos os campos numéricos sejam serializados estritamente com 2 casas decimais
+        for r in records:
+            for col in ("qtd_necessaria", "saldo_inicial_local", "saldo_remanescente", "deficit_saldo"):
+                if col in r and isinstance(r[col], (int, float)):
+                    r[col] = round(float(r[col]), 2)
+
         df_erros = (
             df[df["status_divergencia"] != "OK"]
             if "status_divergencia" in df.columns

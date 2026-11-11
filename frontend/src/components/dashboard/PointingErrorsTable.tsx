@@ -640,7 +640,7 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
                       </span>
                     </td>
                     <td className="py-3 px-3 text-right font-medium text-lider-secondary whitespace-nowrap">
-                      {r.qtd_necessaria.toLocaleString('pt-BR', { minimumFractionDigits: 1 })}
+                      {r.qtd_necessaria.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="py-3 px-3 text-right whitespace-nowrap">
                       <span
@@ -648,19 +648,19 @@ export const PointingErrorsTable: React.FC<PointingErrorsTableProps> = ({
                           r.saldo_remanescente <= 0 ? 'text-lider-danger font-medium' : 'text-lider-secondary'
                         }
                       >
-                        {r.saldo_remanescente.toLocaleString('pt-BR', { minimumFractionDigits: 1 })}
+                        {r.saldo_remanescente.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                       <div className="text-[10px] text-lider-tertiary">
-                        Inicial: {r.saldo_inicial_local.toLocaleString('pt-BR', { minimumFractionDigits: 1 })}
+                        Inicial: {r.saldo_inicial_local.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </div>
                     </td>
                     <td className="py-3 px-3 text-right font-bold whitespace-nowrap">
                       {r.deficit_saldo > 0 ? (
                         <span className="text-lider-danger">
-                          -{r.deficit_saldo.toLocaleString('pt-BR', { minimumFractionDigits: 1 })}
+                          -{r.deficit_saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                       ) : (
-                        <span className="text-lider-tertiary font-normal">0,0</span>
+                        <span className="text-lider-tertiary font-normal">0,00</span>
                       )}
                     </td>
                     <td className="py-3 px-3 text-center whitespace-nowrap">

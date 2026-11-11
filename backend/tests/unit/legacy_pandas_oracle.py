@@ -62,18 +62,18 @@ def calculate_pointing_errors_pandas(
     if not df_estoque.empty:
         for _, row in df_estoque.iterrows():
             key = (str(row["codigo_item"]).strip().upper(), str(row["local_estoque"]).strip().upper())
-            stock_map[key] = stock_map.get(key, 0.0) + float(row.get("saldo_disponivel", 0.0))
+            stock_map[key] = round(stock_map.get(key, 0.0) + float(row.get("saldo_disponivel", 0.0)), 2)
 
     registros: List[dict] = []
     for (cod_comp, loc_prod), group_rows in df_c.groupby(["codigo_componente", "local_producao"], sort=False):
-        saldo_inicial = stock_map.get((cod_comp, loc_prod), 0.0)
+        saldo_inicial = round(stock_map.get((cod_comp, loc_prod), 0.0), 2)
         saldo_corrente = saldo_inicial
         prioridade = 1
 
         for _, row in group_rows.iterrows():
             op = str(row["op"]).strip()
             fabrica = str(row.get("fabrica", loc_prod)).strip()
-            qtd_necessaria = float(row.get("qtd_necessaria", 0.0))
+            qtd_necessaria = round(float(row.get("qtd_necessaria", 0.0)), 2)
             if qtd_necessaria <= 0.0:
                 qtd_necessaria = 1.0
             data_ent_str = str(row.get("data_entrega", "") or "").strip()
@@ -81,7 +81,7 @@ def calculate_pointing_errors_pandas(
             if dt_ent is None or dt_ent > limit_dt:
                 continue
 
-            saldo_rem = saldo_corrente
+            saldo_rem = round(saldo_corrente, 2)
             tipo_comp = str(row.get("tipo_componente", "C")).strip().upper()
             if not tipo_comp or tipo_comp not in ["P", "C"]:
                 tipo_comp = "P" if tipo_comp.startswith("P") else "C"
@@ -99,21 +99,21 @@ def calculate_pointing_errors_pandas(
                 "descricao_componente": row.get("descricao_componente", ""),
                 "tipo_componente": tipo_comp,
                 "baixa_automatica": True,
-                "qtd_necessaria": qtd_necessaria,
-                "saldo_inicial_local": round(saldo_inicial, 4),
-                "saldo_remanescente": round(saldo_rem, 4),
+                "qtd_necessaria": round(qtd_necessaria, 2),
+                "saldo_inicial_local": round(saldo_inicial, 2),
+                "saldo_remanescente": round(saldo_rem, 2),
             }
 
             if saldo_rem < qtd_necessaria:
-                deficit = round(qtd_necessaria - max(0.0, saldo_rem), 4)
+                deficit = round(qtd_necessaria - max(0.0, saldo_rem), 2)
                 status_div = "SALDO_ZERADO_NO_LOCAL" if saldo_inicial <= 0.0 else "SALDO_INSUFICIENTE"
                 severidade = "ALTA" if deficit >= (qtd_necessaria * 0.5) or saldo_rem <= 0.0 else "MEDIA"
-                saldo_corrente = max(0.0, saldo_corrente - qtd_necessaria)
+                saldo_corrente = round(max(0.0, saldo_corrente - qtd_necessaria), 2)
                 registros.append(
                     {**base, "deficit_saldo": deficit, "status_divergencia": status_div, "severidade": severidade}
                 )
             else:
-                saldo_corrente = round(saldo_corrente - qtd_necessaria, 4)
+                saldo_corrente = round(saldo_corrente - qtd_necessaria, 2)
                 if include_ok:
                     registros.append(
                         {**base, "deficit_saldo": 0.0, "status_divergencia": "OK", "severidade": "OK"}

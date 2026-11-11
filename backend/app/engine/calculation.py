@@ -148,15 +148,15 @@ class CalculationEngine:
         if plc.is_empty():
             return pl.DataFrame(schema={c: pl.Utf8 for c in self.COLS})
 
-        # Garante colunas de tipagem no estoque
+        # Garante colunas de tipagem no estoque e padronização em 2 casas decimais
         if ple is not None and not ple.is_empty() and "codigo_item" in ple.columns and "local_estoque" in ple.columns:
             stk = ple.group_by(["codigo_item", "local_estoque"]).agg(
-                pl.col("saldo_disponivel").cast(pl.Float64).sum()
+                pl.col("saldo_disponivel").cast(pl.Float64).round(2).sum().round(2)
             )
         else:
             stk = pl.DataFrame(schema={"codigo_item": pl.Utf8, "local_estoque": pl.Utf8, "saldo_disponivel": pl.Float64})
 
-        # 4. Normaliza colunas e piso de quantidade necessária
+        # 4. Normaliza colunas, piso de quantidade necessária e padroniza em 2 casas decimais
         sort_abertura = (
             pl.when((pl.col("data_abertura").is_null()) | (pl.col("data_abertura") == ""))
             .then(pl.lit("9999-12-31"))
@@ -168,11 +168,12 @@ class CalculationEngine:
             .then(1.0)
             .otherwise(pl.col("qtd_necessaria"))
             .cast(pl.Float64)
+            .round(2)
             .alias("qtd_necessaria"),
             sort_abertura.alias("_sort_abertura"),
         ).sort(["codigo_componente", "local_producao", "data_entrega", "_sort_abertura", "op"])
 
-        # 5. Join do saldo inicial de estoque
+        # 5. Join do saldo inicial de estoque padronizado em 2 casas
         plc = plc.join(
             stk,
             left_on=["codigo_componente", "local_producao"],
@@ -180,17 +181,19 @@ class CalculationEngine:
             how="left",
         )
         plc = plc.with_columns(
-            pl.col("saldo_disponivel").fill_null(0.0).alias("saldo_inicial_local")
+            pl.col("saldo_disponivel").fill_null(0.0).cast(pl.Float64).round(2).alias("saldo_inicial_local")
         )
 
-        # 6. Alocação cumulativa vetorizada
+        # 6. Alocação cumulativa vetorizada com precisão de 2 casas
         prev_cumsum = (
-            pl.col("qtd_necessaria")
-            .cum_sum()
-            .over(["codigo_componente", "local_producao"])
-            - pl.col("qtd_necessaria")
+            (
+                pl.col("qtd_necessaria")
+                .cum_sum()
+                .over(["codigo_componente", "local_producao"])
+                - pl.col("qtd_necessaria")
+            ).round(2)
         )
-        saldo_rem = (pl.col("saldo_inicial_local") - prev_cumsum).clip(lower_bound=0.0)
+        saldo_rem = (pl.col("saldo_inicial_local") - prev_cumsum).clip(lower_bound=0.0).round(2)
 
         plc = plc.with_columns(
             pl.int_range(1, pl.len() + 1).over(["codigo_componente", "local_producao"]).alias("prioridade_fila"),
@@ -199,7 +202,7 @@ class CalculationEngine:
 
         deficit = (
             pl.when(pl.col("saldo_remanescente") < pl.col("qtd_necessaria"))
-            .then((pl.col("qtd_necessaria") - pl.col("saldo_remanescente")).round(4))
+            .then((pl.col("qtd_necessaria") - pl.col("saldo_remanescente")).round(2))
             .otherwise(0.0)
         )
 
@@ -240,6 +243,14 @@ class CalculationEngine:
 
         if not include_ok:
             plc = plc.filter(pl.col("status_divergencia") != "OK")
+
+        # Garante precisão estrita de 2 casas decimais nas colunas numéricas de saída
+        plc = plc.with_columns(
+            pl.col("qtd_necessaria").round(2),
+            pl.col("saldo_inicial_local").round(2),
+            pl.col("saldo_remanescente").round(2),
+            pl.col("deficit_saldo").round(2),
+        )
 
         # Ordenação final estável por entrega, fila, op e código do componente
         plc = plc.sort(["data_entrega", "prioridade_fila", "op", "codigo_componente"])

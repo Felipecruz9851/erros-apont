@@ -194,7 +194,7 @@ class EmailService:
                     comp = str(r.get("codigo_componente", ""))[:18]
                     loc = str(r.get("local_producao", ""))[:12]
                     ent = str(r.get("data_entrega", ""))[:10]
-                    defic = f"{float(r.get('deficit_saldo', 0)):.1f}"
+                    defic = f"{float(r.get('deficit_saldo', 0)):.2f}"
                     lines.append(f"{op:<12} | {prod:<20} | {comp:<18} | {'P':<4} | {loc:<12} | {ent:<10} | {defic:<8}")
 
             if comprados:
@@ -209,7 +209,7 @@ class EmailService:
                     comp = str(r.get("codigo_componente", ""))[:18]
                     loc = str(r.get("local_producao", ""))[:12]
                     ent = str(r.get("data_entrega", ""))[:10]
-                    defic = f"{float(r.get('deficit_saldo', 0)):.1f}"
+                    defic = f"{float(r.get('deficit_saldo', 0)):.2f}"
                     lines.append(f"{op:<12} | {prod:<20} | {comp:<18} | {'C':<4} | {loc:<12} | {ent:<10} | {defic:<8}")
 
         plain_text = "\n".join(lines)

@@ -1,3 +1,4 @@
+from decimal import Decimal, ROUND_HALF_UP
 import re
 from typing import Optional, Tuple
 import pandas as pd
@@ -9,6 +10,28 @@ class TreatmentEngine:
     Projetada para permitir que o usuário refine e adicione novas transformações
     aos poucos, desacoplada da extração e do cálculo.
     """
+
+    @staticmethod
+    def _parse_float(val: object) -> float:
+        """
+        Converte e padroniza valores numéricos com precisão estrita de 2 casas decimais (ROUND_HALF_UP).
+        Trata formatações legadas (ex: '1.250,50', '3,625', '81,800', floats nativos).
+        """
+        try:
+            if pd.isna(val) or val is None or val == "":
+                return 0.0
+            if isinstance(val, (int, float)):
+                val_str = str(val)
+            else:
+                val_str = str(val).strip()
+                if not val_str:
+                    return 0.0
+                if "," in val_str:
+                    val_str = val_str.replace(".", "").replace(",", ".")
+            d = Decimal(val_str).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            return float(d)
+        except Exception:
+            return 0.0
 
     def clean_and_normalize(
         self,
@@ -123,7 +146,7 @@ class TreatmentEngine:
         for col in df.columns:
             norm = self._normalize_col_name(col)
             target = None
-            if norm in ["item", "codigo", "cod_item", "codigo_componente"]:
+            if norm in ["item", "codigo", "cod_item", "codigo_componente", "componente"]:
                 target = "codigo_componente"
             elif norm in ["op", "ordem", "num_ordem"]:
                 target = "op"
@@ -207,18 +230,9 @@ class TreatmentEngine:
         df = df[~df["op"].isin(["", "SEM_OP", "NONE", "NAN", "."])].copy()
         df = df[~df["codigo_componente"].str.upper().str.startswith(("TOTAL", "0 ITENS"))].copy()
 
-        # Tratamento de quantidade necessária
-        def _parse_float(val):
-            try:
-                if pd.isna(val) or val == "":
-                    return 0.0
-                val_str = str(val).replace(".", "").replace(",", ".")
-                return float(val_str)
-            except Exception:
-                return 0.0
-
+        # Tratamento de quantidade necessária padronizado em 2 casas decimais
         if "qtd_necessaria" in df.columns:
-            df["qtd_necessaria"] = df["qtd_necessaria"].apply(_parse_float)
+            df["qtd_necessaria"] = df["qtd_necessaria"].apply(self._parse_float)
         else:
             df["qtd_necessaria"] = 0.0
 
@@ -279,35 +293,29 @@ class TreatmentEngine:
         df = df[~df["codigo_item"].isin(["", "SEM_ITEM", "NONE", "NAN"])].copy()
         df = df[~df["codigo_item"].str.upper().str.startswith(("TOTAL", "0 ITENS"))].copy()
 
-        def _parse_float(val):
-            try:
-                if pd.isna(val) or val == "":
-                    return 0.0
-                val_str = str(val).replace(".", "").replace(",", ".")
-                return float(val_str)
-            except Exception:
-                return 0.0
-
         if "saldo_fisico" in df.columns:
-            df["saldo_fisico"] = df["saldo_fisico"].apply(_parse_float)
+            df["saldo_fisico"] = df["saldo_fisico"].apply(self._parse_float)
         else:
             df["saldo_fisico"] = 0.0
 
         if "saldo_reservado" in df.columns:
-            df["saldo_reservado"] = df["saldo_reservado"].apply(_parse_float)
+            df["saldo_reservado"] = df["saldo_reservado"].apply(self._parse_float)
         else:
             df["saldo_reservado"] = 0.0
 
         # Regra de Saldo Disponível: Usa Qtde. (saldo físico no local, ignorando Qt.Reser)
         df["saldo_disponivel"] = df["saldo_fisico"]
 
-        # Agrega saldos se houver múltiplos lotes no mesmo item e local
+        # Agrega saldos se houver múltiplos lotes no mesmo item e local, arredondando a 2 casas
         df_agrupado = (
             df.groupby(["codigo_item", "local_estoque"], as_index=False)[
                 ["saldo_disponivel", "saldo_fisico", "saldo_reservado"]
             ]
             .sum()
         )
+        df_agrupado[["saldo_disponivel", "saldo_fisico", "saldo_reservado"]] = df_agrupado[
+            ["saldo_disponivel", "saldo_fisico", "saldo_reservado"]
+        ].round(2)
 
         return df_agrupado
 
@@ -353,14 +361,7 @@ class TreatmentEngine:
         if "ordem_data_abertura" in df_o.columns:
             df_o["ordem_data_abertura"] = df_o["ordem_data_abertura"].apply(self._parse_date_iso)
         if "ordem_saldo" in df_o.columns:
-            def _parse_saldo(v):
-                try:
-                    if pd.isna(v) or v == "":
-                        return 0.0
-                    return float(str(v).replace(".", "").replace(",", "."))
-                except Exception:
-                    return 0.0
-            df_o["ordem_saldo"] = df_o["ordem_saldo"].apply(_parse_saldo)
+            df_o["ordem_saldo"] = df_o["ordem_saldo"].apply(self._parse_float)
 
         cols_to_merge = ["op"]
         for c in ["ordem_data_entrega", "ordem_data_abertura", "ordem_produto", "ordem_codigo_produto", "ordem_fabrica", "ordem_saldo"]:
@@ -377,7 +378,7 @@ class TreatmentEngine:
             if mask_zero_qtd.any():
                 if "ordem_saldo" in merged.columns:
                     fallback_qtd = merged.loc[mask_zero_qtd, "ordem_saldo"].fillna(1.0).apply(
-                        lambda x: float(x) if float(x) > 0 else 1.0
+                        lambda x: round(float(x), 2) if float(x) > 0 else 1.0
                     )
                 else:
                     fallback_qtd = 1.0

@@ -1,5 +1,6 @@
 import pandas as pd
 from backend.app.engine.calculation import calculation_engine
+from backend.app.engine.treatment import TreatmentEngine
 
 
 def test_cumulative_allocation_scenario_3():
@@ -348,6 +349,88 @@ def test_zero_consumption_item_falls_back_to_order_saldo_and_flags_error():
     assert row["deficit_saldo"] == 1.0
     assert row["status_divergencia"] == "SALDO_ZERADO_NO_LOCAL"
     assert row["severidade"] == "ALTA"
+
+
+def test_standardization_two_decimal_places_scenario():
+    """
+    Valida padronização estrita em 2 casas decimais antes dos cálculos:
+    - Relatório de consumo com 3 casas decimais (ex: 3,625 e 5,123)
+    - Relatório de estoque com 3 casas decimais (ex: 8,749)
+    - Verifica que tratamento e cálculo padronizam rigorosamente em 2 casas decimais.
+    """
+    treatment_engine = TreatmentEngine()
+
+    df_consumo_raw = pd.DataFrame([
+        {
+            "Ordem": "OP-DEC-1",
+            "Fábrica": "METALURGIA",
+            "Componente": "3PEZREGPRETO",
+            "Descrição": "PE REGULAVEL PRETO",
+            "Tipo": "C",
+            "Baixa": "S",
+            "Consumo": "3,625",  # 3 casas decimais -> deve padronizar para 3.63
+            "Unidade": "UN",
+            "Local Prod.": "METALURGIA",
+            "_local_filtro": "METALURGIA",
+            "Data Abertura": "2026-11-01",
+            "Data Entrega": "2026-11-06",
+        },
+        {
+            "Ordem": "OP-DEC-2",
+            "Fábrica": "METALURGIA",
+            "Componente": "3PEZREGPRETO",
+            "Descrição": "PE REGULAVEL PRETO",
+            "Tipo": "C",
+            "Baixa": "S",
+            "Consumo": "5,123",  # 3 casas decimais -> deve padronizar para 5.12
+            "Unidade": "UN",
+            "Local Prod.": "METALURGIA",
+            "_local_filtro": "METALURGIA",
+            "Data Abertura": "2026-11-01",
+            "Data Entrega": "2026-11-07",
+        },
+    ])
+
+    df_estoque_raw = pd.DataFrame([
+        {
+            "Item": "3PEZREGPRETO",
+            "Local": "METALURGIA",
+            "Qtde.": "8,749",  # 3 casas decimais -> deve padronizar para 8.75
+            "Qt.Reser": "0,000",
+        }
+    ])
+
+    c_clean, e_clean = treatment_engine.clean_and_normalize(df_consumo_raw, df_estoque_raw)
+    assert c_clean.iloc[0]["qtd_necessaria"] == 3.63
+    assert c_clean.iloc[1]["qtd_necessaria"] == 5.12
+    assert e_clean.iloc[0]["saldo_disponivel"] == 8.75
+
+    divergences = calculation_engine.calculate_pointing_errors(
+        c_clean,
+        e_clean,
+        data_atual="2026-11-06",
+        include_ok=True,
+        dias_uteis=3,
+    )
+
+    assert len(divergences) == 2
+    row1 = divergences.iloc[0]
+    assert row1["op"] == "OP-DEC-1"
+    assert row1["qtd_necessaria"] == 3.63
+    assert row1["saldo_inicial_local"] == 8.75
+    assert row1["saldo_remanescente"] == 8.75
+    assert row1["deficit_saldo"] == 0.00
+    assert row1["status_divergencia"] == "OK"
+
+    row2 = divergences.iloc[1]
+    assert row2["op"] == "OP-DEC-2"
+    assert row2["qtd_necessaria"] == 5.12
+    assert row2["saldo_inicial_local"] == 8.75
+    # Saldo remanescente após OP1: 8.75 - 3.63 = 5.12
+    assert row2["saldo_remanescente"] == 5.12
+    assert row2["deficit_saldo"] == 0.00
+    assert row2["status_divergencia"] == "OK"
+
 
 
 

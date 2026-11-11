@@ -31,6 +31,7 @@ $$\text{Saldo Remanescente para a Ordem } k = \max\left(0, \text{Saldo Inicial L
    - Fallback de produto (`_resolver_produto`): quando a descrição do produto da OP estiver vazia ou ausente, adota automaticamente o código do item (`Item` em `atrasadas.php`).
    - Fallback de quantidade necessária (`qtd_necessaria`): quando o consumo do componente vier zerado (`0,0000`) ou não informado no relatório legado, adota automaticamente o saldo da OP (`ordem_saldo`) ou piso de 1.0 unidade, assegurando que componentes com baixa automática obrigatória sem saldo no local de produção sejam devidamente apontados como erro (`SALDO_ZERADO_NO_LOCAL`) com déficit correspondente.
    - Definição de `saldo_disponivel = saldo_fisico` (`Qtde.`, ignorando `Qt.Reser`).
+   - **Padronização Estrita de 2 Casas Decimais (`_parse_float`):** conversão precisa via `Decimal.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)` eliminando disparidades entre relatórios com 3 e 2 casas decimais tanto na ingestão de consumo e estoque quanto na alocação cumulativa e serialização.
 2. **Filtro de Baixa Automática, Data de Abertura e Data de Entrega Válida (`calculate_pointing_errors_polars`):**
    - Seleção estrita dos componentes onde `baixa_automatica == True`.
    - Filtragem das ordens com `data_abertura <= data_atual` (quando preenchida).

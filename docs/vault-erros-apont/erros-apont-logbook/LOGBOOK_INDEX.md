@@ -2,6 +2,7 @@
 
 | Data | Foco Principal | Status Final | Nota Diária |
 | :--- | :--- | :--- | :--- |
+| 2026-11-11 | Padronização Estrita de 2 Casas Decimais nos Cálculos e Exibição Visual | CONCLUIDO | [[2026-11-11]] |
 | 2026-10-19 | Constituição, Mapeamento de Endpoints, Implementação Ponta a Ponta e Porta 8484 | CONCLUIDO | [[2026-10-19]] |
 | 2026-10-20 | Login Individual por Worker (`ExtractionWorker.login`) e Motor de Análise de Erros de Apontamento (Janela de 3 Dias) | CONCLUIDO | [[2026-10-20]] |
 | 2026-10-21 | Commit da Correção de Códigos de 15 Caracteres (`3LEDDP73000K24V`) e Limpeza Automática de Snapshots HTML | CONCLUIDO | [[2026-10-21]] |
@@ -10,6 +11,7 @@
 | 2026-11-03 | Servir Frontend SPA React no Endereço Padrão do Projeto (Porta 8484) | CONCLUIDO | [[2026-11-03]] |
 | 2026-11-10 | Modernização do Pipeline (Polars, HTTPX, LPT), Tabela Infinita e Limpeza Profunda de Código Morto | CONCLUIDO | [[2026-11-10]] |
 
+- [[2026-11-11]] — Padronização Estrita de 2 Casas Decimais nos Cálculos e Exibição Visual
 - [[2026-11-10]] — Modernização do Pipeline (Polars, HTTPX, LPT), Tabela Infinita e Limpeza Profunda de Código Morto
 - [[2026-11-03]] — Servir Frontend SPA React no Endereço Padrão do Projeto (Porta 8484)
 - [[2026-10-23]] — Fallback de Consumo Zerado, Raiz em 3 Pastas e main.py em backend/
